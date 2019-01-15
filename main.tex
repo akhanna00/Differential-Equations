@@ -1,0 +1,1086 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{bm}
+\tcbuselibrary{theorems}
+
+% Things I use, but too lazy to find how again
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make a hyperlink to another section:
+% \hyperref[sec:hello]{Word of text} (set link to hello)
+
+% \section{Hello World} 
+% \label{sec:hello} (define a label for the section
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make an unordered list:
+% \begin{itemize}
+%   \item 
+%   \item
+% \end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make an ordered list:
+% \begin{enumerate}
+%   \item 
+%   \item
+% \end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make a matrix
+%\begin{bmatrix}
+%        x_1y_1 & x_1y_2 & \dots  & x_1y_m \\
+%        x_2y_1 & x_2y_2 & \dots  & x_2y_m \\
+%        \vdots & \vdots & \ddots & \vdots \\
+%        x_ny_1 & a_{m2} & \dots  & x_ny_m \\
+%   \end{bmatrix}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make an equation:
+% \begin{equation}
+% ...
+% \end{equation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theorems:
+%\begin{mytheo}{Title}{NameOfTheorem}
+% ...
+%\end{mytheo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% N'th order linear equation
+% $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtcbtheorem[number within=section]{mytheo}{Theorem}
+{colback=orange!5,colframe=red!35!black,fonttitle=\bfseries}{th}
+
+
+
+\hypersetup{
+    pdftitle={Differential Equations},
+    pdfpagemode=FullScreen,
+}
+
+
+
+
+\title{Differential Equations}
+\author{Arun Khanna}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\chapter{Types of Differential Equations}
+Differential equations come in many types. This is a reference to look back into if you forget.
+\section{Order of a differential equation}
+The order of a differential equation is simply the highest derivative term in it, once it has been simplified as much as possible. For example:
+$$y'' + 5y + 3 = 0$$
+is a second order differential equation.
+
+\section{}
+
+
+
+\chapter{Existence of Solutions in Linear Differential Equations}
+\section{Introduction}
+Linear differential equations have interesting properties that allow us to solve them in convenient ways.
+
+What does it mean to be linear anyway? For matrices, a linear transformation is simplify defined to be a transformation such that the even spacing of the grid-lines is preserved. However, generally, a function or transformation is defined to be linear if and only if it satisfies the following properties.
+
+\begin{mytheo}{Linearity of a transformation}{lin}
+    A transformation $T$ is defined to be linear if for inputs $\mathbf{v_1}$ and $\mathbf{v_2}$
+    \begin{enumerate}
+        \item $T(\mathbf{v_1}+\mathbf{v_2}) = T(\mathbf{v_1}) + T(\mathbf{v_2})$
+        \item $T(c\mathbf{v_1}) = cT(\mathbf{v_1})$, where $c$ is a scalar constant
+   \end{enumerate}
+\end{mytheo}
+
+A fascinating result of calculus is that derivatives are linear because they satisfy these two properties! Thus we can examine the linearity (or lack thereof) of differential equations, which are just equations connecting the various derivatives of the function together.
+
+What does it mean to say that a differential equation is linear? It means that given two functions $y_1(t)$ and $y_2(t)$ satisfying the differential equation, that $y(t) = c_1y_1(t) + c_2y_2(t)$ should also satisfy the differential equation. It turns out that this condition is equivalent to having a differential equation in the form of:
+
+\begin{mytheo}{Linearity of homogeneous differential equations}{lin_diff}
+    A homogeneous differential equation is linear if and only if:
+    $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+\end{mytheo}
+
+
+where all the coefficients of the derivatives of y are only functions of t and not y. For example, this would NOT be a linear differential equation:
+
+$$y'' + 2yy' = 0$$
+because of the $2y$ coefficient on $y'$.
+
+What does having no coefficients dependent on y have anything to do with linearity? We know that all the derivative terms ($y^(n), ..., y'', y', y)$ must satisfy the definition of linearity because the derivative is a linear operator. However, if the coefficient is dependent on y in any way, adding two different potential solutions $y_1, y_2$ will NOT give us the same thing as adding up the individual solutions. We can see that in the example above:
+$$(y_1+y_2)''+2(y_1+y_2)(y_1+y_2)'+3 = y_1'' + y_2'' + 2y_1y_1'+2y_1y_2' +2y_2y_1'+2y_2y_2'$$
+$$=(y_1''+2y_1y_1')+ (y_2''+2y_2y_2')+2y_2y_1+2y_1y_2$$
+
+Notice how taking $y = y_1+y_2$ and plugging it into the equation gives us the same thing as summing the individual results of plugging in $y_1$ and $y_2$, but with the additional garbage of $2y_2y_1+2y_1y_2$
+
+\begin{mytheo}{Existence and Uniqueness Theorem}{Ex&Un}
+    Given an n'th order linear differential equation
+    $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+    and n initial conditions at a time period $t_0$ inan interval $I$ where $p_{n-1}(t)$, $\dots$, $p_1(t)$, and $p_0(t)$ is continuous
+    
+    $y(t_0) = a_0$, $y'(t_0) = a_1$, \dots, $y^{(n)}(t_0) = a_n$
+    
+    there exists only one unique solution $y(t) = \phi(t)$ over the interval I.
+    
+\end{mytheo}
+
+
+\section{Principle of Superposition and Non-homogeneous solution}
+
+\begin{mytheo}{Principle of Superposition}{super}
+ If we have a homogeneous linear differential equation of the form:
+ $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+ and n solutions, $y_1(t)$, $y_2(t)$, $\dots$, $y_n(t)$, then any linear combination $c_1y_1(t) + c_2y_2(t) + \dots + c_ny_n(t)$ is also a solution.
+\end{mytheo}
+
+
+Why?
+Well, a homogeneous equation of degree $m$ is in the form:
+$$L[y] = y^{(n)}(t) + ... + p(t)y'(t) + q(t)y(t) = 0$$
+We know that since this is linear, $L[y_i+y_j] = L[y_i] + L[y_j]$ and $L[cy_i] = cL[y_i]$ for a constant $c$.
+
+If $y_1, ..., y_n$ are solutions, they must all satisfy $L[y_i] = 0$. Thus,
+$$L[c_1y_1+c_2y_2+...+c_ny_n] = c_1L[y_1] + c_2L[y_2] + ... + c_nL[y_n] = 0 + 0 + ... + 0 = 0$$
+Thus, the linear combination satisfies the condition to be a solution for this differential equation.
+
+\section{Non-homogeneous solution}
+We can use linearity and the principle of superposition to come up with a very useful result in solving non-homogeneous equations.
+
+\begin{mytheo}{Non-homogeneous Linear Solution}{nh_sol}
+ For a non-homogeneous solution of the form
+ $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+ where the coefficients are continuous over an interval $I$, the solution is of the form
+ $$\phi(t) = y_h(t) + y_p(t)$$
+ where $y_h(t)$ is the complete solution to homogeneous differential equation:
+ $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+ and $y_p(t)$ is just any particular solution to the original non-homogeneous differential equation.
+\end{mytheo}
+
+This theorem is saying that in order for us to find the solution to a non-homogeneous differential equation we simply need to:
+\begin{enumerate}
+    \item Find the solutions to the homogeneous case
+    \item Find just one function that satisfies our initial non-homogeneous differential equation
+    \item Add these solutions together
+\end{enumerate}
+
+This might seem slightly peculiar, why is it that the unique solution to a non-homogeneous differential equation comes from just using one particular solution?
+
+Proof:
+Say we have the differential equation:
+ $$L[y] = y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+and that we find two different solutions that satisfy this equation, let's call them $y_1(t) and y_2(t)$.
+Thus, $L[y_1]=g(t)$ and $L[y_2]=g(t)$
+What happens when we subtract $L[y_1] and L[y_2]$?
+we get $L[y_1]-L[y_2] = 0$
+We know by linearity that 
+$$L[y_1]-L[y_2] = L[y_1-y_2] = 0$$
+this means that the combination $y_1(t)-y_2(t)$ solves the homogenous equation:
+$$L[y] = y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+Thus,
+$$y_h(t) = y_1(t)-y_2(t)$$
+$$y_1(t) = y_h(t) + y_2(t)$$
+
+This means that any solution to the differential equation can be represented as the combination of another solution plus a solution to the homogeneous equation. 
+
+\section{Unique Homogeneous Solution and the Wronskian}
+In this section, we will consider second order homogeneous equations for simplicity, however, the results apply in general.
+
+By \hyperref[th:Ex&Un]{The Existence and Uniqueness Theorem}, we know that for an n'th order linear homogeneous differential equation with n initial conditions that there exists one unique solution. How do we go about finding this one unique solution?
+
+Say that we've found two solutions $y_1(t)$ and $y_2(t)$ to the differential equation:
+
+$$y'' + p_1(t)y' + p_0(t)y = 0$$
+
+$$\text{with } y(t_0) = a_0 \text{ and } y'(t_0) = a_1$$
+
+By \hyperref[th:super]{superposition}, we know that any linear combination of $y_1(t)$ and $y_2(t)$ is a solution.
+$$y(t) = c_1y_1(t) + c_2y_2(t)$$
+By our initial conditions:
+$$y(t_0) = c_1y_1(t_0) + c_2y_2(t_0) = a_0$$
+$$y'(t_0) = c_1y'_1(t_0) + c_2y'_2(t_0) = a_1$$
+
+Since the \hyperref[th:Ex&Un]{The Existence and Uniqueness Theorem} tells us there is only one solution satisfying the initial constraints, we should be able to get unique values for the coefficients of the equation $c_1$ and $c_2$. Representing the series of equations in matrix form:
+$$
+\begin{bmatrix}
+    y_1(t_0) & y_2(t_0) \\
+    y_1'(t_0) & y_2'(t_0) \\
+\end{bmatrix}
+\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    a_0 \\
+    a_1 \\
+\end{bmatrix}
+$$
+
+The only way we are able to get values for $c_1$ and $c_2$ that satisfy this equation is if the matrix 
+$\begin{bmatrix}
+    y_1(t_0) & y_2(t_0) \\
+    y_1'(t_0) & y_2'(t_0) \\
+\end{bmatrix}$,
+also known as the \textbf{Fundamental Matrix} is invertible. An equivalent condition to invertibilitity of a matrix is that its determinant is non-zero(columns are linearly independent). Thus provided that
+
+$$\text{det}\left(\begin{bmatrix}
+    y_1(t_0) & y_2(t_0) \\
+    y_1'(t_0) & y_2'(t_0) \\
+\end{bmatrix}\right)
+\neq 0
+$$
+we can always find a solution for the coefficients $c_1$ and $c_2$
+$$
+\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    y_1(t_0) & y_2(t_0) \\
+    y_1'(t_0) & y_2'(t_0) \\
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+    a_0 \\
+    a_1 \\
+\end{bmatrix}
+$$
+
+The determinant of the fundamental matrix is called the \textbf{Wronskian} and has a number of interesting properties. 
+
+Thus, we can conclude that in general:
+
+\begin{mytheo}{Unique Homogeneous Solution}{unHomSol}
+ Given a homogeneous equation of the form:
+  $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+  and $n$ solutions $y_1(t)$, $y_2(t)$, $\dots$, $y_n(t)$ such that there exists a $t_0$ where the determinant of the fundamental matrix (the Wronskian) is non-zero:
+  $$\text{det}\left(\begin{bmatrix}
+    y_1(t_0) & y_2(t_0) & \dots  & y_n(t_0) \\
+    y_1'(t_0) & y_2'(t_0) & \dots  & y_n'(t_0) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    y_1^{(n)}(t_0) & y_2^{(n)}(t_0) & \dots  & y_n^{(n)}(t_0) \\
+    \end{bmatrix}\right)
+    \neq 0
+    $$
+ The general unique solution to the differential equation is in the form of:
+ $$\phi(t) = c_1y_1(t) + c_2y_2(t) + \dots + c_ny_n(t)$$
+ where $c_1, \dots, c_n$ can be determined given $n$ conditions of the form:
+ $y(t_0) = a_0$, $y'(t_0) = a_1$, $\dots$, $y^{(n-1)}(t_0) = a_n$ by 
+ $$
+\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+    \vdots \\
+    c_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+    y_1(t_0) & y_2(t_0) & \dots  & y_n(t_0) \\
+    y_1'(t_0) & y_2'(t_0) & \dots  & y_n'(t_0) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    y_1^{(n)}(t_0) & y_2^{(n)}(t_0) & \dots  & y_n^{(n)}(t_0) \\
+    \end{bmatrix}^{-1}
+\begin{bmatrix}
+    a_0 \\
+    a_1 \\
+    \vdots \\ 
+    a_n
+\end{bmatrix}
+$$
+\end{mytheo}
+
+\section{Linear Independence and the Wronskian}
+\section{Linear Dependence}
+What does it mean for a function to be \textbf{linearly dependent} on another function? 
+
+Recall what linear dependence means for vectors. When we have two vectors that are linearly dependant, we can represent one vector as a scaled version of the other:
+
+[Insert Picture]
+
+Algebraically, for two vectors $\bm{\vec{v_1}}$ and $\bm{\vec{v_2}}$ are \textbf{linearly independent} when:
+$$\bm{\vec{v_1}} = c\bm{\vec{v_2}}$$
+for some constant $c$
+
+\textbf{Linear dependence} between two vectors occurs when this is not true, it is impossible to recreate one of the two linearly dependent vectors by just scaling the other one:
+
+[Insert Picture]
+
+Algebraically, for two vectors $\bm{\vec{v_1}}$ and $\bm{\vec{v_2}}$ are \textbf{linearly independent} when:
+$$\bm{\vec{v_1}} \neq c\bm{\vec{v_2}}$$
+for any constant $c$
+
+When dealing with functions, the definitions of linearly dependence and independence are really similar:
+
+\begin{mytheo}{Linear Dependence and Independence of functions}{lin_func}
+    Two functions $f(t)$ and $g(t)$ are \textbf{linearly independent} on an interval $I$ if and only if for every $t$ in $I$, the result of one function can be represented as a scalar multiple of the other function:
+    $$\bm{f(t)} = c\bm{g(t)} \text{ for all $t \in I$}$$
+    This is equivalent to saying (as most textbooks present it):
+    $$c_1\bm{f(t)} + c_2\bm{g(t)} = 0 \text{ for all $t \in I$}$$
+    for non-zero constants $c_1$ and $c_2$
+    
+    Similarly, \textbf{linear dependence} is defined as when these conditions are not met, i.e.:
+    $$\bm{f(t_0)} \neq c\bm{g(t)} \text{ for a $t_0 \in I$}$$
+    or:
+    $$c_1\bm{f(t_0)} + c_2\bm{g(t_0)} = 0 \text{ for a $t_0 \in I$}$$
+    for only constants $c_1$ and $c_2$ equal to 0
+    
+\end{mytheo}
+
+These definitions apply similarly in higher dimensions, linear independence of $n$ functions is the same thing as all of the $n$ functions being linearly independent to one another.
+
+\section{Wronskian and Linear Independence}
+How does the Wronskian relate to linear independence of functions?
+
+Fascinatingly, finding the Wronskian of any two functions can tell us directly if the two functions are linearly independent:
+
+\begin{mytheo}{Wronskian and linear independence}{wronLinInd}
+    Consider two functions $f(t)$ and $g(t)$ defined as continuous on some interval $I$. If the Wronskian of these two functions is non-zero for a $t_0$ in the interval $I$, then the two functions are \textbf{linearly independence}. 
+    
+    $$W(f(t),g(t))(t_0) = \text{det}\left(\begin{bmatrix}
+    f(t_0) & g(t_0) \\
+    f'(t_0) & g'(t_0) \\
+    \end{bmatrix}\right)
+    \neq 0 $$
+    $$\implies c_1\bm{f(t_0)} + c_2\bm{g(t_0)} = 0$$ 
+    for a $t_0 \in I$ only for constants $c_1=c_2=0$ (linear independence).
+\end{mytheo}
+  
+\hyperref[sec:prWronLinInd]{The proof can be found in the appendix}
+
+
+Note that the implication is in only one way. This is important!! In general, if the Wronskian is zero for all $t \in I$, that does \textbf{not} necessarily mean that functions are linearly dependant. 
+    
+An example of this occurring are the functions $f(t) = t^3$ and $g(t) = |t|t^2$ over the interval $-\infty < t < \infty$. These functions are linearly independent over the interval, but the Wronskian is in fact 0 everywhere!!
+\\ \\
+By using basic logic principles, the contrapositive of a true implication is also true. Therefore, linearly dependent functions have a Wronskian zero everywhere in the interval in which they are defined to be linearly dependant:
+    
+\begin{mytheo}{Linear dependence and the Wronskian}{wronLinDep}
+    Consider two functions $f(t)$ and $g(t)$ defined as continuous on some interval $I$. If the functions are \textbf{linearly dependent} for all $t \in I$, then the Wronskian is zero everywhere.
+    
+    $$c_1\bm{f(t)} + c_2\bm{g(t)} = 0$$ 
+    for non-zero constants $c_1$ and $c_2$ (linear dependence)
+    
+    $$ \implies W(f(t),g(t))(t) = \text{det}\left(\begin{bmatrix}
+    f(t) & g(t) \\
+    f'(t) & g'(t) \\
+    \end{bmatrix}\right)
+    = 0 \text{, for all $t \in I$}$$
+\end{mytheo}
+
+
+\section{Abel's Theorem}
+Let's go back to the case of second order homogeneous linear differential equations. Say we have the equation:
+$$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+For any two solutions $y_1(t)$ and $y_2(t)$ which may be fundamental solutions or not, Abel's theorem yields an extremely powerful result:
+
+\begin{mytheo}{Abel's Theorem}{abel_thm}
+    Say we have a second order homogeneous linear differential equation of the form 
+    $$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+    over an interval $I$ where the coefficients are continuous and the first and second derivatives of $y(t)$ are continuous and defined.
+    In addition, say we have two solutions $y_1(t)$ and $y_2(t)$ that satisfy these constraints.
+    
+    According to Abel's theorem, the Wronskian of any two solutions will precisely be:
+    
+    $$W(y_1(t), y_2(t))(t) = \text{det}\left(\begin{bmatrix}
+    y_1(t) & y_2(t) \\
+    y_1'(t) & y_2'(t) \\
+    \end{bmatrix}\right)$$
+    $$= c(y_1(t),y_2(t))\exp{\left[-\int{p_1(t)dt}\right]}$$
+    where $c$ is a constant that depends on $y_1(t)$ and $y_2(t)$ but not $t$.
+\end{mytheo}
+
+\hyperref[sec:abel]{The proof can be found in the appendix.}
+\newline
+
+
+This theorem tells us that the Wronskian of any two solutions to a second-order linear homogeneous differential equation differ only by a constant multiple.
+
+
+One consequence of Abel's theorem is that if the Wronskian is non-zero at one point in the interval $I$, it is non-zero everywhere. Similarly, if the Wronskian is zero at one point, it is zero everywhere. This is because $c$ determines whether or not the Wronskian will be zero or non-zero at a point $t_0 \in I$ since the exponential term will always be non-zero. Since $c$ is universally defined in the interval (not dependent on $t$), it will be 0 or non-zero. 
+
+This leads us to another important result:
+
+\begin{mytheo}{Wronskian for two solutions}{wron_two_sol}
+    The Wronskian for any two solutions of a second order linear homogeneous differential equation defined on some interval $I$ is either 0 everywhere on this interval or always non-zero.
+    $$
+    W(y_1(t), y_2(t))(t) = \text{det}\left(\begin{bmatrix}
+    y_1(t) & y_2(t) \\
+    y_1'(t) & y_2'(t) \\
+    \end{bmatrix}\right) = 0
+    $$
+    for all $t \in I$
+    
+    OR
+    
+    $$
+    W(y_1(t), y_2(t))(t) = \text{det}\left(\begin{bmatrix}
+    y_1(t) & y_2(t) \\
+    y_1'(t) & y_2'(t) \\
+    \end{bmatrix}\right) \neq 0
+    $$
+    for all $t \in I$
+\end{mytheo}
+
+This falls directly from Abel's theorem (the constant is either 0 or non-zero on the interval $I$). 
+
+This means that if we find the Wronskian to be 0 at any point $t_0$ in the interval, the Wronskian will be 0 everywhere on the interval. Similarly, if it is non-zero at any point, it will be non-zero everywhere. 
+
+This is a powerful fact! This will be made even more powerful in the next section:
+
+\section{Fundamental Solutions and Linear Dependence}
+We know two major things from the previous sections about the Wronskian of two solutions to a homogeneous linear differential equation:
+\begin{enumerate}
+    \item \hyperref[th:unHomSol]{$W(y_1(t), y_2(t))(t_0)\neq 0 \implies $ $y_1(t)$ and $y_2(t)$ span the solution space}
+    \item \hyperref[th:wronLinInd]{$W(y_1(t), y_2(t))(t_0)\neq 0 \implies $ $y_1(t)$ and $y_2(t)$ are linearly independent}
+\end{enumerate}
+
+A question that may be asked is whether linear independence and spanning the solution space of two solutions can be connected. This would be a beautiful connection to linear algebra and differential equations, where having linearly independent vectors spans the space we're considering. In fact, there is a connection through the Wronskian:
+
+
+\begin{mytheo}{Wronskian and Linear Dep of solutions}{WrLinDep}
+    Say we have a second order homogeneous linear differential equation of the form 
+    $$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+    over an interval $I$ where the coefficients are continuous and the first and second derivatives of $y(t)$ are continuous and defined. 
+    In addition say we have found two solutions $y_1(t)$ and $y_2(t)$ for this differential equation.
+    
+    The Wronskian of $y_1(t)$ and $y_2(t)$ will only be 0 if and only if $y_1(t)$ and $y_2(t)$ are Linearly Dependent. 
+    
+    In other words:
+    
+    $$W(y_1(t), y_2(t))(t) = 0 \implies \text{Linear Dependence}$$
+    
+    $$ \text{Linear Dependence} \implies W(y_1(t), y_2(t))(t) = 0$$
+    
+\end{mytheo}
+
+
+\hyperref[sec:PrWrLinDep]{The proof of this can be found in the appendix.}
+
+The converse is also directly implied:
+
+\begin{mytheo}{Wronskian and Linear Ind of solutions}{WrLinIn}
+    Say we have a second order homogeneous linear differential equation of the form 
+    $$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+    over an interval $I$ where the coefficients are continuous and the first and second derivatives of $y(t)$ are continuous and defined. 
+    In addition say we have found two solutions $y_1(t)$ and $y_2(t)$ for this differential equation.
+    
+    The Wronskian of $y_1(t)$ and $y_2(t)$ will only be non-zero if and only if $y_1(t)$ and $y_2(t)$ are Linearly Independent. 
+    
+    In other words:
+    
+    $$W(y_1(t), y_2(t))(t_0) \neq 0 \implies \text{Linear Independence}$$
+    
+   $$ \text{Linear Independence} \implies W(y_1(t), y_2(t))(t_0) \neq 0$$
+    
+\end{mytheo}
+
+
+Since the Wronskian being non-zero at some point is equivalent to linear independence for two solutions to a linear homogeneous second-order differential equation:
+
+\begin{mytheo}{Fundamental solutions and Linear Ind}{fund_sol}
+    If two solutions to a linear homogeneous second-order differential equation $y_1(t)$ and $y_2(t)$ are linearly independent, they span the solution space for the differential equation.
+\end{mytheo}
+
+Thus, all of these facts are equivalent:
+
+\begin{mytheo}{Equivalencies for linearly independent solutions}{EqLinInd}
+    For two solutions $y_1(t)$ and $y_2(t)$ on some interval $I$ of the linear homogeneous second-order differential equation:
+    $$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+    all of the following are equivalent:
+    \begin{enumerate}
+        \item The Wronskian of the solutions is non-zero at some point $t_0 \in I$ 
+        $$W(y_1(t), y_2(t))(t_0) \neq 0 $$
+        \item The Wronskian of the solutions is non-zero at \textbf{all points} $t \in I$ 
+        $$W(y_1(t), y_2(t))(t) \neq 0 $$
+        \item The two solutions are linearly independent:
+        $$c_1y_1(t_0) + c_2y_2(t_0) = 0$$
+        is only satisfied for $c_1=c_2=0$ at some $t_0 \in I$
+        \item The two solutions span the entire solution space for the differential equation:
+        $$\phi(t) = c_1y_1(t) + c_2y_2(t)$$
+        satisfies the differential equation for all $t \in I$
+    
+    \end{enumerate}
+    
+\end{mytheo}
+
+
+Similarly, the opposite is true:
+
+\begin{mytheo}{Equivalencies for linearly dependent solutions}{EqLinDep}
+    For two solutions $y_1(t)$ and $y_2(t)$ on some interval $I$ of the linear homogeneous second-order differential equation:
+    $$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+    all of the following are equivalent:
+    \begin{enumerate}
+        \item The Wronskian of the solutions is zero at some point $t_0 \in I$ 
+        $$W(y_1(t), y_2(t))(t_0) = 0 $$
+        \item The Wronskian of the solutions is zero at \textbf{all points} $t \in I$ 
+        $$W(y_1(t), y_2(t))(t) = 0 $$
+        \item The two solutions are linearly dependent:
+        $$c_1y_1(t) + c_2y_2(t) = 0$$
+        is only satisfied for some non-zero $c_1$ and $c_2$ for all $t \in I$
+        \item The two solutions \textbf{do not} span the entire solution space for the differential equation:
+        $$\phi(t) = c_1y_1(t) + c_2y_2(t)$$
+        \textbf{does not} satisfy the differential equation for all $t \in I$
+    
+    \end{enumerate}
+    
+\end{mytheo}
+
+
+
+
+\chapter{Linear Differential Equation with Constant Coefficients}
+\section{Introduction}
+
+Let's zoom into the specific case of linear homogeneous differential equations with constant coefficients:
+
+That is a differential equation in the form of:
+$$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
+
+In this section we will mostly consider second order differential equations, since they are significantly easier to solve, however, the results apply in general for any $n^th$ degree polynomial.
+
+So let us look at that case:
+$$y''(t) + a_1y'(t) + a_0y$$
+
+What happens if we try a solution in the form of $y(t) = Ce^{rt}$?
+
+When we plug it into our equation and simplify, we get (by the property of taking derivatives of exponents):
+
+$$(Ce^{rt})'' + a_1(Ce^{rt})' + a_0Ce^{rt} = 0$$
+$$(r^2cCe^{rt}+a_1rCe^{rt}+a_0Ce^{rt} = 0$$
+Taking out $Ce^{rt}$, 
+$$(r^2+a_1r+a_0)e^{rt} = 0$$
+
+Since, $e^{rt}$ is always greater than 0, we can divide by both sides to get an expression for $r$:
+
+$$r^2+a_1r+a_0 = 0$$
+
+To recap, for the differential equation above $y(t) = Ce^{rt}$ is a solution for any $r$ that satisfies the polynomial equation above!
+
+This holds in general:
+
+\begin{mytheo}{A Constant Coefficients Solution}{constSol}
+    For an n'th order differential equation with constant coefficients in the form:
+    $$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
+    
+    $y(t) = Ce^{rt}$ will be a solution as long as it satisfies the following polynomial equation:
+    
+    $$r^n+\dots+a_1r+a_0=0$$
+    
+    The polynomial is called the \textbf{characteristic polynomial} of the differential equation above.
+\end{mytheo}
+The proof can be found in the appendix.
+
+From the chapter above, we showed that in order for us to have the complete solution a linear differential equation of $n$'th degree, we need $n$ linearly independent solutions. Since $y(t) = Ce^{rt}$ is always a solution to the differential equation, it will help us find the fundamental solution. 
+In the sections below, we will consider finding the complete solution to the linear differential equation with constant coefficients in the following cases for the roots of the characteristic polynomial:
+\begin{enumerate}
+    \item Roots are real and unique
+    \item Roots are complex
+    \item Some Roots are repeated
+\end{enumerate}
+
+
+\section{Real Unique Roots}
+
+The following theorem is important:
+
+\begin{mytheo}{Linear Independence of Exponentials of Different Degrees}{expLinInd}
+    Consider two functions $y_1(t) = e^{r_1t}$ and $y_2(t) = e^{r_2t}$ such that $r_1 \neq r_2$. 
+    \\
+    \\
+    The functions $y_1(t) = e^{r_1t}$ and $y_2(t) = e^{r_2t}$ has a Wronskian that is always non-zero and are linearly independent.
+\end{mytheo}
+
+\hyperref[sec:prExpLinInd]{The proof is in the appendix.}
+
+If we have the differential equation, 
+$$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
+and the following characteristic polynomial equation:
+
+$$r^n+\dots+a_1r+a_0=0$$
+
+Say that we solve this polynomial equation and get $n$ real unique roots such that $r_1 \neq r_2 \neq \dots r_n$. 
+
+Then we know that $y_1(t) = Ce^{r_1t}, y_2(t) = Ce^{r_2t}, \dots y_n(t)Ce^{r_nt}$ are all \hyperref[th:constSol]{solutions to the differential equation}. We also know that all of these solutions are \hyperref[th:expLinInd]{linearly independent since $r_1 \neq r_2 \neq \dots r_n$}. Because of these facts, we know that the following function:
+$$\phi(t) = c_1e^{r_1t}+c_2e^{r_2t}+\dots c_ne^{r_nt}$$
+
+must be the \hyperref[th:EqLinInd]{fundamental solution the differential equation since it is the combination of $n$ linearly independent solutions for a $n$'th order linear differential equation.}
+
+Thus:
+
+\begin{mytheo}{Complete Solution to Linear Differential Equation with Real Unique Roots}{compSolReUn}
+    For a linear differential equation with constant coefficients in the form:
+    $$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
+    If we solve the characteristic polynomial:
+    $$r^n+\dots+a_1r+a_0=0$$
+    and get $n$ real unique roots $r_1 \neq r_2 \neq \dots r_n$, the fundamental solution is:
+    
+    $$\phi(t) = c_1e^{r_1t}+c_2e^{r_2t}+\dots c_ne^{r_nt}$$
+
+\end{mytheo}
+
+
+\section{Complex Roots}
+If we have a polynomial of the form:
+$$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
+and instead of getting unique real roots, we get complex roots of the form $a+bi$, we could proceed as we did before and have solutions:
+$$e^{(a_1+b_1i)t}, e^{(a_2+b_2i)t}, \dots, e^{(a_n+b_ni)t}$$
+
+This would in fact be valid. However, there is a way we can take this equation and turn it into a form that is significantly easier to both visualize and easier to apply to actual physical solutions.
+
+First, we need to introduce Euler's formula:
+
+\begin{mytheo}{Euler's Formula}{euler}
+    We can express the exponential of an imaginary number with sines and cosines using Euler's formula.
+    
+    $$e^{bit} = \cos(bt) + i\sin(bt)$$
+\end{mytheo}
+
+Another important theorem in algebra is the complex conjugate root theorem:
+
+\begin{mytheo}{Complex Conjugate Root Theorem}{comConjRoot}
+    For any $n$'th degree polynomial in the form:
+    $$r^n+\dots+a_1r+a_0=0$$
+    If the complex number $r_1=a+bi$ is a root, then another root has to be $r_2 = a-bi$. 
+    In other words, if one complex number is a root of a polynomial, then it is neccessarily the case that the complex conjugate of that root is another root (complex conjugates always come in pairs).
+\end{mytheo}
+
+Both of these theorems hold true in general and are given without proof.
+
+By the \hyperref[th:comConjRoot]{Complex Conjugate theorem}, if $r_1=a+bi$ is a solution to the characteristic polynomial $r_2 = a-bi$ must also be a solution.
+
+Thus when $y_1(t) = e^{(a+bi)t}$ is a solution to a linear homogeneous differential equation with constant coefficients, $y_2(t) = e^{(a-bi)t}$ also must be (since they both solve the same characteristic polynomial).
+
+Because of \hyperref[th:euler]{Euler's formula} we can represent these solutions as:
+$$y_1(t) = e^{at}(\cos{bt}+i\sin{bt}$$
+$$y_2(t) = e^{at}(\cos{bt}-i\sin{bt}$$
+
+Because of superposition $y_3(t) =\frac{1}{2}y_1(t)+\frac{1}{2}y_2(t)$ is also a solution:
+
+$$y_3(t) = \frac{1}{2}e^{at}(\cos{bt}+i\sin{bt})+ \frac{1}{2}e^{at}(\cos{bt}-i\sin{bt})$$
+$$=e^{at}(\frac{1}{2}\cos{bt} + \frac{1}{2}\cos{bt})$$
+$$=e^{at}\cos{bt}$$
+
+Similarly, $y_4(t)=-\frac{1}{2}iy_1(t) + \frac{1}{2}iy_2(t)$ is also a solution:
+$$y_4(t) = -\frac{1}{2}ie^{at}(\cos{bt}+i\sin{bt})  \frac{1}{2}e^{at}(\cos{bt}-i\sin{bt})$$
+$$ie^{at}(-\frac{1}{2}i\sin{bt} - \frac{1}{2}i\sin{bt})$$
+$$-e^{at}(i^2\sin{bt})$$
+$$e^{at}(\sin{bt})$$
+
+
+\label{sinLin}
+These two solutions formed by taking linear combinations of the complex solutions are real and furthermore they are \hyperref[sec:prSinLin]{linearly independent!}
+
+Thus,
+
+\begin{mytheo}{Real Solutions from Complex roots}{realFromComplex}
+    If we have a differential equation in the form 
+    $$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
+    with the characteristic polynomial:
+    $$r^n+\dots+a_1r+a_0=0$$
+    if we solve this polynomial and get a complex pair of conjugate roots $r_1 = a+bi$ and $r_2 = a-bi$, we can represent two \textbf{real} solutions for the original differential equation as:
+    $$y_1(t) = e^{at}(\cos{bt})$$
+    $$y_2(t) = e^{at}(\sin{bt})$$
+\end{mytheo}
+
+\section{Repeated Roots}
+What happens when we solve our characteristic equation and get a repeated root, i.e. $r_1=r_2$ solves our equation. Then we no longer have the $n$ linearly independent solutions we need to span our solution space anywhere.
+
+The proof of the following theorem is long, but definitely worth looking at:
+
+
+\begin{mytheo}{Linearly Independent Solutions with Repeated Roots}{linIndRep}
+    If we have a differential equation in the form 
+    $$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
+    with the characteristic polynomial:
+    $$r^n+\dots+a_1r+a_0=0$$
+    If we solve this equation and end up getting two roots $r_i=r_j$ such that there are less than $n$ equations of the form $y(t) = e^{rt}$. 
+    If $r_i$ is a repeated once in the characteristic solution, then we can find two linearly independent solutions:
+    $$y_i(t) = e^{r_it}$$
+    $$y_j(t) = te^{r_it}$$
+    
+    This applies in general. If $r_i$ is repeated $n$ times, all of the following are linearly independent solutions:
+    $$y_1(t) = e^{r_it}$$
+    $$y_2(t) = te^{r_it}$$
+    $$\vdots$$
+    $$y_n(t) = t^ne^{r_it}$$
+\end{mytheo}
+
+\label{repRoot}
+\hyperref[sec:PrRepRoot]{The "proof" is presented in the appendix} for the specific case of second-order differential equation. 
+
+Note that this means that for any homogeneous differential equation with constant coefficients, we can \textbf{always} find the solutions quite easily if we know the roots of the polynomial. Finding the roots, however may end up being very difficult.
+
+
+
+
+\chapter{Solving Non-homogeneous Linear Differential Equations}
+\section{Introduction}
+\section{Constant Coefficients}
+\section{Method of Undetermined Coefficients}
+\section{Method of Variation of Parameters}
+
+\chapter{Application:Damping, Resonance, and Visualizing Solutions}
+\section{Spring mass system}
+\section{External force and resonance}
+
+
+\chapter{Linear Systems of Differential Equations}
+\section{Introduction}
+\section{Visualizing solution}
+
+
+
+\chapter{First-order case}
+
+\chapter{Questions}
+\begin{itemize}
+    \item Why does an nth order linear equation with n initial conditions need n linearly independent solutions to fully describe the solution space?
+    \item Proof of Uniqueness and Existence theorem (or at least intuition)?
+    \item What is Bessels equation?
+    \item Is there a form of Abel's equation in higher than 2 dimensions?
+    \item Why does putting $t, t^2, \dots $ before solution to a constant coefficient differential homogeneous give us another linearly independent solution for any degree?
+\end{itemize}
+
+\chapter{Proofs}
+\section{\hyperref[th:wronLinInd]{Proof of Wronskian implying linear independence}}
+\label{sec:prWronLinInd}
+Consider the equation 
+$$c_1\bm{f(t)} + c_2\bm{g(t)} = 0$$ 
+for some interval $t \in I$. 
+
+We know that is we can find non-zero $c_1$ and $c_2$ such that this equation is always true, the functions $\bm{f(t)}$ and $\bm{g(t)}$ are linearly dependent. On the other hand, if we can find some $t_0 \in I$ such that the only way we can satisfy this equation is by setting $c_1 = c_2 = 0$, then the functions are linearly independent.
+
+Say that the functions have their derivatives defined. Thus, we have a set of equations:
+$$c_1\bm{f(t)} + c_2\bm{g(t)} = 0$$ 
+$$c_1\bm{f'(t)} + c_2\bm{g'(t)} = 0$$ 
+
+In matrix form:
+$$
+\begin{bmatrix}
+    \bm{f(t)} & \bm{g(t)} \\
+    \bm{f'(t)} & \bm{g'(t)} \\
+\end{bmatrix}
+\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0 \\
+    0 \\
+\end{bmatrix}
+$$
+
+If the determinant of the matrix (which is the Wronskian) is non-zero for some $t_0 \in I$, we know from basic linear algebra, that the only $\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+\end{bmatrix}$ that satisfies the equation is $\begin{bmatrix}
+    0 \\
+    0 \\
+\end{bmatrix}$ (there is no non-zero null space for the matrix).
+
+Thus, when the \textbf{Wronskian} is non-zero for some $t_0$, the functions must be linearly independent since it is impossible to find a non-zero $c_1$ and $c_2$ that satisfy:
+$$c_1\bm{f(t_0)} + c_2\bm{g(t_0)} = 0$$
+$$c_1\bm{f'(t_0)} + c_2\bm{g'(t_0)} = 0$$.
+
+
+
+
+
+
+\section{\hyperref[th:abel_thm]{Proof of Abel's Theorem}}
+\label{sec:abel}
+Say we have the differential equation.
+$$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+Say we also have two solutions $y_1(t)$ and $y_2(t)$ that satisfy this equation:
+$$y_1''(t) + p_1(t)y_1'(t) + p_0(t)y_1(t) = 0$$
+$$y_2''(t) + p_1(t)y_2'(t) + p_0(t)y_2(t) = 0$$
+
+Let's multiply the top equation by $y_2(t)$ and the bottom equation by $y_1(t)$ and subtract to get rid of the term with $p_0(t)$:
+
+$$y_1''(t)y_2(t) + p_1(t)y_1'(t)y_2(t) + p_0(t)y_1(t)y_2(t) = 0$$
+$$y_2''(t)y_1(t) + p_1(t)y_2'(t)y_1(t) + p_0(t)y_2(t)y_1(t) = 0$$
+
+Subtracting yields:
+$$y_1''(t)y_2(t) + p_1(t)y_1'(t)y_2(t) - (y_2''(t)y_1(t) + p_1(t)y_2'(t)y_1(t)) = 0$$
+which after rearranging and simplifying yields:
+\begin{equation}
+\label{abel_eq}
+(y_1''(t)y_2(t)-y_2''(t)y_1(t))+p_1(t)(y_1'(t)y_2(t)-y_2'(t)y_1(t)) = 0
+\end{equation}
+
+multiplying by $-1$ and simplifying some more:
+$$(y_1(t)y_2''(t)-y_2(t)y_1''(t))+p_1(t)(y_1(t)y_2'(t)-y_2(t)y_1'(t)) = 0$$
+The term $y_1(t)y_2'(t)-y_2(t)y_1'(t)$ looks familiar. In fact, it is the Wronskian of $y_1(t)$ and $y_2(t)$:
+$$
+    W(y_1(t), y_2(t))(t) =
+    \text{det}\left(\begin{bmatrix}
+        y_1(t) & y_2(t) \\
+        y_1'(t) & y_2'(t) \\
+        \end{bmatrix}\right)
+    = y_1(t)y_2'(t)-y_2(t)y_1'(t)
+$$
+It also turns out that (by the chain rule):
+$$
+W'(y_1(t), y_2(t))(t) = y_1'(t)y_2'(t)-y_2(t)y_1''(t)+y_1(t)y_2''(t)-y_2'(t)y_1'(t)
+$$
+$$=y_1(t)y_2''(t)-y_2(t)y_1''(t)$$
+
+Returning to equation \ref{abel_eq}, we can substitute in the Wronskian and the derivative to get:
+$$W'(y_1(t),y_2(t))(t) + p_1(t)W(y_1(t), y_2(t))(t) = 0$$
+
+This is a separable first order equation for $W(t)$. Thus,
+
+$$\frac{W'(y_1(t),y_2(t))(t)}{W(y_1(t), y_2(t))(t)} = -p_1(t)$$
+Integrating both sides and simplifying:
+$$\int{\frac{dW}{W(y_1(t), y_2(t))(t)} }= \int{-p_1(t)dt}$$
+$$=\ln|W(y_1(t), y_2(t))(t)| = \int{-p_1(t)dt} + c$$
+$$W(y_1(t), y_2(t))(t)| = \exp{\left[\int{-p_1(t)dt} + c\right]}$$
+$$=c\exp{\left[-\int{p_1(t)dt}\right]}$$
+
+
+\section{\hyperref[th:WrLinDep]{Proof of Wronskian and Linear Dependence Relationship}}
+\label{sec:PrWrLinDep}
+This theorem says two main things:
+\begin{enumerate}
+    
+    \item$W(y_1(t), y_2(t))(t) = 0 \implies \text{Linear Dependence}$
+    
+    \item$ \text{Linear Dependence} \implies W(y_1(t), y_2(t))(t) = 0$
+\end{enumerate}
+We know that the second statement is true from \hyperref[th:wronLinDep]{this theorem.} The challenge in this proof is to prove the first statement.
+
+Let our two solutions be $y_1(t)$ and $y_2(t)$. Say we have the equation:
+$$c_1y_1(t) +c_2y_2(t) = 0$$
+The constants $c_1$ and $c_2$ can be zero or non-zero to satisfy this equation. If we can find a $c_1$ and $c_2$ such that they are both non-zero and it always satisfies this solution for any $t$ in some interval $I$, then $y_1(t)$ and $y_2(t)$ are linearly independent.
+
+From our equation we can take derivatives of both sides to get:
+$$c_1y_1(t) +c_2y_2(t) = 0$$
+$$c_1y_1'(t) +c_2y_2'(t) = 0$$
+
+Which forms the linear equations:
+$$
+\begin{bmatrix}
+    y_1(t) & y_2(t) \\
+    y_1'(t) & y_2'(t) \\
+\end{bmatrix}
+\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0 \\
+    0 \\
+\end{bmatrix}
+$$
+
+This equation will be satisfied for some $c_1$ and $c_2$ if and only if the determinant of the matrix is 0. That is when:
+$$
+\text{det}\left(\begin{bmatrix}
+        y_1(t) & y_2(t) \\
+        y_1'(t) & y_2'(t) \\
+        \end{bmatrix}\right)
+$$
+which is just the Wronskian.
+
+We might think that completes our proof, however, this is not the case. We've proven that we can always find a non-zero $c_1$ and $c_2$, however, they may not be the \textbf{same} $c_1$ and $c_2$ throughout the equation. 
+
+For example, in the case of the functions $t^3$ and $|t|t^2$ we can in fact find a $c_1$ and $c_2$ such that we always satisfy $c_1t^3+c_2|t|t^2=0$ for any t. However, for $t < 0$, $c_1=c_2=1$ satisfies this equation. In the case of $t>0$, $c_1=-c_1$ will satisfy this equation. Therefore these equations are not linearly dependant even though their Wronskian will be 0 everywhere.
+
+So in order to complete our proof, we need to make use of an additional fact, that $y_1(t)$ and $y_2(t)$ are solutions of a differential equation. 
+
+Say that for the differential equation $y_1(t)$ and $y_2(t)$ are the solution to we have the following arbitrarily initial values on the complete solution $\phi(t)$
+$$\phi(t_0) = 0$$
+$$\phi'(t_0) = 0$$
+
+
+We also know that $y_1(t)$ and $y_2(t)$ satisfy this differential equation (by definition) and by superposition, any linear combination of them must also satisfy this equation. Thus, let us consider a possible  general solution to be:
+
+$$\phi(t) = c_1y_1(t) +c_2y_2(t)$$
+
+Using the initial constraints,
+
+$$\phi(t_0) = c_1y_1(t_0) +c_2y_2(t_0) = 0$$
+$$\phi'(t_0) = c_1y_1'(t_0) +c_2y_2'(t_0) = 0$$
+
+which solves the matrix equation that we had earlier:
+$$
+\begin{bmatrix}
+    y_1(t_0) & y_2(t_0) \\
+    y_1'(t_0) & y_2'(t_0) \\
+\end{bmatrix}
+\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0 \\
+    0 \\
+\end{bmatrix}
+$$
+
+If the Wronskian is 0, we can always find $c_1$ and $c_2$ that are both non-zero satisfying this equation (a fact we established earlier). 
+
+Therefore, $\phi(t) = c_1y_1(t) + c_2y_2(t)$ is a solution the differential equation with the initial constraints $\phi(t_0) = 0$ and $\phi'(t_0) = 0$. if the Wronskian of $y_1(t)$ and $y_2(t)$ is zero. 
+
+Another interesting fact is that the trivial solution $\phi(t) = 0$ also satisfies our initial constraints $\phi(t_0) = 0$ and $\phi'(t_0) = 0$.
+
+By the  \hyperref[Ex&Un]{Existence and Uniqueness theorem}, if we find one solution satisfying the initial value problem, it must be the only solution the differential equation. Since we found two solutions to the differential equation we're considering, they must be equal to each other for all $t \in I$.
+Thus,
+$$\phi(t) = c_1y_1(t) +c_2y_2(t) = 0$$
+for all $t \in I$
+
+Taking derivatives of both sides and putting into matrix form, we see that:
+
+$$
+\begin{bmatrix}
+    y_1(t) & y_2(t) \\
+    y_1'(t) & y_2'(t) \\
+\end{bmatrix}
+\begin{bmatrix}
+    c_1 \\
+    c_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0 \\
+    0 \\
+\end{bmatrix}
+$$
+
+for $c_1, c_2 \neq 0$, $t \in I$
+
+Thus, when the Wronskian is 0 for two solutions of a second order linear homogeneous differential equation, we can find a universal $c_1$ and $c_2$ that are both non-zero such that $c_1y_1(t) +c_2y_2(t) = 0$ is always satisfied. 
+
+
+\section{\hyperref[th:expLinInd]{Proof of Linear Independence of exponentials of different degrees}}
+\label{sec:prExpLinInd}
+We know that  if we show that the Wronskian of two functions $y_1(t)$ and $y_2(t)$ is non-zero at any point, \hyperref[th:wronLinInd]{the functions must be linearly independent.}
+
+Thus, if we show that the Wronskian of $e^{r_1t}$ and $e^{r_2t}$ is 0 for $r_1 \neq r_2$ then they must be linearly independent.
+
+Let's do a proof by contradiction. Suppose that the $r_1 \neq r_2$, but the Wronskian is 0.Thus,
+
+$$
+    \text{det}\left(\begin{bmatrix}
+        e^{r_1t} & e^{r_2t} \\
+        r_1 e^{r_1t} & r_2 e^{r_2t} \\
+    \end{bmatrix}\right)
+    = 0
+$$
+Thus,by the definition of a determinant,
+$$r_2e^{r_2t}e^{r_1t} -r_1e^{r_1t}e^{r_2t} = 0$$
+which simplifies to:
+$$(r_2-r_1)e^{(r_1+r_2)t} = 0$$
+Since $e^{(r_1+r_2)t} \neq 0$, we can divide both sides by it and get:
+$$r_2 -r_1 = 0$$
+$$r_2 = r_1$$
+
+which contradicts our assumption that $r_1 \neq r_2$
+
+Thus, the Wronskian is in fact non-zero and the functions $e^{r_1t}$ and $e^{r_2t}$ are linearly independent.
+
+\section{\hyperref[sinLin]{Proof that sine and cosine are linearly independent}}
+\label{sec:prSinLin}
+If we can show that Wronskian of sine and cosine is non-zero at any particular $t_0$, then the functions are linearly independent.
+
+Let's take the Wronskian of $y_1(t) = \sin(bt)$ and $y_2(t) = \cos(bt)$
+
+$$
+    \text{det}\left(\begin{bmatrix}
+        \sin(bt) & b\cos(bt)\\
+        b\cos{bt} & -b\sin(bt) \\
+    \end{bmatrix}\right)
+$$
+$$=-b\sin^2(bt)-b\sin^2(bt)$$
+$$=-b(\sin^2(bt) + \cos^2(bt)$$
+By the elementary trig identity $\sin^2(bt) + \cos^2(bt) = 1$, we get:
+$$W(\sin(bt),\cos(bt))(t)=-b$$
+which is non-zero everywhere when $b$ is non-zero.
+
+Because, the Wronskian indeed is 0 everywhere, the functions $\sin(bt)$ and $\cos(bt)$ are linearly independent
+
+
+\section{\hyperref[repRoot]{Proof of finding Linearly Independent solutions for repeated roots (2nd Order)}}
+\label{sec:PrRepRoot}
+Say that we have a homogeneous linear differential equation of 2nd order with constant coefficients:
+
+$$y''(t) + a_1y'(t) + a_0y = 0$$
+
+Say that we solve for the characteristic polynomial and get an expression in the form of:
+
+$$r^2 + a_1r + a_0 = 0$$
+
+Furthermore, say that when we solve this polynomial (for example, using the quadratic equation), we get two repeated roots $r_1=r_2$.
+
+We need to find another linearly independent solution if we wish to span the complete solution space.
+
+We know that $y(t) = Ce^{r_1t}$ must be a solution (since it always satisfies the equation. Let's see if we can multiply it by a function $u(t)$ and see if the complete function satisfies our original differential equation.
+
+Thus, another potential solution is:
+
+$$y_2(t) = u(t)e^{rt}$$
+
+Plugging that in gives us:
+$$(u(t)e^{rt})'' + a_1(u(t)e^{rt})' + a_0(u(t)e^{rt}) = 0$$
+
+Applying the chain rule gives us:
+$$(u''(t)e^{rt}+2u'(t)(re^{rt}) + u(t)(r^2e^{rt})) + a_1(u'(t)e^{rt} + u(t)(re^{rt}))' + a_0(u(t)e^{rt}) = 0$$
+Collecting terms:
+$$u(t)e^{rt}(r^2+a_1r+a_0) +u''(t)e^{rt} + 2u'(t)(re^{rt}) + a_1 u(t)(re^{rt}) = 0$$
+Since we know $r$ satisfies the characteristic polynomial equation, $(r^2+a_1r+a_0)$ must be 0. Thus,
+$$u''(t)e^{rt} + 2u'(t)(re^{rt}) + a_1 u(t)(re^{rt}) = 0$$
+Simplifying by dividing by $e^{rt}$ (which is never 0) yields,
+$$u''(t) + u'(t)(2r+a_1) = 0$$
+
+Hmm, what should we do now?
+
+We know that the roots of a quadratic in the form $x^2 + bx + c = 0$ are given by the quadratic formula:
+$$r = \frac{-b \pm \sqrt{b^2-4c}}{2}$$
+When we have repeated roots, the discriminant $b^2-4ac$ is 0, giving us:
+$$r = \frac{-b}{2}$$
+
+
+Putting this in our equation yields:
+$$u''(t)+u'(t)(2r+a_1) = 0$$
+$$u''(t)+u'(t)(2(\frac{-a_1}{2}+a_1) = 0$$
+$$u''(t) + u'(t)(-a_1+a_1) = 0$$
+$$u''(t) = 0$$
+
+Integrating we get:
+$$u'(t) = c$$
+$$u(t) = ct + d$$
+
+Plugging back into original equation, we get:
+$$y_2(t) = (ct+d)e^{rt}$$
+
+We can remove the $de^{rt}$ part, since that is already a linear multiple of our first solution.
+
+Is the equation, $y_2(t) = te^{rt}$ linearly independent with $y_1(t) = e^{rt}$
+
+We can take the Wronskian and see if it is non-zero at any point in the interval we're considering:
+
+
+$$
+    \text{det}\left(\begin{bmatrix}
+        e^{rt} & te^{rt}\\
+        re^{rt} & rte^{rt}+ te^{rt} \\
+    \end{bmatrix}\right)
+$$
+$$
+    = e^{rt}(rte^{rt}+te^{rt}) - te^{rt}re^{rt}
+    = (e^{rt})^2(rt+t-rt)
+    = te^{rt}
+$$
+which is in fact non-zero everywhere where $t$ is non-zero!
+
+\end{document}
