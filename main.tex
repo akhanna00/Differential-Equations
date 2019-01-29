@@ -6,6 +6,10 @@
 \usepackage{tcolorbox}
 \usepackage{bm}
 \tcbuselibrary{theorems}
+\usepackage{physics}
+\usepackage{graphicx}
+
+
 
 % Things I use, but too lazy to find how again
 
@@ -59,6 +63,7 @@
 \hypersetup{
     pdftitle={Differential Equations},
     pdfpagemode=FullScreen,
+    linkbordercolor = {red},
 }
 
 
@@ -131,7 +136,7 @@ Notice how taking $y = y_1+y_2$ and plugging it into the equation gives us the s
 \end{mytheo}
 
 
-\section{Principle of Superposition and Non-homogeneous solution}
+\section{Principle of Superposition}
 
 \begin{mytheo}{Principle of Superposition}{super}
  If we have a homogeneous linear differential equation of the form:
@@ -149,44 +154,7 @@ If $y_1, ..., y_n$ are solutions, they must all satisfy $L[y_i] = 0$. Thus,
 $$L[c_1y_1+c_2y_2+...+c_ny_n] = c_1L[y_1] + c_2L[y_2] + ... + c_nL[y_n] = 0 + 0 + ... + 0 = 0$$
 Thus, the linear combination satisfies the condition to be a solution for this differential equation.
 
-\section{Non-homogeneous solution}
-We can use linearity and the principle of superposition to come up with a very useful result in solving non-homogeneous equations.
 
-\begin{mytheo}{Non-homogeneous Linear Solution}{nh_sol}
- For a non-homogeneous solution of the form
- $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
- where the coefficients are continuous over an interval $I$, the solution is of the form
- $$\phi(t) = y_h(t) + y_p(t)$$
- where $y_h(t)$ is the complete solution to homogeneous differential equation:
- $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
- and $y_p(t)$ is just any particular solution to the original non-homogeneous differential equation.
-\end{mytheo}
-
-This theorem is saying that in order for us to find the solution to a non-homogeneous differential equation we simply need to:
-\begin{enumerate}
-    \item Find the solutions to the homogeneous case
-    \item Find just one function that satisfies our initial non-homogeneous differential equation
-    \item Add these solutions together
-\end{enumerate}
-
-This might seem slightly peculiar, why is it that the unique solution to a non-homogeneous differential equation comes from just using one particular solution?
-
-Proof:
-Say we have the differential equation:
- $$L[y] = y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
-and that we find two different solutions that satisfy this equation, let's call them $y_1(t) and y_2(t)$.
-Thus, $L[y_1]=g(t)$ and $L[y_2]=g(t)$
-What happens when we subtract $L[y_1] and L[y_2]$?
-we get $L[y_1]-L[y_2] = 0$
-We know by linearity that 
-$$L[y_1]-L[y_2] = L[y_1-y_2] = 0$$
-this means that the combination $y_1(t)-y_2(t)$ solves the homogenous equation:
-$$L[y] = y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
-Thus,
-$$y_h(t) = y_1(t)-y_2(t)$$
-$$y_1(t) = y_h(t) + y_2(t)$$
-
-This means that any solution to the differential equation can be represented as the combination of another solution plus a solution to the homogeneous equation. 
 
 \section{Unique Homogeneous Solution and the Wronskian}
 In this section, we will consider second order homogeneous equations for simplicity, however, the results apply in general.
@@ -535,6 +503,7 @@ Similarly, the opposite is true:
 
 
 
+
 \chapter{Linear Differential Equation with Constant Coefficients}
 \section{Introduction}
 
@@ -627,6 +596,7 @@ Thus:
 
 
 \section{Complex Roots}
+\label{sec:comRoot}
 If we have a polynomial of the form:
 $$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = 0$$
 and instead of getting unique real roots, we get complex roots of the form $a+bi$, we could proceed as we did before and have solutions:
@@ -715,27 +685,1118 @@ The proof of the following theorem is long, but definitely worth looking at:
 \label{repRoot}
 \hyperref[sec:PrRepRoot]{The "proof" is presented in the appendix} for the specific case of second-order differential equation. 
 
-Note that this means that for any homogeneous differential equation with constant coefficients, we can \textbf{always} find the solutions quite easily if we know the roots of the polynomial. Finding the roots, however may end up being very difficult.
+Note that this means that for any homogeneous differential equation with constant coefficients, we can \textbf{always} find the solutions quite easily if we know the roots of the polynomial. Finding the roots, however may end up being very difficult (especially since there is no general formula for polynomials of degree 5 and above).
 
 
+\section{Application: Spring-Mass System and Damping}
+\subsection{Simple Harmonic Motion}
+Consider a physics example of a mass attached to a theoretically mass-less spring with a spring-constant of $k$.
+
+[insert picture]
+
+When we pull the spring to the right by a small $\delta x$, by Hooke's law, the restoring force to its original force is proportial to the distance stretched. The direction is in the opposite direction of stretching. Thus,
+$$F = -kx$$
+This is equivalent to (by Newton's 2nd Law):
+$$m\dv[2]{x}{t} = -kx$$
+Further simplify we get:
+$$\dv[2]{x}{t} + \frac{k}{m}x = 0$$
+
+which is a second order differential equation with constant coefficients. We can solve this by finding the roots of the characteristic polynomial:
+
+$$r^2+\frac{k}{m} = 0$$
+$$r = 0 \pm \sqrt{-\frac{k}{m}}$$
+
+Thus we have a complex root. We know from \hyperref[sec:comRoot]{the section above} that two solutions to this are:
+
+$$y_1(t) = e^0\cos(\sqrt{\frac{k}{m}}t) = \cos(\sqrt{\frac{k}{m}}t)$$
+$$y_2(t) = e^0\sin(\sqrt{\frac{k}{m}}t) = \sin(\sqrt{\frac{k}{m}}t)$$
+
+and that in fact any linear combination of these two solutions will also be a solution.
+
+$$y(t) = c_1\cos(\sqrt{\frac{k}{m}}t) + c_2\sin(\sqrt{\frac{k}{m}}t)$$
+
+The following theorem can help simplify this even more:
+
+\begin{mytheo}{Adding sines and cosines of same frequency}{sinPlusCosin}
+    The linear combination of a sine and cosine function of the same frequency is itself a cosine function with a phase shift $\phi$:
+    $$a\cos(\omega t) + b\sin(\omega t) = A\cos(\omega t - \phi)$$
+    where $$A = \sqrt{a^2+b^2}$$ and $$\phi = \tan^{-1}(b/a)$$
+\end{mytheo}
+\hyperref[sec:prSinPlusCosin]{Two proofs are given in the appendix.}
+
+Thus, an equivalent form is:
+$$y(t) = A\cos(\sqrt{\frac{k}{m}} t - \phi)$$
+
+In both representations of the solution, the constants can be determined by the initial conditions ($c_1, c_2$ in the first case and $A, \phi$ in the second).
+
+Thus, the solution look something like this:
+
+\includegraphics[scale=0.4]{cos_phase.png}
+
+
+\subsection{Damping}
+
+\includegraphics[scale=0.4]{spring-mass.png}
+
+
+If we introduce some external force such as friction that opposes the direction the mass is travelling and is proportional to velocity, we get another equation:
+
+$$F = -kx(t) - bv(t)$$
+
+Which simplifying is:
+
+$$\dv[2]{x(t)}{t} + \frac{b}{m}\dv{x(t)}{t} + \frac{k}{m}x(t) = 0$$
+
+This gives us the characteristic polynomial:
+$$r^2 + \frac{b}{m}r + \frac{k}{m} = 0$$
+
+To get the roots we can use the quadratic formula to get:
+$$r = \frac{-\frac{b}{m} \pm \sqrt{(\frac{b}{m})^2-4\frac{k}{m}}}{2}$$
+$$ = -\frac{b}{2m} \pm \frac{1}{2}\sqrt{\left(\frac{b}{m}\right)^2-4\frac{k}{m}}$$
+$$ = -\frac{b}{2m} \pm \sqrt{\left(\frac{b}{2m}\right)^2-\frac{k}{m}}$$
+
+Let's rename some constants to make solving this easier:
+
+$$\rho = \frac{b}{2m}$$
+$$\omega_n = \sqrt{\frac{k}{m}}$$
+$$\omega_d = \sqrt{\rho^2 - \omega_n^2}$$
+
+The reason we named $\sqrt{\frac{k}{m}}$ the natural frequency, is that this would be the angular frequency of the cosine function if there was no oscillation. Plugging these values in our equation:
+$$r = -\rho \pm \sqrt{\rho^2-\omega_n^2}$$
+
+Thus our complex solution will be:
+$$y(t) = e^{-\rho \pm \sqrt{\rho^2-\omega_n^2}t}$$
+
+However, using the methods we described in the section above, we can better understand what is going on when evaluating three different cases (two distinct real roots, complex roots and repeated roots)
+
+\subsubsection{Underdamped Case}
+Let's consider the case when the discriminant is less than 0 
+$$\omega_d = \rho^2-\omega_n^2 < 0$$.
+Thus, we should get complex roots:
+
+$$r = -\rho \pm i\omega_d$$
+
+We know from our \hyperref[th:realFromComplex]{previous discussion of the case where our roots are complex}, that two real solutions to our original differential equation are:
+
+$$y_1(t) = e^{-\rho t}(\cos(\omega_d t))$$
+$$y_2(t) = e^{-\rho t}(\sin(\omega_d t))$$
+
+Thus, the complete solution is any linear combination of these two cases:
+$$y(t) = c_1e^{-\rho t}(\cos(\omega_d t)) + c_2e^{-\rho t}(\sin(\omega_d t))$$
+Which we can simplify to:
+$$y(t) = e^{-\rho t}(c_1\cos(\omega_d t) + c_2\sin(\omega_d t))$$
+$$=Ae^{-\rho t}\cos(\omega_d t - \phi)$$
+
+Visually, this function should begin as a cosine function oscillating with an exponentially decreasing amplitude.
+
+
+\subsubsection{Critically Damped Case}
+Now let's consider the case where the discriminant is 0. Thus,
+
+$$\omega_d = \rho^2-\omega_n^2 = 0$$.
+
+Solving our characteristic equation, we get the repeated root:
+$$r = -\rho$$
+
+What should our complete solution be in this case? We can look to our \hyperref[th:linIndRep]{previous discussion on repeated roots} in the characteristic polynomial to see that two linearly independent solutions should be:
+
+
+$$y_1(t) = e^{-\rho t}$$
+$$y_2(t) = te^{-\rho t}$$
+
+Thus our complete solution is any linear combination of these solutions:
+
+$$y = c_1e^{-\rho t} + c_2te^{-\rho t} $$
+
+
+This will tend to 0 fairly quickly because of the two exponentials.
+
+
+\subsubsection{Overdamped Case}
+Let's consider the case when the discriminant is greater than 0 
+$$\omega_d = \rho^2-\omega_n^2 > 0$$.
+
+Since the discriminant is positive, we get two distinct real solutions:
+$$r_1 = -\rho + \omega_d$$
+$$r_2 = -\rho - \omega_d$$
+
+Thus our two linearly independent solutions will be:
+$$y_1(t) = e^{-(\rho - \omega_d)t}$$
+$$y_2(t) = e^{-(\rho + \omega_d)t}$$
+
+We know that $\rho > \omega$ so both of these functions exhibit exponential decay. Thus, the complete solution should also exhibit exponential decay:
+
+$$y(t) = c_1e^{-(\rho - \omega_d)t} + c_2e^{-(\rho + \omega_d)t}$$
+
+\subsection{Summary}
+For a spring-mass system we have 4 different cases:
+\newline
+
+
+\begin{tabular}{ c c c c}
+ \textbf{Situation} & \textbf{Case} & \textbf{Roots} & \textbf{Solution} \\
+ \hline
+ No Damping & $b=0$ & Complex Roots $\pm i\omega_n$ & $A\cos(\omega_nt - \phi)$ \\ 
+ Underdamped & $b^2 < 4mk$ & Complex Roots $-\rho \pm i\omega_n$ &  $Ae^{-\rho t}\cos(\omega_d t - \phi)$\\  
+ Critically Damped & $b^2 = 4mk$ & Repeated Root $-\rho$ & $(c_1 + c_2t)e^{-\rho t}$  \\
+ Overdamped & $b^2 > 4mk$ & Real Roots $-\rho \pm \omega_d$  & $c_1e^{-(\rho - \omega_d)t} + c_2e^{-(\rho + \omega_d)t}$ \\
+\end{tabular}
+
+
+where:
+
+$$\rho = \frac{b}{2m}$$
+$$\omega_n = \sqrt{\frac{k}{m}}$$
+$$\omega_d = \sqrt{\rho^2 - \omega_n^2}$$
+
+This is easier to understand visually:
+
+\includegraphics[scale=0.5]{damping.png}
 
 
 \chapter{Solving Non-homogeneous Linear Differential Equations}
 \section{Introduction}
-\section{Constant Coefficients}
-\section{Method of Undetermined Coefficients}
-\section{Method of Variation of Parameters}
+In the previous sections, we mostly focused on the homogeneous case of linear differential equations. In this case we will focus on non-homogeneous equations, that is, there is a term in the differential equation that is only dependent on the independent variable. Thus, we will be considering equations in the form:
 
-\chapter{Application:Damping, Resonance, and Visualizing Solutions}
-\section{Spring mass system}
-\section{External force and resonance}
+
+$$y''(t) + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+
+where $y(t)$ is twice differentiable on an interval $I$ and $p_1(t), p_0(t) and g(t)$ are defined and continuous in this interval.
+
+You can imagine $g(t)$ to be some external force that doesn't depend on our original system (only on time). We will use this fact to study the effect of putting an external force on the spring-mass-dashpot system we talked about before.
+
+\section{Finding the Non-Homogeneous Solution}
+
+The following theorem gives us the method of finding a non-homogeneous solution for a differential equation:
+
+\begin{mytheo}{Non-homogeneous Linear Solution}{nhSol}
+ For a non-homogeneous solution of the form
+ $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+ where the coefficients are continuous over an interval $I$, the solution is of the form
+ $$\phi(t) = y_h(t) + y_p(t)$$
+ where $y_h(t)$ is the complete solution to homogeneous differential equation:
+ $$y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+ and $y_p(t)$ is just any particular solution to the original non-homogeneous differential equation.
+\end{mytheo}
+
+\hyperref[sec:prNhSol]{The proof is given in the appendix}
+
+This theorem is saying that in order for us to find the solution to a non-homogeneous differential equation we simply need to:
+\begin{enumerate}
+    \item Find the solutions to the homogeneous case
+    \item Find just one function that satisfies our initial non-homogeneous differential equation
+    \item Add these solutions together
+\end{enumerate}
+
+
+\section{Non-homogeneous Equation with Constant Coefficients and Exponential Response}
+
+Consider the case we did in the chapter above, a differential equation with constant coefficients. However, this time, let's add a an exponential term only dependant on $t$, so our equation will look like:
+
+$$y^{(n)}(t) + ... + a_1y'(t) + a_0y(t) = be^{\omega t}$$
+
+where $b$ is just a constant value.
+
+As we discussed in the section above, the complete solution to this differential equation is the complete set of all homogeneous solutions plus one particular solution:
+$$y(t) = y_h(t) + y_p(t)$$
+
+Using the methods we discussed in the previous chapter, we can solve for the homogeneous solution by finding the roots of the characteristic polynomial for the homogeneous differential equation:
+
+$$y^{(n)}(t) + \dots + a_1y'(t) + a_0y(t) = 0$$
+
+However, how do we go about finding one particular solution?
+
+What happens if we try plugging in $ce^{\omega t}$ as our solution, where $c$ is just an arbritrary constant. Thus we should get:
+
+$$(ce^{\omega t})^{(n)} + \dots + a_1(ce^{\omega t})' + a_0(ce^{\omega t}) = be^{\omega t}$$
+
+Using the fact that the derivative of an exponent is itself and the linearity of the derivative operator, we see that:
+$$(\omega^n + \dots + a_1\omega + a_0)ce^{\omega t} = be^{\omega t}$$
+
+We know that $e^{\omega t}$ is never 0 so we can divide both sides by it:
+$$(\omega^n + \dots + a_1\omega + a_0)c = b$$
+
+If we suppose that $\omega^n + \dots + a_1\omega + a_0 \neq 0$ (which is in fact a big assumption), we see that we can solve for c:
+
+$$c = \frac{b}{\omega^n + \dots + a_1\omega + a_0}$$
+
+Thus, we have found a particular solution!:
+
+$$y_p(t) =  \frac{b}{\omega^n + \dots + a_1\omega + a_0}e^{\omega t}$$
+
+If we represent the characteristic polynomial as a function:
+
+$$P(r) = r^n + \dots + a_1r + a_0$$
+
+We see that the denominator of our solution is just the characteristic polynomial evaluated at $\omega$.
+
+Thus more compactly, the particular solution is:
+
+$$y_p(t) = \frac{b}{P(\omega)} e^{\omega t}$$
+if $P(\omega) \neq 0$
+
+
+
+Thus:
+
+\begin{mytheo}{Exponential Response Formula}{ERF}
+    For a non-homogeneous differential equation in the form:
+    $$y^{(n)}(t) + \dots + a_1y'(t) + a_0y(t) = be^{\omega t}$$
+    and the characteristic polynomial
+    $$P(r) = r^n + \dots + a_1r + a_0$$
+    
+    A particular solution to this differential equation is:
+    
+    $$y_p(t) = \frac{b}{P(\omega)} e^{\omega t}$$
+    if $P(\omega) \neq 0$
+    
+ 
+\end{mytheo}
+
+What do we do in the specific case of a $\omega_0$ where $P(\omega_0) = 0$? We can evaluate the limit as we approach the value the particular solution
+
+$$y_p(t) = \lim_{\omega \to \omega_0}\frac{b}{P(\omega)} e^{\omega t}$$
+
+We can use L'Hopital's Rule to help evaluate this limit when it is in fact indeterminate $P(\omega_0) = 0$.
+
+L'Hopital's Rule (not stated formally) says that if the function composed of the division of two other functions is indeterminant at some point $x_0$ we can evaluate the limit at the derivatives of both of these functions instead provided the functions are differentiable.
+
+Thus,
+if $P(\omega_0) = 0$, but $P'(\omega_0) \neq 0$, then:
+
+$$y_p(t) = \lim_{\omega \to \omega_0}\frac{b}{P(\omega)} e^{\omega t} = \frac{b}{P'(\omega)} te^{\omega t}$$
+
+If $P'(\omega_0) = 0$ also, but the second derivative is non-zero then:
+
+$$y_p(t) = \lim_{\omega \to \omega_0}\frac{b}{P(\omega)} e^{\omega t} = \frac{b}{P''(\omega)} t^2e^{\omega t}$$
+
+
+and so on.
+
+Thus:
+
+\begin{mytheo}{Generalized Exponential Response Formula}{GERF}
+    For a non-homogeneous differential equation in the form:
+    $$y^{(n)}(t) + \dots + a_1y'(t) + a_0y(t) = be^{\omega t}$$
+    and the characteristic polynomial
+    $$P(r) = r^n + \dots + a_1r + a_0$$
+    
+    At the first non-zero value of $P(r)$ evaluated at $\omega$ (say at the m'th derivative), $P^{m}(\omega) \neq 0$ then we can always find a particular solution by:
+    
+    $$y_p(t) = \frac{b}{P^{(m)}(\omega)} t^me^{\omega t}$$
+    if $P^{(m)}(\omega) \neq 0$
+    and all the lower derivatives $P(\omega), P'(\omega), \dots, P^{(m-1)} = 0$
+    
+ 
+\end{mytheo}
+
+\section{Complexification for sines and cosines}
+
+The method above only works for exponentials. However, by using Euler's formula:
+
+$$\cos(\omega t) + i\sin(\omega t) = e^{i\omega t}$$
+
+we can use the same method for sinusoidal functions.
+
+Imagine that we have the differential equation:
+
+$$y^{(n)}(t) + \dots + a_1y'(t) + a_0y(t) = b\cos(\omega t)$$
+
+Say that we make a new function such that:
+$$z(t) = y(t) + iq(t) $$
+
+In other words: $y(t) = \Re[z(t)]$
+
+Thus, plugging it into the LHS of the equation we get:
+
+$$z(t)^{(n)}(t) + \dots + a_1z'(t) + a_0z(t)$$
+$$=(y(t) + iq(t))^{(n)} + \dots + a_1(y(t) + iq(t))' + a_0(y(t) + iq(t))$$
+
+which by linearity gives us:
+
+$$y^{(n)}(t) + \dots + a_1y'(t) + a_0y(t) + i(q^{(n)}(t) + \dots + a_1q'(t) + a_0q(t))$$
+
+Hmm... The first part of this expression looks a lot like the differential equation we originally were trying to solve and if we plug in our original value for it, we get:
+
+$$b\cos(\omega t) + i(q^{(n)}(t) + \dots + a_1q'(t) + a_0q(t))$$
+
+Remember we arbitrarily introduce the function $q(t)$ so we can set the value of it to whatever we want. Say we set $q^{(n)}(t) + \dots + a_1q'(t) + a_0q(t))$ to $\sin(\omega t)$:
+
+We get:
+
+$$b(\cos(\omega t) + i\sin(\omega t))$$
+
+which by Euler's formula is:
+
+$$be^{i\omega t}$$
+
+Thus,
+$$z^{(n)}(t) + \dots + a_1z'(t) + a_0z(t) = be^{i\omega t}$$
+
+where $y(t) = \Re[z(t)]$
+
+We know how to solve for $z_p(t)$ using the methods we discussed above! We just need to get the real part of it to solve for our original differential equation.
+
+We can apply the same procedure for a differential equation where instead of cosine, we had sine. We would just solve the complexified equation and take the imaginary part of the solution.
+
+This gives us the method of complexification:
+
+\begin{mytheo}{Complexification}{complexification}
+    For a non-homogeneous differential equation with constant coefficien569+ts, if we have a sinusoidal input in the form:
+    $$y^{(n)}(t) + \dots + a_1y'(t) + a_0y(t) = b\cos(\omega t)$$
+    or 
+    $$y^{(n)}(t) + \dots + a_1y'(t) + a_0y(t) = b\sin(\omega t)$$
+    We can find a particular solution for these cases if we solve a different differential equation:
+    $$z^{(n)}(t) + \dots + a_1z'(t) + a_0z(t) = be^{i\omega t}$$
+    which we can solve using the \hyperref[th:GERF]{Generalized ERF.}
+    
+    To find the solutions for our differential equation we take Real or Imaginary part of the solution $z_p(t)$. Thus in the first case with cosine:
+    $$y_p(t) = \Re{z_p(t)}$$
+    In the second case with sine:
+    $$y_p(t) = \Im{z_p(t)}$$
+\end{mytheo}
+
+\section{Constant Coefficients with a Polynomial Response}
+Let's say that we're given the differential equation
+
+$$y^{(n)}(t) + \dots + c_1y'(t) + c_0y(t) = a_0t^n + a_1t^{n-1} + \dots a_n$$
+
+(Notice that I switched $a_0 \dots a_n$ with $c_n \dots  c_0$. I did this because of convention in a lot of textbooks)
+
+It turns out that we can find the solution for this case:
+
+\begin{mytheo}{Polynomial Response}{polyResp}
+    Given a non-homogeneous differential equation with constant coefficients of the form:
+    $$y^{(n)}(t) + \dots + c_1y'(t) + c_0y(t) = a_0t^n + a_1t^{n-1} + \dots a_n$$
+    
+    A particular solution will take the form:
+    
+    $$y_p(t) = A_0t^n + \dots + A_n$$
+    if $c_0 \neq 0$:
+    
+    If $c_0=0$, then the form will be:
+    
+    $$y_p(t) = t(A_0t^n + \dots + A_n)$$
+    if $c_1 \neq 0$:
+    
+    If both $c_0=c_1=0$, then the particular solution will be:
+    $$y_p(t) = t^2(A_0t^n + \dots + A_n)$$
+    if $c_2 \neq 0$:
+
+    This process continues on. Thus when we have $c_0 = c_1 = \dots = c_s = 0$, the form of a particular solution is:
+    $$y_p(t) = t^{s+1}(A_0t^n + \dots + A_n)$$
+    if $c_{s+1} \neq 0$:
+    
+\end{mytheo}
+
+\hyperref[sec:prPolyResp]{The proof of this is given in the appendix.}
+
+
+After we know the form of a particular solution, it is relatively straightforward to go about finding the actual coefficients. We can just plug it into our equation and relate like terms together.
+
+\section{Method of Undetermined Coefficients}
+We might run into a specific case of a differential equation where the response is in fact a sum or product of an exponential and polynomial. How do we deal with those cases to find a particular solution?
+
+Let's start with sums:
+
+This theorem applies in general (doesn't require terms to be polynomials or exponentials):
+
+\begin{mytheo}{Particular Solution to Sum of different responses}{sumResp}
+    Given a differential equation in the form of:
+    $$y^{(n)}(t) + \dots + c_1y'(t) + c_0y(t) = g_1(t) + \dots + g_m(t)$$
+    and given that we have a particular solution for the differential equations:
+    $$y^{(n)}(t) + \dots + c_1y'(t) + c_0y(t) = g_1(t)$$
+    $$\vdots$$
+    $$y^{(n)}(t) + \dots + c_1y'(t) + c_0y(t) = g_m(t)$$
+    which we will denote as $y_1(t), \dots, y_m(t)$ respectively.
+    
+    A particular solution to the original differential equation can be found by taking the sum of these particular solutions:
+    $$y_p(t) = y_1(t) + \dots + y_m(t)$$
+    
+\end{mytheo}
+
+The proof of this fact is relatively simple and relies on the linearity of the problem (almost exactly the same proof as for homogeneous differential equations).
+
+
+\section{Method of Variation of Parameters}
+The method of variation of parameters allows us a method for determining the solution to an non-homogeneous n'th order linear differential equation, provided we know all of the homogeneous solutions.
+
+\begin{mytheo}{Variation of Parameters}{var}
+    Say we have a differential equation of the form:
+
+    $$y^{(n)}(t) + \dots + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+
+    Say that the n solutions to the homogeneous are:
+    $y_1(t), y_2(t), \dots, y_n(t)$ respectively.
+    
+    We can always find a particular solution to the non-homogeneous differential equation above by:
+    
+    $$y_p(t) = u_1(t)y_1(t) + u_2(t)y_2(t) + \dots + u_n(t)y_n(t)$$
+    
+    where the functions $u_1(t), \dots, u_n(t)$ can be determined by computing the derivatives by:
+    
+    
+$$
+\begin{bmatrix}
+    u_1'(t) \\
+    u_2'(t) \\
+    \vdots \\ 
+    u_n'(t)
+\end{bmatrix}
+=
+\begin{bmatrix}
+    y_1(t) & y_2(t) & \dots  & y_n(t) \\
+    y_1'(t) & y_2'(t) & \dots  & y_n'(t) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    y_1^{(n)}(t) & y_2^{(n)}(t) & \dots  & y_n^{(n)}(t) \\
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+    0 \\
+    0 \\
+    \vdots \\ 
+    g(t)
+\end{bmatrix}
+$$
+Once we have the derivatives, we can integrate to find the actual functions $u_1(t), \dots, u_n(t)$
+\end{mytheo}
+
+\hyperref[sec:prVar]{The (lengthy) proof is in the appendix.}
+
+This gives us a general way to solve for a particular solution of any non-homogeneous linear differential equation given we know the homogeneous solutions! 
+
+\section{Application: Resonance}
+Imagine a spring-mass system we discussed earlier without damping. What if we applied a sinusoidal force to our oscillator?
+
+Thus,
+$$F = -kx + A\cos(\omega t)$$
+$$\dv[2]{x}{t} + \frac{k}{m}x = A\cos(\omega t)$$
+
+This is a non-homogeneous differential equation. If we use the ERF to solve for a particular solution, we get:
+
+$$x_p(t) = \frac{A\cos(\omega t)}{(k/m)^2-\omega^2}$$
+
+if $\frac{k}{m} \neq \omega$
+
+However, something interesting happens as $\omega$ is in fact the natural frequency $\frac{k}{m}$. We can see that as it approaches this value, we get higher and higher values for x. We can use l'Hopital's rule to determine the exact value of this limit which is:
+
+$$\lim_{\omega \to k/m}(\frac{A\cos(\omega t)}{(k/m)^2-\omega^2}) = \frac{At\sin(\omega t)}{2\omega}$$
+
+
+Notice that now the response is in fact a sinusoidal function with increasing amplitude!
+
+This phenomenon is called \textbf{pure resonance}
+
+
+
 
 
 \chapter{Linear Systems of Differential Equations}
 \section{Introduction}
-\section{Visualizing solution}
+Linear systems of differential equations become important when we want to model rates of change that depend on multiple variables and those variables further depend on other variables.
+
+For example (and oversimplifying greatly), the rate of change in the population of wolfs in a forest may depend on the current population of wolfs and the population of their prey (such as deer). The rate of change in the deer population also depends on the population of predators and the current population of deer. Therefore we could model the system as:
+
+$$x' = ax + by$$
+$$y' = cx + dy$$
+
+This can also be thought of in matrix form:
+
+$$
+\begin{bmatrix}
+    x' \\
+    y' \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    a & b \\
+    c & d \\
+\end{bmatrix}
+\begin{bmatrix}
+    x \\
+    y \\
+\end{bmatrix}
+$$
+
+We will discuss how to solve such matrices and understand the long term behaviour of systems like these.
+
+In this chapter we will use the convention that for each variable $x_i$, we will not put $(t)$ afterward to represent a function (even though it is in fact a function).
+
+\section{Existence of Solutions}
+In this section, we will consider the system of differential equation as follows:
+
+$$x_1' = F_1(x_1, \dots, x_n)$$
+$$\vdots$$
+$$x_n' = F_2(x_1, \dots, x_n)$$
+
+We define a \textbf{solution} to this differential equation when we have:
+
+$$x_1 = \phi_1(t)$$
+$$\vdots$$
+$$x_n = \phi_n(t)$$
+
+defined on some interval $I$ where the solutions are differential and satisfy the initial system of equations.
+
+There is an Existence and Uniqueness Theorem for systems of differential equations as well:
+
+\begin{mytheo}{Existence and Uniqueness Theorem for System}{exUnSys}
+    For the system of differential equation:
+    $$x_1' = F_1(x_1, \dots, x_n)$$
+    $$\vdots$$
+    $$x_n' = F_2(x_1, \dots, x_n)$$
+    
+    If $F_1, \dots F_n$  and all of the partial derivatives of $F_1, \dots F_n$ with respect to $x_1, \dots x_n$ ($n^2$ total partial derivatives) are continuous on some region $R$ of $t, x_1, \dots, x_n$. 
+    
+    Furthermore say that at some point in R, say
+    $t_0, x_1^0, \dots x_n^0$, some initial constraint is satisfied:
+    $$x_1(t_0) = x_1^0$$
+    $$\vdots$$
+    $$x_n(t_0) = x_n^0$$
+    
+    Then there must exist a unique solution on some interval I for which $x_1 = \phi_1(t), \dots, x_n = \phi_n(t)$ such that both the initial system and the initial conditions are satisfied.
+    
+\end{mytheo}
+
+The proof of this theorem is not given.
+
+Note one thing: the partial derivatives of $F_1, \dots, F_n$ with respect to $t$ are irrelevant in deciding if we can find a solution or not.
 
 
+Just like in the case of $n'th$ order differential equations, there are both linear can non-linear cases.
+
+A \textbf{linear} system of differential equations is one where each function $F_1, \dots, F_n$ are combinations of $x_1, \dots, x_n$ such that the coefficients only depend on time. Thus a linear system of equations looks like:
+
+
+$$x_1' = p_{11}(t)x_1 + \dots + p_{1n}(t)x_n +g_1(t)$$
+$$\vdots$$
+$$x_n' = p_{n1}(t)x_1 + p_{nn}(t)x_n + g_n(t)$$
+
+We will be dropping the $(t)$ for the functions $p_11(t), \dots, p_nn(t)$ and $g_1(t), \dots, g_n(t)$ in future discussions.
+
+Another way of viewing linear systems is that we can represent them in matrix form:
+
+
+$$
+\begin{bmatrix}
+    x_1' \\
+    \vdots \\
+    x_n' \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    p_{11} &  \dots & p_{1n} \\
+    \vdots & \ddots & \vdots \\
+    p_{n1} &  \dots & p_{nn} \\
+\end{bmatrix}
+\begin{bmatrix}
+    x_1 \\
+    \vdots \\
+    x_n \\
+\end{bmatrix}
++
+\begin{bmatrix}
+    g_1 \\
+    \vdots \\
+    g_n \\
+\end{bmatrix}
+$$
+
+which is also:
+
+$$\mathbf{x}' = \mathbf{Px} + \mathbf{g}$$
+
+where bold letters represent matrices
+
+If $\mathbf{g} = \mathbf{0}$, we call it a \textbf{homogeneous} system of differential equation and if it is non-zero it is \textbf{non-homogeneous}.
+
+
+If $p_{11}, \dots, p_{nn}$ and $g_1, \dots, g_n$ are continuous, then there exists a unique solution for some initial conditions.
+
+Why?
+Since the partial derivatives of all of the $F_1, \dots, F_n$ of a linear system of differential equation are in fact $p_11, \dots p_nn$, we can just check the continuity of these functions to satsisfy the Existence and Uniqueness Theorem.
+
+
+
+Let's consider the case of a linear, homogeneous system:
+
+
+$$\mathbf{x}' = \mathbf{Px}$$
+
+
+(Note on convention:
+We will denote solutions by $\mathbf{x}^{(1)}, \dots \mathbf{x}^{(n)}$. In addition, the solution vectors components will be labelled as:
+
+$$\mathbf{x}^{(j)} = 
+\begin{bmatrix}
+    x_1^{(j)} \\
+    \vdots \\
+    x_n^{(j)} \\
+\end{bmatrix}
+$$
+)
+
+The following theorem is very similar to that of superposition for $n$'th order differential equations:
+
+\begin{mytheo}{Sum of Two Homogeneous Solutions}{sysSum}
+    If $\mathbf{x}^{(1)}$ and $\mathbf{x}^{(2)}$ are both solutions to the some homogeneous system in the form of
+    $$\mathbf{x}' = \mathbf{Px}$$
+    than any linear combination of these two solutions is also a solution.
+    $$\mathbf{x}^{(3)} = c_1\mathbf{x}^{(1)} + c_2\mathbf{x}^{(2)}$$
+\end{mytheo}
+
+
+This applies again, just like the $n$'th order case because taking derivatives is a linear operator.
+
+This begs the question we had in the $n$'th order case, how do we know we have enough solutions to span the solution space?
+
+Just like before, we know that we have enough solution vectors $\mathbf{x}^{(1)}, \dots, \mathbf{x}^{(n)}$ if and only if for any $n$ set of initial conditions $x_1(t_0) = x_1^0, \dots, x_n(t_0) = x_n^0$ we can find a unique solution.
+
+By the principle of superposition, we know that any solution can be composed of a linear combination of other solutions.
+
+Imagine if we could find some solutions $\mathbf{x}^{(1)}. \dots, \mathbf{x}^{(n)}$ such that we could always find a linear combination such that we solve for the unique solution for \textbf{any} initial value problem:
+
+$$
+\begin{bmatrix}
+    \vert & & \vert \\
+    \mathbf{x}^{(1)}(t_0) & \dots & \mathbf{x}^{(n)}(t_0) \\
+    \vert & & \vert \\
+\end{bmatrix}
+\begin{bmatrix}
+    c_1 \\
+    \vdots \\
+    c_n \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    x_1^0 \\
+    \vdots \\
+    x_n^0 \\
+\end{bmatrix}
+$$
+
+If $\mathbf{x}^{(1)}. \dots, \mathbf{x}^{(n)}$ are in fact our basis solutions than we should be able to find a unique $c_1, \dots, c_n$ that solve this system:
+
+$$
+\begin{bmatrix}
+    c_1 \\
+    \vdots \\
+    c_n \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    \vert & & \vert \\
+    \mathbf{x}^{(1)}(t_0) & \dots & \mathbf{x}^{(n)}(t_0) \\
+    \vert & & \vert \\
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+    x_1^0 \\
+    \vdots \\
+    x_n^0 \\
+\end{bmatrix}
+$$
+
+
+Let's put some names to things:
+
+$$\mathbf{X(t)} = 
+\begin{bmatrix}
+    \vert & & \vert \\
+    \mathbf{x}^{(1)}(t) & \dots & \mathbf{x}^{(n)}(t) \\
+    \vert & & \vert \\
+\end{bmatrix}
+$$
+
+$$
+\mathbf{c} = 
+\begin{bmatrix}
+    c_1 \\
+    \vdots \\
+    c_n \\
+\end{bmatrix}
+$$
+
+$$
+\mathbf{x^0} =
+\begin{bmatrix}
+    x_1^0 \\
+    \vdots \\
+    x_n^0 \\
+\end{bmatrix}
+$$
+
+Therefore, the following theorem must hold:
+
+
+\begin{mytheo}{Fundamental Set of Solutions}{fundSys}
+For a system of linear differential equations:
+
+$$\mathbf{x'} = \mathbf{Px}$$
+
+If we solve for $n$ solutions 
+$\mathbf{x}^{(1)}, \dots, \mathbf{x}^{(n)}$ such that:
+
+$$\mathbf{X(t)} = 
+\text{det}\left(\begin{bmatrix}
+    \vert & & \vert \\
+    \mathbf{x}^{(1)}(t_0) & \dots & \mathbf{x}^{(n)}(_0t) \\
+    \vert & & \vert \\
+\end{bmatrix}\right)
+\neq 0
+$$
+
+then the solutions $\mathbf{x}^{(1)}, \dots, \mathbf{x}^{(n)}$ form \textbf{fundamental set of solutions} such that we can we can solve for any unique solution to an IVP by taking a linear combination of these solutions. In addition, the matrix formed by taking the columns of the $n$ solutions is called the \textbf{Wronskian}.
+
+\end{mytheo}
+
+Notice how the Wronskian appears again! This time, instead of using the matrix formed by taking the derivatives of a set of solutions over again, it is formed by just putting the solutions as column vectors.
+
+Another interesting parallel to the $n'th$ order differential equation case is:
+
+\begin{mytheo}{Wronskian General Form}{wronAbelSys}
+    For a system of differential equations defined in some interval $I$ in the form:
+    $$\mathbf{x'} = \mathbf{Px}$$
+    
+    For any $n$ solutions $\mathbf{x}^{(1)}, \dots, \mathbf{x}^{(n)}$
+    
+    the Wronskian will satisfy the following differential equation:
+    
+    $$\dv{W}{t} = (p_11 + \dots + p_nn)W$$
+    
+    Solving this gives us the general form of the Wronskian:
+    
+    $$W = c\exp{\int{p_{11} + \dots + p_{nn})dt}}$$
+\end{mytheo}
+This is a parallel to Abel's Theorem!!
+
+\hyperref[sec:wronAbelSys]{The proof of this for a system of two equations is given in the appendix.}
+
+This directly implies the following:
+
+\begin{mytheo}{Wronskian over interval for solutions}{wronOverI}
+    For any set of solutions $\mathbf{x}^{(1)}, \dots, \mathbf{x}^{(n)}$, the Wronskian is either always 0 or never 0.
+\end{mytheo}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Homogeneous Solutions of a System of Differential Equation}
+How do we go about finding the solutions to a homogeneous system of differential equations in the form of a system:
+
+$$\mathbf{x'} = \mathbf{Px}$$
+
+Since we see the expression $x'$ on the left and $x$ on the right, we might guess that this has something vaguely to do with exponentials.
+
+Let's try guessing something of the form:
+
+$$\mathbf{x} = \mathbf{v}e^{\lambda t}$$
+
+where $\mathbf{v}$ is just some vector.
+
+Plugging this in, we get:
+
+$$(\mathbf{v}e^{\lambda t})' = \mathbf{Pv}e^{\lambda t}$$
+
+Since $\mathbf{v}$ is just a constant, we can simplify this to:
+
+$$\mathbf{v}\lambda e^{\lambda t} =  \mathbf{Pv}e^{\lambda t}$$
+
+Since $e^{\lambda t}$ is never 0, we can divide both sides by it:
+
+$$\mathbf{v}\lambda =  \mathbf{Pv}$$
+
+Rearranging terms, we have:
+
+$$\mathbf{Pv} = \lambda\mathbf{v}$$
+
+From linear algebra, we know that this can be solved by the eigenvectors and eigenvalues of $\mathbf{P}$!
+
+Thus, our solutions are constrained by values:
+
+$$\text{det}(\mathbf{P} - \lambda\mathbf{I}) = 0$$
+
+Taking the determinant of the expression above gives us some polynomial of $n$'th degree in $\lambda$, and thus we have 3 different cases:
+
+\begin{enumerate}
+    \item Eigenvalues are are all real and unique.
+    \item Eigenvalues are in complex conjugate pairs
+    \item Eigenvalues are repeated
+\end{enumerate}
+
+\subsection{Real and Unique Eigenvalues}
+If all the eigenvalues are real and unique, then we have $n$ linearly independent eigenvectors associated with each eigenvalue. Therefore, we can find $n$ linearly independent solutions:
+
+
+$$ \mathbf{x_1}(t)=\mathbf{v_1}e^{\lambda_1 t}$$
+$$\vdots$$
+$$ \mathbf{x_n}(t)=\mathbf{v_n}e^{\lambda_n t}$$
+
+We can put these solutions as columns and take the determinant to verify that the Wronskian is in fact non-zero everywhere.
+
+Thus, we have a fundamental set of solutions!!
+
+Our general solution will be in the form:
+
+$$ \mathbf{x}(t) = c_1\mathbf{v_1}e^{\lambda_1 t} + \dots + \mathbf{v_n}e^{\lambda_n t}$$
+
+
+
+\subsection{Complex Conjugate Pairs of Eigenvalues}
+Suppose we get complex eigenvalues for the following system:
+
+$$(\mathbf{P} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}$$
+
+Let's take the complex conjugate of both sides:
+
+$$\overline{(\mathbf{P} - \lambda\mathbf{I})\mathbf{v}} = \overline{\mathbf{0}}$$
+
+If $\mathbf{P}$ is real, this simplifies to:
+
+$$(\mathbf{P} - \overline{\lambda}\mathbf{I})\overline{\mathbf{v}}= \mathbf{0}$$
+
+which is another eigenvalue, eigenvector pair. Thus, the following holds:
+
+\begin{mytheo}{Complex Eigenvectors and Eigenvalues come in pairs}{compEigen}
+    If the eigenvalue of some matrix is complex, $\lambda_1 = a + ib$, for some real $a,b$ and the eigenvector associated with this eigenvector is $\mathbf{v_1}$, then there we can always find a second eigenvalue, eigenvector combination 
+    $$\lambda_2 = \overline{\lambda_1} = a - ib$$
+    $$\mathbf{v_2} = \overline{\mathbf{v_1}}$$
+\end{mytheo}
+
+
+Thus, if we have the solution:
+
+$$\mathbf{x_1}(t)=\mathbf{v_1}e^{(a+bi) t}$$
+then another solution is formed by:
+$$\mathbf{x_2}(t)=\overline{\mathbf{v_1}}e^{(a-bi) t}$$
+
+We also know that the real and imaginary part of a number is:
+
+$$\Re{x} = \frac{x+\overline{x}}{2}$$
+$$\Im{x} = \frac{x-\overline{x}}{2i}$$
+
+In our case:
+$$\Re{\mathbf{x_1}(t)} = \frac{\mathbf{x_1}(t)+\overline{\mathbf{x_1}(t)}}{2}=\frac{\mathbf{x_1}(t)+\mathbf{x_2}(t)}{2}$$
+
+and:
+$$\Im{\mathbf{x_1}(t)} = \frac{\mathbf{x_1}(t)-\overline{\mathbf{x_1}(t)}}{2i}=\frac{\mathbf{x_1}(t)-\mathbf{x_2}(t)}{2i}$$
+
+Notice that since the real and imaginary parts of the solution of $\mathbf{x_1}(t)$ are in fact linear combinations of two solutions, they are in fact solutions themselves!! They also end up being real solutions.
+
+Thus:
+\begin{mytheo}{Solution to Complex Eigenvalues}{compEigenvals}
+    Say we are solving the equation:
+    $$\mathbf{x'} = \mathbf{Px}$$
+    and we plug in a solution of the form:
+    $$\mathbf{x} = \mathbf{v}e^{\lambda t}$$
+    and solve for the corresponding eigenvalue equation and get a complex conjugate pair for the eigenvalues and eigenvectors.
+    
+    We can find two solutions to this complex pair by taking the real and imaginary part of one solution formed by the complex eigenvalue-eigenvector pair:
+    
+    $$\mathbf{x_1(t)} = \Re{\mathbf{v_1}e^{\lambda_1 t}}$$
+    $$\mathbf{x_1(t)} = \Im{\mathbf{v_1}e^{\lambda_1 t}}$$
+    
+    where both $\lambda_1$ and $\mathbf{v_1}$ are complex
+\end{mytheo}
+
+\subsection{Repeated Eigenvalues}
+What happens when we get some repeated eigenvalues?
+
+Well, there are two situations that can arise. One is where we still can get out linearly independent eigenvectors out of the same repeated eigenvalue.
+
+So for example, if we have the matrix $\lambda\mathbf{I}$:
+$$
+\begin{bmatrix}
+    \lambda & 0  \\
+    0 & \lambda  \\
+\end{bmatrix}
+$$
+
+There is just one eigenvalue $\lambda$. However, there are two linearly indepedent eigenvectors that can be formed 
+
+$$
+\mathbf{v_1}
+=
+\begin{bmatrix}
+    1 \\
+    0 \\
+\end{bmatrix},
+\mathbf{v_2}
+=
+\begin{bmatrix}
+    0 \\
+    1 \\
+=\end{bmatrix},
+$$
+
+Thus, in this case, we can proceed as before as we did in the real and unique eigenvalue case.
+
+However, what if we get a matrix like:
+
+$$
+\begin{bmatrix}
+    1 & 1  \\
+    0 & 1  \\
+\end{bmatrix}
+$$
+
+In this case, there is only one eigenvalue, $\lambda = 1$. However, we \textbf{cannot} extract multiple linearly independent eigenvectors. There is only one eigenvector in this case:
+
+$$
+\mathbf{v_1}
+=
+\begin{bmatrix}
+    1 \\
+    0 \\
+\end{bmatrix},
+$$
+
+What should we do in this case to find another linearly independent solution?
+
+
+Say we have the system:
+
+$$\mathbf{x'} = \mathbf{Px}$$
+
+Say that we extracted one eigenvalue and one non-zero eigenvector, but we're trying to find another solution. We know for sure, that one solution can be given by:
+
+$$\mathbf{x_1}(t) = \mathbf{v_1}e^{\lambda_1 t}$$
+
+For the second solution let's try just multiplying by $t$:
+
+$$\mathbf{x_2}(t) \stackrel{?}{=} \mathbf{v_1}te^{\lambda_1 t}$$
+
+
+Plugging this into our original system, we get:
+
+$$(\mathbf{v_1}te^{\lambda_1 t})' = \mathbf{P}\mathbf{v_1}te^{\lambda_1 t}$$
+
+Using the chain rule and eigenvector properties, we get:
+
+$$\mathbf{v_1}e^{\lambda_1 t} + \lambda_1\mathbf{v_1}te^{\lambda_1 t} = \lambda_1 \mathbf{v_1}te^{\lambda_1 t}$$
+
+which gives us:
+$$\mathbf{v_1}e^{\lambda_1 t} = 0$$
+which after simplifying more gives us:
+$$\mathbf{v_1} = 0$$
+
+This is contradiction, since we assumed $\mathbf{v_1}$ was non-zero to begin with! Thus, our guess was incorrect :(
+
+
+Hmm..., looking at how the "solution" failed above, we see that on the LHS that there is both a $te^{\lambda_1 t}$ and $e^{\lambda_1 t}$ component. Thus, let's try to guess:
+
+
+$$\mathbf{x_2}(t) \stackrel{?}{=} \mathbf{v_1}te^{\lambda_1 t} + \mathbf{v_2}e^{\lambda_1 t}$$
+
+where $\mathbf{v_2}$ is an arbitrary vector.
+
+Plugging this into our original system, we get:
+
+
+$$(\mathbf{v_1}te^{\lambda_1 t} + \mathbf{v_2}e^{\lambda_1 t})' = \mathbf{P}(\mathbf{v_1}te^{\lambda_1 t} + \mathbf{v_2}e^{\lambda_1 t})$$
+
+Simplifying this expression using the chain rule:
+
+$$\mathbf{v_1}e^{\lambda_1 t} + \lambda_1\mathbf{v_1}te^{\lambda_1 t} + \lambda_1\mathbf{v_2}e^{\lambda_1 t} = \mathbf{P}\mathbf{v_1}te^{\lambda_1 t} + \mathbf{P}\mathbf{v_2}e^{\lambda_1 t}$$
+
+Using the fact that $\mathbf{P}\mathbf{v_1} = \lambda_1\mathbf{v_1}$:
+
+$$\mathbf{v_1}e^{\lambda_1 t} + \lambda_1\mathbf{v_1}te^{\lambda_1 t} + \lambda_1\mathbf{v_2}e^{\lambda_1 t} = \lambda_1\mathbf{v_1}te^{\lambda_1 t} + \mathbf{P}\mathbf{v_2}e^{\lambda_1 t}$$
+
+We can subtract both sides by  $\lambda_1\mathbf{v_1}te^{\lambda_1 t}$, to get:
+
+$$\mathbf{v_1}e^{\lambda_1 t} + \lambda_1\mathbf{v_2}e^{\lambda_1 t} = \mathbf{P}\mathbf{v_2}e^{\lambda_1 t}$$
+
+Moving terms and switching sides:
+$$\mathbf{P}\mathbf{v_2}e^{\lambda_1 t} - \lambda_1\mathbf{v_2}e^{\lambda_1 t} = \mathbf{v_1}e^{\lambda_1 t}  $$
+
+Since $e^{\lambda_1 t}$ is always greater than 0, we can divide both sides by it:
+$$\mathbf{P}\mathbf{v_2} - \lambda_1\mathbf{v_2} = \mathbf{v_1} $$
+
+We can factor out $\mathbf{v_2}$:
+
+$$(\mathbf{P}-\lambda_1\mathbf{I})\mathbf{v_2} = \mathbf{v_1} $$
+
+Also, since $\mathbf{v_1}$ satisfies:
+
+$$(\mathbf{P}-\lambda_1\mathbf{I})\mathbf{v_1} = 0$$
+
+Plugging in the expression for $v_1$ in the above expression:
+
+$$(\mathbf{P}-\lambda_1\mathbf{I})(\mathbf{P}-\lambda_1\mathbf{I})\mathbf{v_2} = 0$$
+$$(\mathbf{P}-\lambda_1\mathbf{I})^2\mathbf{v_2} = 0$$
+
+
+Thus, if we can solve for $\mathbf{v_2}$ using the expression above, we can in fact solve for another linearly independent solution! The vector $\mathbf{v_2}$ is in fact called a \textbf{generalized eigenvector} to the matrix $P$.
+
+
+It turns out that we can continue this process if the multiplicity of the eigenvalues is greater than 2:
+
+\begin{mytheo}{Repeated Eigenvalues}{repEig}
+    Given the system of linear differentiable equations:
+    
+    $$\mathbf{x'} = \mathbf{Px}$$
+    
+    If we solve for the eigenvalues of $P$ and get $k$ repeats (multiplicity of $k$), we can find linearly independent solutions by computing the generalized eigenvectors defined by:
+    $$(\mathbf{P}-\lambda\mathbf{I})^j\mathbf{v_j} = \mathbf{0} $$
+    $$(\mathbf{P}-\lambda\mathbf{I})^{j-1}\mathbf{v_j} \neq \mathbf{0}$$
+    for $j = 1, \dots, k$
+    such that:
+    $$(\mathbf{P}-\lambda\mathbf{I})\mathbf{v_1} = \mathbf{0}$$
+    $$(\mathbf{P}-\lambda\mathbf{I})\mathbf{v_2} = \mathbf{v_1}$$
+    $$\vdots$$
+    $$(\mathbf{P}-\lambda\mathbf{I})\mathbf{v_k} = \mathbf{v_{k-1}}$$
+    
+    Once we have the generalized eigenvectors, we can find $k$ linearly independent solutions by:
+    $$\mathbf{x_1}(t) = \mathbf{v_1}e^{\lambda t}$$
+    $$\mathbf{x_2}(t) = (\mathbf{v_2} + t\mathbf{v_1})e^{\lambda t}$$
+    $$\vdots$$
+    $$\mathbf{x_k}(t) = \left(\mathbf{v_k} + t\mathbf{v_{k-1}} + \frac{t^2}{2}\mathbf{v_{k-2}} + \dots + \frac{t^{(k-1)}}{(k-1)!}\mathbf{v_1}\right)e^{\lambda t}$$
+\end{mytheo}
+
+
+
+\section{Trace-Determinant}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Fundamental Matrix and Matrix Exponential}
+\section{Non-homogeneous Case}
+\section{Approximating Non-linear Differential Equations}
+
+
+\chapter{Series Solutions}
+
+\chapter{Laplace Transform}
 
 \chapter{First-order case}
 
@@ -746,6 +1807,7 @@ Note that this means that for any homogeneous differential equation with constan
     \item What is Bessels equation?
     \item Is there a form of Abel's equation in higher than 2 dimensions?
     \item Why does putting $t, t^2, \dots $ before solution to a constant coefficient differential homogeneous give us another linearly independent solution for any degree?
+    \item Why is a generalized eigenvector guaranteed to exist if we have a eigenvalue with multiplicity greater than one.
 \end{itemize}
 
 \chapter{Proofs}
@@ -859,7 +1921,7 @@ We know that the second statement is true from \hyperref[th:wronLinDep]{this the
 
 Let our two solutions be $y_1(t)$ and $y_2(t)$. Say we have the equation:
 $$c_1y_1(t) +c_2y_2(t) = 0$$
-The constants $c_1$ and $c_2$ can be zero or non-zero to satisfy this equation. If we can find a $c_1$ and $c_2$ such that they are both non-zero and it always satisfies this solution for any $t$ in some interval $I$, then $y_1(t)$ and $y_2(t)$ are linearly independent.
+The constants $c_1$ and $c_2$ can be zero or non-zero to satisfy this equation. If we can find a $c_1$ and $c_2$ such that they are both non-zero and it always satisfies this solution for any $t$ in some interval $I$, then $y_1(t)$ and $y_2(t)$ are linearly dependent.
 
 From our equation we can take derivatives of both sides to get:
 $$c_1y_1(t) +c_2y_2(t) = 0$$
@@ -934,7 +1996,7 @@ Therefore, $\phi(t) = c_1y_1(t) + c_2y_2(t)$ is a solution the differential equa
 
 Another interesting fact is that the trivial solution $\phi(t) = 0$ also satisfies our initial constraints $\phi(t_0) = 0$ and $\phi'(t_0) = 0$.
 
-By the  \hyperref[Ex&Un]{Existence and Uniqueness theorem}, if we find one solution satisfying the initial value problem, it must be the only solution the differential equation. Since we found two solutions to the differential equation we're considering, they must be equal to each other for all $t \in I$.
+By the  \hyperref[th:Ex&Un]{Existence and Uniqueness theorem}, if we find one solution satisfying the initial value problem, it must be the only solution the differential equation. Since we found two solutions to the differential equation we're considering, they must be equal to each other for all $t \in I$.
 Thus,
 $$\phi(t) = c_1y_1(t) +c_2y_2(t) = 0$$
 for all $t \in I$
@@ -1082,5 +2144,444 @@ $$
     = te^{rt}
 $$
 which is in fact non-zero everywhere where $t$ is non-zero!
+
+\section{\hyperref[th:sinPlusCosin]{Proof of Ssum of Sine and Cosine of same frequency}}
+\label{sec:prSinPlusCosin}
+First proof:
+
+Consider taking the dot product between two vectors $(a,b)$ and a vector arbritrarily defined on the unit circle $(\cos(\theta),\sin(\theta))$
+
+$$(a,b)\cdot(\cos(\theta),\sin(\theta)) = a\cos(\theta) + b\sin(\theta)$$
+
+We know that by the geometric interpretation of the dot product, that:
+
+$$(a,b)\cdot(c,d) = \lVert(a,b)\rVert*\lVert(c,d)\rVert*\cos(\text{angle b/w vectors})$$
+
+Thus, the dot product of $(a,b)$ and $(\cos(\omega t),\sin(\omega t))$ is just:
+
+$$(a,b)\cdot(\cos(\theta),\sin(\theta)) = \lVert(a,b)\rVert*\lVert(\cos(\theta),\sin(\theta)\rVert*\cos(\text{angle b/w vectors})$$
+
+We know that $\lvert(\cos(\theta),\sin(\theta))\rvert =1$ so this simplifies to 
+
+$$\lVert(a,b)\rVert*\cos(\text{angle b/w vectors})$$
+
+The magnitude of $(a,b)$ is simply $\sqrt{a^2+b^2}$
+
+The angle between both vectors is just going to be the difference between the angle created by the vector $(a,b)$ and $\theta$. 
+
+Using basic trigonometry, the angle of the vector $(a,b)$ is $\phi = \tan^{-1}(b/a)$
+
+Thus we get:
+
+$$(a,b)\cdot(\cos(\theta),\sin(\theta) = A\cos(\theta - \phi)$$
+
+where
+$$A = \sqrt{a^2+b^2}$$
+$$\phi = \tan^{-1}(b/a)$$
+
+Since both interpretations of the dot product yield the same result, we get:
+
+$$a\cos(\theta) + b\sin(\theta) = A\cos(\theta - \phi)$$
+
+[INSERT PICTURE]
+
+Second proof:
+
+It turns out that
+
+$$a\cos(\theta) + b\sin(\theta) = \Re{(a-bi)*(\cos(\theta) + i\sin(\theta)}$$
+
+(you can quickly verify this!)
+
+We know that the expression $a-bi$ like all complex numbers, can be represented in the form $Ae^{i\phi}$
+
+In this case $A$ is the magnitude of the complex number, which is just $\sqrt{a^2+b^2}$.
+
+In addition, $\phi$ is the angle formed by the real and imaginary part of the complex number. This will be negative since there is a negative imaginary part in the expression we're considering. In this case the angle between these parts is $\phi = \tan^{-1}(b/a)$, but we will be considering $-\phi$ since we want the negative.
+
+We also know that from Euler's identity that:
+
+$$\cos(\theta) + i\sin(\theta) = e^{i\theta}$$
+
+Plugging these substitutions, we get:
+
+$$a\cos(\theta) + b\sin(\theta) = \Re{Ae^{-i\phi}e^{i\theta}}$$
+$$=A\Re{e^{(\theta-\phi)t}}$$
+which by Euler's Identity is:
+$$=A\Re{\cos((\theta-\phi)t)+i\sin((\theta-\phi)t)}$$
+$$=A\cos((\theta-\phi)t)$$
+
+where 
+$$\phi = \tan^{-1}(b/a)$$
+$$A = \sqrt{a^2+b^2}$$
+
+
+
+
+\section{\hyperref[th:nhSol]{Proof of Non-homogeneous Solution}}
+\label{sec:prNhSol}
+Say we have the differential equation:
+ $$L[y] = y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+and that we find two independent solutions that satisfy this equation, let's call them $y_1(t) and y_2(t)$.
+Thus, $L[y_1]=g(t)$ and $L[y_2]=g(t)$
+What happens when we subtract $L[y_1] and L[y_2]$?
+we get $L[y_1]-L[y_2] = 0$
+We know by linearity that 
+$$L[y_1]-L[y_2] = L[y_1-y_2] = 0$$
+this means that the combination $y_1(t)-y_2(t)$ solves the homogeneous equation:
+$$L[y] = y^{(n)}(t) + ... + p_1(t)y'(t) + p_0(t)y(t) = 0$$
+Thus,
+$$y_h(t) = y_1(t)-y_2(t)$$
+$$y_1(t) = y_h(t) + y_2(t)$$
+
+We find that our two "independent" solutions are actually the same plus a homogeneous solution.
+
+Since all the potential solutions can in fact be decomposed this way, our complete solution is in fact the sum of 1 particular solution and all the homogeneous solutions of the differential equation.
+
+
+\section{\hyperref[th:polyResp]{NH Form of Solution with Polynomial Response}}
+\label{sec:prPolyResp}
+Consider a differential equation in the form:
+
+$$y^{(n)}(t) + \dots + c_1y'(t) + c_0y(t) = a_0t^n + a_1t^{n-1} + \dots a_n$$
+
+If we put in a particular solution of the form:
+
+$$y_p(t) = A_0t^n + \dots + A_{n-1}t + A_n$$
+
+into our differential equation, will get a system of equations in which we can equate all the $t, t^2, \dots t^n$ in the LHS with the RHS.
+
+Thus substituting we get something like:
+
+$$[n!A_0] + \dots c_1[A_0nt^{n-1}+\dots+A_{n-1}] + c_0[A_0t^n + \dots + A_{n-1}t + A_n]$$
+
+$$= a_0t^n + a_1t^{n-1} + \dots + a_n$$
+
+We can equate coefficients of the same power of $t$ to get the following system of equations:
+
+$$c_0A_0t^n = a_0t^n$$
+$$(c_1A_0n + c_0A_1)t^{n-1} = a_1t^{n-1}$$
+$$\vdots$$
+$$n!A_0 + \dots + c_0A_n = a_n$$
+
+
+If we solve for $A_0$ using the first equation, it is possible to solve for $A_1$ in the second equation and so on until $A_n$
+
+However, if we cannot solve for $A_0$, then we cannot find any of the other coefficients and must make some sort of adjustment.
+
+What determines whether or not we can find $A_0$? By looking at the first equation, we can see that $A_0$ can be solved for when $c_0 \neq 0$ ($A_0 = \frac{a_0}{c_0}$).
+
+What should we do when $c_0 = 0$?
+
+If try the solution
+$$y_p(t) = t(A_0t^n + \dots + A_{n-1}t + A_n)$$
+$$=A_0t^{n+1} + \dots + A_{n-1}t^2 + A_nt$$
+
+
+Plugging this into our original differential equation and equating coefficients we get:
+
+$$[A_0(n+1)!t+A_1(n+1)!] + \dots + c_1[A_0(n+1)t^n+\dots + A_n]$$
+$$= a_0t^n + a_1t^{n-1} + \dots + a_n$$
+
+Equating coefficients like before:
+
+$$c_1A_0(n+1)t^n = a_0t^n$$
+$$(c_1A_1n+c_2A_0)t^{n-1} = a_1t^{n-1}$$
+$$\vdots$$
+$$(n+1)!A_0 + \dots + c_1A_{n} = a_n$$
+
+In this case, if $c_1 \neq 0$, we can solve for $A_0$ and all the rest of the coefficients $A_1, \dots, A_n$ quite easily!
+
+When $c_0=c_1=0$, we can see that in fact, this method does not give us a solution either :(. However, we can repeat what we did earlier by multiplying another $t$ and plug:
+
+$$y_p(t) = t^2(A_0t^n + \dots + A_{n-1}t + A_n)$$
+$$=A_0t^{n+2} + \dots + A_{n-1}t^3 + A_nt^2$$
+
+as a potential solution.
+
+We can continue this process arbitrarily large $s$ such that $c_0=c_1=\dots=c_s=0$ and see that this process continues to yield us solutions for $A_0, \dots, A_n$
+
+
+\section{\hyperref[th:var]{Proof of Variation of Parameters}}
+\label{sec:prVar}
+We have a differential equation of the form:
+
+$$y^{(n)}(t) + \dots + p_1(t)y'(t) + p_0(t)y(t) = g(t)$$
+
+Say that the n solutions to the homogeneous are:
+$y_1(t), y_2(t), \dots, y_n(t)$ respectively.
+
+The method of variation of parameters relies on using these non-homogeneous solutions as "jumping points" to find a non-homogeneous solution of the form:
+
+$$y_p(t) = u_1(t)y_1(t) + u_2(t)y_2(t) + \dots + u_n(t)y_n(t)$$
+
+where $u_1(t), \dots, u_n(t)$ are arbitrary functions of just that we set to satisfy the non-homogeneous equation.
+
+What is the derivative of this function. By the product rule with some rearranging, we get:
+
+$$y_p'(t) = (u_1(t)y_1'(t) + u_2(t)y_2'(t) + \dots
++ u_n(t)y_n'(t)) $$  $$+ (u_1'(t)y_1(t) + u_2'(t)y_2(t) + \dots + u_n'(t)y_n(t))$$
+
+Let's arbitrarily set the second part of this equation to 0:
+
+$$u_1'(t)y_1(t) + u_2'(t)y_2(t) + \dots + u_n'(t)y_n(t) = 0$$
+
+We can do this because we are in fact assigning what $u_1(t), \dots, u_n(t)$ should in fact be. We're doing this because it makes taking subsequent derivatives easier, as we will see.
+
+Thus,
+
+$$y_p'(t) = u_1(t)y_1'(t) + u_2(t)y_2'(t) + \dots + u_n(t)y_n'(t)$$
+
+What is the second derivative?
+
+$$y_p''(t) = (u_1(t)y_1''(t) + u_2(t)y_2''(t) + \dots + u_n(t)y_n''(t))$$ 
+$$ +  (u_1'(t)y_1'(t) + u_2'(t)y_2'(t) + \dots + u_n'(t)y_n'(t))$$
+
+We can again arbitrarily set the second expression to 0:
+$u_1'(t)y_1'(t) + u_2'(t)y_2'(t) + \dots + u_n'(t)y_n'(t)) = 0$
+
+We can continue this process such that the first $n$ derivatives are:
+
+$$y_p(t) = u_1(t)y_1(t) + u_2(t)y_2(t) + \dots + u_n(t)y_n(t)$$
+$$y_p'(t) = u_1(t)y_1'(t) + u_2(t)y_2'(t) + \dots + u_n(t)y_n'(t)$$
+$$\vdots$$
+$$y_p^{(n-1)}(t) = u_1(t)y_1^{(n-1)}(t) + u_2(t)y_2^{(n-1)}(t) + \dots + u_n(t)y_n^{(n-1)}(t)$$
+$$y_p^{(n)}(t) = (u_1(t)y_1^{(n)}(t) + u_2(t)y_2^{(n)}(t) + \dots + u_n(t)y_n^{(n)}(t))$$
+$$+ (u_1'(t)y_1^{(n-1)}(t) + u_2'(t)y_2^{(n-1)}(t) + \dots + u_n'(t)y_n^{(n-1)}(t))$$
+
+Notice that we didn't apply our "condition" on the last expression. Our $n-1$ conditions are:
+
+$$u_1'(t)y_1(t) + u_2'(t)y_2(t) + \dots + u_n'(t)y_n(t) = 0$$
+$$u_1'(t)y_1'(t) + u_2'(t)y_2'(t) + \dots + u_n'(t)y_n'(t) = 0$$
+$$\vdots$$
+$$u_1'(t)y_1^{(n-2)}(t) + u_2'(t)y_2^{(n-2)}(t) + \dots + u_n'(t)y_n^{(n-2)}(t) = 0$$
+
+
+Now let's plug these into our original equation:
+
+$$y^{(n)}(t) + \dots + c_1y'(t) + c_0y(t) = g(t)$$
+
+$$[(u_1(t)y_1^{(n)}(t) + u_2(t)y_2^{(n)}(t) + \dots + u_n(t)y_n^{(n)}(t))$$
+$$+ (u_1'(t)y_1^{(n-1)}(t) + u_2'(t)y_2^{(n-1)}(t) + \dots + u_n'(t)y_n^{(n-1)}(t))]$$
+$$\vdots$$
+$$+ p_1(t)[u_1(t)y_1'(t) + u_2(t)y_2'(t) + \dots + u_n(t)y_n'(t)]$$
+$$+ p_0(t)[u_1(t)y_1(t) + u_2(t)y_2(t) + \dots + u_n(t)y_n(t)]$$
+$$=g(t)$$
+
+We can rearrange the terms to get:
+
+$$(u_1'(t)y_1^{(n-1)}(t) + u_2'(t)y_2^{(n-1)}(t) + \dots + u_n'(t)y_n^{(n-1)}(t))$$
+$$u_1(t)[y_1^{(n)} + \dots + p_1(t)y_1'(t) + p_0(t)y_1(t)]$$
+$$\vdots$$
+$$u_n(t)[y_n^{(n)} + \dots + p_1(t)y_n'(t) + p_0(t)y_n(t)]$$
+$$=g(t)$$
+
+You might be able to notice something from the rearrangement of equations! We see a repetition of $y_i^{(n)} + \dots + p_1(t)y_i'(t) + p_0(t)y_i(t)$
+multiple times! In fact, since $y_i$ for $i \in (1,n)$ are in fact our homogeneous solutions, they cancel out, simplifying our expression. thus we get:
+$$u_1'(t)y_1^{(n-1)}(t) + u_2'(t)y_2^{(n-1)}(t) + \dots + u_n'(t)y_n^{(n-1)}(t)$$
+$$=g(t)$$
+
+Let's list out all of the conditions we have now:
+
+
+$$u_1'(t)y_1(t) + u_2'(t)y_2(t) + \dots + u_n'(t)y_n(t) = 0$$
+$$u_1'(t)y_1'(t) + u_2'(t)y_2'(t) + \dots + u_n'(t)y_n'(t) = 0$$
+$$\vdots$$
+$$u_1'(t)y_1^{(n-2)}(t) + u_2'(t)y_2^{(n-2)}(t) + \dots + u_n'(t)y_n^{(n-2)}(t) = 0$$
+$$u_1'(t)y_1^{(n-1)}(t) + u_2'(t)y_2^{(n-1)}(t) + \dots + u_n'(t)y_n^{(n-1)}(t)$$
+$$=g(t)$$
+
+We have $n$ equations and $n$ unknowns for $u_i'(t)$. We can solve this! Let's put it in matrix form:
+
+$$
+\begin{bmatrix}
+    y_1(t) & y_2(t) & \dots  & y_n(t) \\
+    y_1'(t) & y_2'(t) & \dots  & y_n'(t) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    y_1^{(n)}(t) & y_2^{(n)}(t) & \dots  & y_n^{(n)}(t) \\
+    \end{bmatrix}
+\begin{bmatrix}
+    u_1'(t) \\
+    u_2'(t) \\
+    \vdots \\ 
+    u_n'(t)
+\end{bmatrix}
+=
+\begin{bmatrix}
+    0 \\
+    0 \\
+    \vdots \\ 
+    g(t)
+\end{bmatrix}
+$$
+
+
+Notice our old friend, the fundamental matrix, again! We know it is in fact invertible since the \hyperref[th:EqLinInd]{Wronskian (the determinant) is non-zero since the homogeneous solutions we selected were linearly independent.}
+
+Thus:
+
+$$
+\begin{bmatrix}
+    u_1'(t) \\
+    u_2'(t) \\
+    \vdots \\ 
+    u_n'(t)
+\end{bmatrix}
+=
+\begin{bmatrix}
+    y_1(t) & y_2(t) & \dots  & y_n(t) \\
+    y_1'(t) & y_2'(t) & \dots  & y_n'(t) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    y_1^{(n)}(t) & y_2^{(n)}(t) & \dots  & y_n^{(n)}(t) \\
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+    0 \\
+    0 \\
+    \vdots \\ 
+    g(t)
+\end{bmatrix}
+$$
+
+\section{\hyperref[th:wronAbelSys]{Proof of Abel's Theorem for systems}}
+\label{sec:wronAbelSys}
+
+Say we have the Wronskian of two solutions to a differential system:
+
+$$
+W(t) =
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    x_2^{(1)} & x_2^{(2)} \\
+\end{bmatrix}\right)
+=x_1^{(1)}x_2^{(2)}-x_1^{(2)}x_2^{(1)}
+$$
+
+Let's take the derivative of this and use the chain rule:
+
+$$W'(t) = (x_1'^{(1)}x_2^{(2)}) + (x_1'^{(1)}x_2'^{(2)}) - (x_1'^{(2)}x_2^{(1)}) - (x_1^{(2)}x_2'^{(1)})$$
+
+Rearranging terms:
+
+$$W'(t) = [(x_1'^{(1)}x_2^{(2)}) 
+- (x_1'^{(2)}x_2^{(1)})]
++ [(x_1'^{(1)}x_2'^{(2)})  - (x_1^{(2)}x_2'^{(1)})]$$
+
+This is just (verify):
+
+$$
+W'(t) =
+\text{det}\left(
+\begin{bmatrix}
+    x_1'^{(1)} & x_1'^{(2)} \\
+    x_2^{(1)} & x_2^{(2)} \\
+\end{bmatrix}\right)
++
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    x_2'^{(1)} & x_2'^{(2)} \\
+\end{bmatrix}\right)
+$$
+
+Furthermore, from our initial system:
+
+$$\mathbf{x'} = \mathbf{Px}$$
+we see that:
+$$x_1' = p_{11}x_1 + p_{12}x_2$$
+$$x_2' = p_{21}x_1 + p_{22}x_2$$
+
+Putting this into our initial expression for the derivative of the Wronskian:
+
+$$
+W'(t) =
+\text{det}\left(
+\begin{bmatrix}
+    p_{11}x_1^{(1)} + p_{12}x_2^{(1)} & p_{11}x_1^{(2)} + p_{12}x_2^{(2)} \\
+    x_2^{(1)} & x_2^{(2)} \\
+\end{bmatrix}\right)
+$$
+$$
++
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    p_{21}x_1^{(1)} + p_{22}x_2^{(1)} & p_{21}x_1^{(2)} + p_{22}x_2^{(2)} \\
+\end{bmatrix}\right)
+$$
+
+We can break this apart even more by using properties of determinants:
+
+$$
+W'(t) =
+\text{det}\left(
+\begin{bmatrix}
+    p_{11}x_1^{(1)} & p_{11}x_1^{(2)} \\
+    x_2^{(1)} & x_2^{(2)} \\
+\end{bmatrix}\right)
++
+\text{det}\left(
+\begin{bmatrix}
+     p_{12}x_2^{(1)} &  p_{12}x_2^{(2)} \\
+    x_2^{(1)} & x_2^{(2)} \\
+\end{bmatrix}\right)
+$$
+$$
++
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    p_{21}x_1^{(1)} & p_{21}x_1^{(2)} \\
+\end{bmatrix}\right)
++
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    p_{22}x_2^{(1)} &  p_{22}x_2^{(2)} \\
+\end{bmatrix}\right)
+$$
+
+The rows of some of the determinants in the expression above are just scalar multiples of other rows and therefore are 0 (because of linear dependence). Thus, the expression simplifies to:
+
+$$
+W'(t) =
+\text{det}\left(
+\begin{bmatrix}
+    p_{11}x_1^{(1)} & p_{11}x_1^{(2)} \\
+    x_2^{(1)} & x_2^{(2)} \\
+\end{bmatrix}\right)
++
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    p_{22}x_2^{(1)} &  p_{22}x_2^{(2)} \\
+\end{bmatrix}\right)
+$$
+
+We also know that we can take out a constant multiple of a row:
+$$
+W'(t) =
+p_{11}
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    x_2^{(1)} & x_2^{(2)} \\
+\end{bmatrix}\right)
++
+p_{22}
+\text{det}\left(
+\begin{bmatrix}
+    x_1^{(1)} & x_1^{(2)} \\
+    x_2^{(1)} &  x_2^{(2)} \\
+\end{bmatrix}\right)
+$$
+
+This is just:
+
+$$W'(t) = (p_{11} + p_{22})W$$
+
+When we integrate both sides, we get:
+
+$$W = c\exp{\int{p_{11} + \dots + p_{nn})dt}}$$
 
 \end{document}
