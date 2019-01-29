@@ -1605,12 +1605,13 @@ Thus:
     We can find two solutions to this complex pair by taking the real and imaginary part of one solution formed by the complex eigenvalue-eigenvector pair:
     
     $$\mathbf{x_1(t)} = \Re{\mathbf{v_1}e^{\lambda_1 t}}$$
-    $$\mathbf{x_1(t)} = \Im{\mathbf{v_1}e^{\lambda_1 t}}$$
+    $$\mathbf{x_2(t)} = \Im{\mathbf{v_1}e^{\lambda_1 t}}$$
     
     where both $\lambda_1$ and $\mathbf{v_1}$ are complex
 \end{mytheo}
 
 \subsection{Repeated Eigenvalues}
+\label{sec:repEigen}
 What happens when we get some repeated eigenvalues?
 
 Well, there are two situations that can arise. One is where we still can get out linearly independent eigenvectors out of the same repeated eigenvalue.
@@ -1748,7 +1749,7 @@ It turns out that we can continue this process if the multiplicity of the eigenv
     
     $$\mathbf{x'} = \mathbf{Px}$$
     
-    If we solve for the eigenvalues of $P$ and get $k$ repeats (multiplicity of $k$), we can find linearly independent solutions by computing the generalized eigenvectors defined by:
+    If we solve for the eigenvalues of $P$ and get $k$ repeats (multiplicity of $k$), but $< k$ linearly independent eigenvectors, we can find linearly independent solutions by computing the generalized eigenvectors defined by:
     $$(\mathbf{P}-\lambda\mathbf{I})^j\mathbf{v_j} = \mathbf{0} $$
     $$(\mathbf{P}-\lambda\mathbf{I})^{j-1}\mathbf{v_j} \neq \mathbf{0}$$
     for $j = 1, \dots, k$
@@ -1767,7 +1768,247 @@ It turns out that we can continue this process if the multiplicity of the eigenv
 
 
 
-\section{Trace-Determinant}
+\section{Visualization of 2x2 solutions and Trace-Determinant Plane}
+
+Let's examine how particular solutions to the eigenvalues of a 2x2 coefficient matrix look geometrically:
+
+
+\subsection{Nodal sources and sinks and saddle points}
+
+In the case of real eigenvalues, our solution will be in the form:
+
+$$\mathbf{x} = \mathbf{v_1}e^{\lambda_1 t} + \mathbf{v_2}e^{\lambda_2 t}$$
+
+What happens geometrically when both $\lambda_1, \lambda_2 > 0$?
+
+If we plot the solution we see that as time goes on, we are repelled from the center at any starting point:
+
+\includegraphics[scale=0.5]{nodal_source.png}
+
+This is called a \textbf{nodal source}
+
+Similarly if $\lambda_1,\lambda_2 < 0$, we get:
+
+\includegraphics[scale=0.5]{nodal_sink.png}
+
+This is called a \textbf{nodal sink} since as time goes by we go toward the eigenvectors.
+
+
+
+If we have opposite signs, we get something called a \textbf{saddle point}:
+
+\includegraphics[scale=0.5]{saddle.png}
+
+
+\subsection{Centers and Spirals}
+\label{sec:center}
+In this section we will examine the case where we get complex eigenvalues.
+
+\hyperref[sec:prCenter]{The proof of the following fact is given in the appendix.}
+
+
+In the case of a purely imaginary eigenvalue $\lambda = i\mu$, the complete solution can be described by:
+
+$$
+\mathbf{x(t)} = 
+\begin{bmatrix}
+    A_1\cos(\mu t - \phi_1) \\ 
+    A_2\sin(\mu t - \phi_2) \\
+\end{bmatrix}
+$$
+
+This is just an ellipse! with a center determined by $\phi_1, \phi_2$ and sides $A_1, A_2$. This is called a \textbf{center}:
+
+
+\includegraphics[scale=0.4]{center.png}
+
+
+What if there is in fact a non-zero real component to the complex eigenvalue?
+
+$$\lambda = r + i\mu$$
+
+Then we have:
+$$\mathbf{x(t)} = c_1\Re{\mathbf{v_1}e^{(r+i\mu) t}} + c_2\Im{\mathbf{v_1}e^{(r+i\mu) t}}$$
+
+which is just:
+
+
+$$\mathbf{x(t)} = e^{rt}[c_1\Re{\mathbf{v_1}e^{i\mu) t}} + c_2\Im{\mathbf{v_1}e^{i\mu t}}]$$
+
+
+The right side of this expression is identical to before. However, now we have an exponential term to deal with:
+
+
+$$
+\mathbf{x(t)} = 
+e^{rt}
+\begin{bmatrix}
+    A_1\cos(\mu t - \phi_1) \\ 
+    A_2\sin(\mu t - \phi_2) \\
+\end{bmatrix}
+$$
+
+You could think about this as an exponentially increasing or decreasing amplitude for the ellipse. Thus this forms a spiral!
+
+If the eigenvalues are:
+$\lambda = r \pm i\mu$ and $r>0$, then we get a \textbf{spiral source}:
+
+\includegraphics[scale=0.3]{spiral_source.png}
+
+
+Otherwise if the eigenvalues are:
+$\lambda = r \pm i\mu$ and $r<0$, then we get a \textbf{spiral sink}:
+
+\includegraphics[scale=0.3]{spiral_sink.png}
+
+\subsection{Combs, Degenerate Node and Star Nodes}
+
+What happens when we have one of the eigenvalues to be 0?
+
+We get something like this called a \textbf{comb}. It can be a \textbf{repelling comb} or an \textbf{attracting comb} depending on whether the non-zero eigenvalue is positive or negative respectively (the figure is of attracting comb):.
+
+\includegraphics[scale=0.4]{comb.png}
+
+What happens when we have repeated roots?
+
+\hyperref[sec:repEigen]{In our discussion above} we described two cases. One where even though we had $k$ repeated eigenvalues, we were still able to find $k$ linearly independent eigenvectors. It turns out that this is the case when $\mathbf{P} = \lambda I$. Thus the solution will simply be:
+
+$$\mathbf{x}(t) = 
+c_1
+\begin{bmatrix}
+    1 \\
+    0
+\end{bmatrix}
+e^{\lambda t}
++
+c_2
+\begin{bmatrix}
+    1 \\
+    0
+\end{bmatrix}
+e^{\lambda t}
+$$
+
+which forms a \textbf{star node} when we plot it:
+
+\includegraphics[scale=0.4]{star_node.png}
+
+Notice that this can be attracting or repelling depending on whether or not $\lambda < 0$ or $\lambda > 0$ respectively.
+
+There are some cases, called degenerate cases, where we get repeated eigenvalues without linearly independent eigenvectors. In this case two find the two linearly independent solutions to span the solution space, we need to find the \hyperref[th:repEig]{generalized eigenvectors as described above}.
+
+Thus, the complete solution in this case is given by:
+
+$$\mathbf{x}(t) = c_1\mathbf{v_1}e^{\lambda t} + c_2(t\mathbf{v_1} + \mathbf{v_2})e^{\lambda t}$$
+
+When we plot this out, we see something that looks like it is in between a spiral and a node called a \textbf{degenerate node}:
+
+\includegraphics[scale=0.5]{degenerate.png}
+
+This is also attracting or repelling depending on the sign of $\lambda$.
+
+
+Let's put our results together:
+
+
+\begin{tabular}{ c c c}
+ \textbf{Name} & $\mathbf{\lambda_1, \lambda_2}$  & \textbf{Description} \\
+ \hline
+ Nodal source/sink & \lambda_1\lambda_2 > 0 & $\lambda_1, \lambda_2$ have same sign \\
+ Saddle node & \lambda_1\lambda_2 < 0 & $\lambda_1, \lambda_2$ have different signs\\
+ Center & $\lambda_1,\lambda_2 = \pm \mu i$ & $\lambda_1,\lambda_2$ are  purely imaginary \\
+ Spiral & $\lambda_1,\lambda_2 =  r \pm \mu i$ & $\lambda_1,\lambda_2$ are complex with a real part \\
+ Comb & $\lambda_1 = 0,\lambda_2 \neq 0$ & One $\lambda_1$ is zero while the other is non-zero \\
+ Star node & $\lambda_1=\lambda_2$ & Repeated eigenvalue with $\mathbf{P} = \lambda_1\mathbf{I}$
+ \\
+ Degenerate node & $\lambda_1=\lambda_2$ & Repeated eigenvalue with $\mathbf{P} \neq \lambda_1\mathbf{I}$
+\end{tabular}
+
+
+\subsection{Trace-Determinant Plane}
+We know that our 2x2 system looks like
+$$
+\begin{bmatrix}
+    x' \\
+    y' \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    p_{11} & p_{12} \\
+    p_{21} & p_{22} \\
+\end{bmatrix}
+\begin{bmatrix}
+    x \\
+    y \\
+\end{bmatrix}
+$$
+
+We know that from our previous discussion that the eigenvalues of the matrix $\mathbf{P}$ determine the solution of this system.
+
+The eigenvalues of a matrix can be solved by solving the following equality:
+
+$$\det(\mathbf{P}-\lambda \mathbf{I}) = \mathbf{0}$$
+
+In our case, this is just:
+
+$$
+\text{det}\left(
+\begin{bmatrix}
+    p_{11} - \lambda & p_{12} \\
+    p_{21} & p_{22} - \lambda \\
+\end{bmatrix}\right) = 0
+$$
+
+Using the formula for calculating determinants, we get:
+
+$$( p_{11} - \lambda)(p_{22} - \lambda)- p_{12}p_{21} = 0$$
+
+This simplifies to:
+
+$$\lambda^2 - (p_{11} + p_{22})\lambda + (p_{11}p_{21}- p_{12}p_{21}) = 0$$
+
+Notice that $p_{11} + p_{22}$ is just the trace of the original coefficient matrix $\mathbf{P}$. Also, $p_{11}p_{21}- p_{12}p_{21}$ is just the determinant of the coefficient matrix.
+
+Thus, the eigenvalues of a 2x2 system is just the solutions to the quadratic:
+
+$$\lambda^2-\Tr(\mathbf{P})\lambda + \det(\mathf{\mathbf{P}}) = 0$$
+
+Using the quadratic formula:
+
+$$\lambda = \frac{\Tr(\mathbf{P}) \pm \sqrt{\Tr(\mathbf{P})^2-4\det(\mathbf{P}) }}{2}$$
+
+This means that whether or not the eigenvalues are real, complex, or repeated is determined entirely by the term $\Tr(\mathbf{P})^2-4\det(\mathbf{P})$!
+
+The eigenvalues are real and unique when:
+
+$$\det(\mathbf{P}) < \frac{\Tr(\mathbf{P})^2}{4}$$
+
+They are complex and unique when:
+
+$$\det(\mathbf{P}) < \frac{\Tr(\mathbf{P})^2}{4}$$
+
+They are repeated reals when:
+
+$$\det(\mathbf{P}) = \frac{\Tr(\mathbf{P})^2}{4}$$
+
+We can thereby graph our results on a trace-determinant plane.
+
+\includegraphics[scale=0.3]{tr-det.png}
+
+If, after we find the trace and determinant of a matrix, it is below the parabola outlined, then we have two unique real roots. If it is on the parabola, we have a repeated root. If it is above the parabola, we have a complex conjugate pair of eigenvalues.
+
+
+Furthermore, the discriminant of the quadratic expression also tells us the sign of the eigenvalues.
+
+Thus, it is possible to view all the node types on the determinant-trace plane as follows:
+
+\includegraphics[scale=0.5]{trace_det_full.png}
+
+
+
+
+
+
 
 
 
@@ -2584,4 +2825,92 @@ When we integrate both sides, we get:
 
 $$W = c\exp{\int{p_{11} + \dots + p_{nn})dt}}$$
 
+
+\section{\hyperref[sec:center]{Proof that purely imaginary Eigenvalues form Ellipses}}
+\label{sec:prCenter}
+
+When we have a purely imaginary conjugate pair of eigenvalues, we know from our \hyperref[th:compEigenvals]{previous discussion} that our two real solutions are given by the real and imaginary parts of:
+
+$$\mathbf{v_1}e^{\lambda t}$$
+
+where $\mathbf{v_1}$ is an eigenvector.
+
+Say that:
+
+$$\lambda = i\mu$$
+$$\mathbf{v_1}
+= \begin{bmatrix}
+    a + bi \\
+    c + di \\
+\end{bmatrix}$$
+Then our complete solution is described by:
+
+$$\mathbf{x(t)} = c_1\Re{\mathbf{v_1}e^{\lambda t}} + c_2\Im{\mathbf{v_1}e^{\lambda t}}$$
+
+Simplifying:
+
+$$\mathbf{x(t)} = c_1\Re{\begin{bmatrix}
+    a + bi \\
+    c + di \\
+\end{bmatrix}
+e^{i\mu t}} + c_2\Im{\begin{bmatrix}
+    a + bi \\
+    c + di \\
+\end{bmatrix}
+e^{i\mu t}}$$
+
+Applying Euler's formula:
+
+$$\mathbf{x(t)} = c_1\Re{\begin{bmatrix}
+    a + bi \\
+    c + di \\
+\end{bmatrix}
+(\cos(\mu t) + i\sin(\mu t))}
+$$
+$$+ c_2\Im{\begin{bmatrix}
+    a + bi \\
+    c + di \\
+\end{bmatrix}
+(\cos(\mu t) + i\sin(\mu t))}$$
+
+which after expanding is just:
+
+$$\mathbf{x(t)} = c_1\Re{
+\begin{bmatrix}
+    (a\cos(\mu t) - b\sin(\mu t)) + i(a\sin(\mu t) + b\cos(\mu t) \\
+    (c\cos(\mu t) - d\sin(\mu t)) + i(c\sin(\mu t) + d\cos(\mu t) \\
+\end{bmatrix}}
+$$
+$$+ c_2\Im{
+\begin{bmatrix}
+    (a\cos(\mu t) - b\sin(\mu t)) + i(a\sin(\mu t) + b\cos(\mu t) \\
+    (c\cos(\mu t) - d\sin(\mu t)) + i(c\sin(\mu t) + d\cos(\mu t) \\
+\end{bmatrix}}
+$$
+
+$$= c_1
+\begin{bmatrix}
+    a\cos(\mu t) - b\sin(\mu t) \\
+    c\cos(\mu t) - d\sin(\mu t) \\
+\end{bmatrix}
++ c_2
+\begin{bmatrix}
+    a\sin(\mu t) + b\cos(\mu t) \\
+    c\sin(\mu t) + d\cos(\mu t) \\
+\end{bmatrix}
+$$
+
+\hyperref[th:sinPlusCosin]{Since both components are just sums of cosines and sines of the same frequency}, we know that this evaluates to:
+
+$$
+\mathbf{x(t)} = 
+\begin{bmatrix}
+    A_1\cos(\mu t - \phi_1) \\ 
+    A_2\sin(\mu t - \phi_2) \\
+\end{bmatrix}
+$$
+
+(A sine function is just a shifted cosine ).
+
+This is the end of our proof.
 \end{document}
