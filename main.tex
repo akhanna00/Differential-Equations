@@ -78,7 +78,8 @@
 \maketitle
 \tableofcontents
 
-\chapter{Types of Differential Equations}
+\chapter{First-order case}
+\section{Types of Differential Equations}
 Differential equations come in many types. This is a reference to look back into if you forget.
 \section{Order of a differential equation}
 The order of a differential equation is simply the highest derivative term in it, once it has been simplified as much as possible. For example:
@@ -2031,13 +2032,1746 @@ Thus, it is possible to view all the node types on the determinant-trace plane a
 
 
 \section{Fundamental Matrix and Matrix Exponential}
+
+\section{The Fundamental Matrix}
+Say that we've found $n$ solution linearly independent solutions to some system:
+$$\mathbf{x'} = \mathbf{Ax}$$
+
+
+We know from our previous discussion that any solution can in fact be represented as a linear combination of the linearly independent basis solutions:
+
+$$\mathbf{x} = c_1\mathbf{x^{(1)}} + \dots + c_n\mathbf{x^{(n)}}$$
+
+In matrix form this means that any solution is:
+
+Let's consider the matrix formed from the columns of the solutions:
+
+
+$$
+\mathbf{x} =
+\begin{bmatrix}
+    \vert & & \vert \\
+    \mathbf{x}^{(1)} & \dots & \mathbf{x}^{(n)} \\
+    \vert & & \vert \\
+\end{bmatrix}
+\begin{bmatrix}
+    c_1 \\
+    \vdots \\
+    c_n \\
+\end{bmatrix}
+$$
+
+or 
+$$\mathbf{x} = \mathbf{\Psi c}$$
+
+where $\mathbf{\Psi}$ is the \textbf{fundamental matrix} formed by the columns of n linearly independent solutions and $\mathbf{c}$ is the coefficient vector.
+
+How can we find the coefficient vector given some set of initial conditions;
+
+$$\mathbf{x}(t_0) = \mathbf{x^0}$$
+
+Let's use this in the expression above:
+
+
+$$\mathbf{x}(t_0) = \mathbf{\Psi}(t_0)\mathbf{c} = \mathbf{x^0}$$
+
+We know that that fundamental matrix is inevitable because it is composed of linearly independent vectors. Thus:
+
+$$\mathbf{c} = \mathbf{\Psi}(t_0)^{-1}\mathbf{x^0}$$
+
+And our general solution is given by:
+
+$$\mathbf{x}(t) = \mathbf{\Psi}(t)\mathbf{\Psi}(t_0)^{-1}\mathbf{x^0}$$
+
+
+If we decide to be clever and pick either a point $t_0$ or another fundamental matrix such that:
+
+$$\mathbf{\Phi}(t_0) = \mathbf{I}$$
+
+Than because $\mathbf{\Phi}(t_0)^{-1} = \mathbf{I}$, our general solution will be:
+
+$$\mathbf{x}(t) = \mathbf{\Phi}(t)\mathbf{x^0}$$
+
+It is possible to always find a $\mathbf{\Phi}$ that satisfies this condition by seeing that:
+
+$$\mathbf{\Phi}(t) = \mathbf{\Psi}(t)\mathbf{\Psi}(t_0)^{-1}$$
+
+Thus:
+
+\begin{mytheo}{Unique Solution to a System}{genSolSys}
+    Given a system of homogeneous equations:
+    $$\mathbf{x'} = \mathbf{Ax}$$
+    with initial conditions:
+    $$\mathbf{x}(t_0) = \mathbf{x^0}$$
+    
+    And given that we have found $n$ linearly independent solutions
+    $\mathbf{x^{(1)}}, \dots, \mathbf{x^{(n)}}$  
+    
+    The unique solution to this differential system of equations is:
+    
+    $$\mathbf{x}(t) = \mathbf{\Psi}(t)\mathbf{\Psi}(t_0)^{-1}\mathbf{x^0}$$
+    
+    where:
+    $$\mathbf{\Psi}(t)
+    =
+    \begin{bmatrix}
+    \vert & & \vert \\
+    \mathbf{x}^{(1)} & \dots & \mathbf{x}^{(n)} \\
+    \vert & & \vert \\
+    \end{bmatrix}
+    $$
+\end{mytheo}
+
+
+\section{Matrix Exponential}
+It turns out that it is possible to take exponentials not only of numbers, but of matrices.
+
+What is an exponential? One way to define it is through it's Taylor series:
+
+$$e^{x} = 1 + \sum_{n=1}^\infty \frac{x^n}{n!} = 1 + \frac{x}{1!} + \frac{x^2}{2!} + \dots$$
+
+We can apply this definition with matrices as well. Thus a matrix exponential is defined as:
+
+\begin{mytheo}{Matrix Exponential}{matExp}
+    A matrix exponential for a matrix $\mathbf{A}$ is defined as:
+    $$e^{\mathbf{A}} = \mathbf{I} + \sum_{n=1}^\infty \frac{\mathbf{A}^n}{n!} = \mathbf{I} + \frac{\mathbf{A}}{1!} + \frac{\mathbf{A}^2}{2!} + \dots$$
+\end{mytheo}
+
+It is not too difficult to show \hyperref[sec:prMatExpProp]{(proofs are in the appendix)} that matrix exponentials satisfy some of the properties we are familiar with as exponents:
+\label{sec:matExpProp}
+\begin{itemize}
+    \item Derivative of a matrix exponential:
+    $$\dv{e^{\mathbf{A}t}}{t}
+    = \mathbf{A}e^{\mathbf{A}t}
+    $$
+    \item Matrix exponential of a diagonal matrix:
+    $$
+    \mathbf{D} = 
+    \begin{bmatrix}
+        d_{1} & & \\
+        & \ddots & \\
+        & & d_{r} \\
+    \end{bmatrix}
+    $$
+    $$
+    e^{\mathbf{D}} = 
+    \begin{bmatrix}
+        e^{d_{1}} & & \\
+        & \ddots & \\
+        & & e^{d_{r}} \\
+    \end{bmatrix}
+    $$
+    \item If we have a matrix $\mathbf{A} = \mathbf{S}\mathbf{D}\mathbf{S^{-1}}$
+    where $\mathbf{D}$ is a diagonal matrix:
+    
+    $$e^{\mathbf{\mathbf{S}\mathbf{D}\mathbf{S^{-1}}}} = \mathbf{S} e^{\mathbf{D}}\mathbf{S}^{-1}$$
+    
+    \item If $\mathbf{AB = BA}$, then $\mathbf{A}e^{\mathbf{B}t} = e^{\mathbf{B}t}\mathbf{A}$
+    
+    \item  $(e^{\mathbf{A}})^{-1} = e^{-\mathbf{A}}$
+
+    \item If $\mathbf{AB = BA}$, then $e^{\mathbf{A+B}} = e^{\mathbf{A}}e^{\mathbf{B}}$
+    
+\end{itemize}
+
+
+From the first property, we can see that the matrix exponential satisfies the properties:
+
+$$(e^{\mathbf{A}t})' = \mathbf{A}e^{\mathbf{A}t}$$
+
+and that at $t=0$:
+$$\mathbf{e^{\mathbf{A}*0}} = \mathbf{I}$$
+
+
+We also know that each column of our fundamental matrix $\mathbf{\Phi}$ is a solution to the differential equation:
+
+$$\mathbf{x}' = \mathbf{Ax}$$
+
+Since each column is a solution, the matrix itself is a solution:
+
+$$\mathbf{\Phi}' = \mathbf{A\Phi}$$
+
+We also know that $\mathbf{\Phi}(t_0) = \mathbf{I}$
+
+If we choose $t_0 = 0$, then we have:
+
+$$\mathbf{\Phi}(0) = \mathbf{I}$$
+
+Thus:
+$$\mathbf{e^{\mathbf{A}t}} = \mathbf{\Phi}(t)$$
+
+
+
+\begin{mytheo}{Matrix Exponential Solution}{matExpSol}
+    Given the system
+    $$\mathbf{x'} = \mathbf{Ax}$$
+    with initial conditions:
+    $$\mathbf{x}(0) = \mathbf{x^0}$$
+    
+    The solution can be given by:
+    $$\mathbf{x}(t) = \mathbf{e^{\mathbf{A}t}}x^0$$
+    
+    where 
+    $$\mathbf{e^{\mathbf{A}t}}= \mathbf{\Psi}(t)\mathbf{\Psi}^{-1}(t_0)$$
+    
+    and $\mathbf{\Psi}(t)$ is just the fundamental matrix containing $n$ linearly independent solutions as columns.
+\end{mytheo}
+
+It is possible to find the matrix exponential directly without computing the fundamental matrix. 
+
+If the matrix $\mathbf{A}$ is \textbf{nilpotent} such that there is a $k$ where $\mathbf{A}^k = \mathbf{0}$, then we can see that the from our definition of matrix exponentials that:
+
+$$e^{\mathbf{A}} = \mathbf{I} + \sum_{n=1}^\infty \frac{\mathbf{A}^n}{n!} = \mathbf{I} + \frac{\mathbf{A}}{1!} + \frac{\mathbf{A}^2}{2!} + \dots + \frac{\mathbf{A}^{k-1}}{(k-1)!} + \frac{\mathbf{A}^k}{k!} + \dots$$
+$$e^{\mathbf{A}} = \mathbf{I} + \frac{\mathbf{A}}{1!} + \frac{\mathbf{A}^2}{2!} + \dots + \frac{\mathbf{A}^{k-1}}{(k-1)!} + 0 + 0 + \dots$$
+$$e^{\mathbf{A}} = \mathbf{I} + \frac{\mathbf{A}}{1!} + \frac{\mathbf{A}^2}{2!} + \dots + \frac{\mathbf{A}^{k-1}}{(k-1)!}$$
+
+which can be computed directly!
+
+How about matrices that are not necessarily nil-potent? 
+We know that if we have $n$ eigenvectors, we can make the following equality:
+
+$$\mathbf{AV} = \mathbf{V\Lambda}$$
+
+where $\mathbf{V}$ is the matrix of eigenvectors and $\mathbf{\Lambda}$ is the matrix formed by putting the corresponding eigenvalue in the diagonals.
+
+If we have $n$ linearly independent eigenvectors, it is possible to take the inverse of $\mathbf{V}$:
+
+Thus, we can represent the matrix $A$ as:
+
+$$\mathbf{A} = \mathbf{V\Lambda V^{-1}}$$
+
+Using one of the properties of matrix exponentials, we see that:
+
+$$e^{\mathbf{A}t} = e^{\mathbf{V\Lambda V^{-1}}t} = \mathbf{V}e^{\mathbf{\Lambda} t}\mathbf{V^{-1}} $$
+
+which gives us a convenient way of solving for the matrix exponential.
+
+\subsection{Repeated Roots and Matrix Exponentials}
+
+Since we know that:
+
+$$\dv{e^{\mathbf{A}t}}{t} = \mathbf{A}e^{\mathbf{A}t}$$. All of the columns must satisfy the homogeneous system:
+
+$$\mathbf{x}' = \mathbf{Ax}$$
+
+We also know that since it is a homogeneous system, any linear combination of solutions is also itself a solution. Thus, for any vector $\mathbf{u}$:
+
+$$\mathbf{x} = e^{\mathbf{A}t}\mathbf{u}$$ 
+
+is in fact a solution to the system above. (We can also see that because of our previous equivalency between the fundamental matrix and the matrix exponential.
+
+We know that:
+
+$$e^{\mathbf{A}t} = e^{(\mathbf{A}-\lambda \mathbf{I} + \lambda\mathbf{I})t}$$
+
+Because $\mathbf{A}(\lambda \mathbf{I}) = (\lambda \mathbf{I})\mathbf{A}$, this is also equivalent to:
+
+$$e^{\mathbf{A}t} = e^{\lambda\mathbf{I}t}e^{(\mathbf{A}-\lambda \mathbf{I} )t}$$
+
+Using properties of taking exponentials of a diagonal matrix, this is just:
+$$e^{\lambda t}\mathbf{I}e^{(\mathbf{A}-\lambda \mathbf{I} )t}$$
+
+Since we know that $e^{\mathbf{A}t}\mathbf{u}$ is a solution to the system:
+
+$$\mathbf{x'} = \mathbf{Ax}$$
+
+We know that $\mathbf{x} = e^{\lambda t}e^{(\mathbf{A}-\lambda \mathbf{I} )t}\mathbf{u}$ is a solution
+for an arbitrary $\lambda$ and $\mathbf{u}$. Let's take the Taylor expansion of this solution:
+
+
+$$e^{\lambda t}e^{(\mathbf{A}-\lambda \mathbf{I} )t}\mathbf{u} = e^{\lambda t} \left[ \mathbf{I} + \frac{\mathbf{(A-\lambda \mathbf{I}})t}{1!} + \frac{(\mathbf{A-\lambda \mathbf{I}})^2t^2}{2!} + \dots \right]\mathbf{u} $$
+
+$$= e^{\lambda t} \left[ \mathbf{u} + \frac{\mathbf{(A-\lambda \mathbf{I}})\mathbf{u}t}{1!} + \frac{(\mathbf{A-\lambda \mathbf{I}})^2\mathbf{u}t^2}{2!} + \dots \right]$$
+
+If the matrix $A$ has $n$ unique eigenvalues $\lambda_1, \dots, \lambda_n$, we see that if we plug in $\lambda$ as one of the eigenvalues and $\mathbf{u}$ as an eigenvector, by the properties of eigenvalues we get:
+
+$$(A-\lambda_j \mathbf{I}) \mathbf{u_j} = 0$$
+$$(A-\lambda_j \mathbf{I})^2 \mathbf{u_j} = 0$$
+$$\vdots$$
+$$(A-\lambda_j \mathbf{I})^k \mathbf{u_j} = 0$$
+
+Thus, when we put this into the Taylor expansion of the matrix exponential, almost all of the terms cancel out. If we have $n$ unique eigenvalues, we can use this technique to find $n$ solutions:
+
+$$\mathbf{x^{(1)} = e^{\lambda t}\mathbf{u_1}$$
+$$\vdots$$
+$$\mathbf{x_n^{(n)}} = e^{\lambda t}\mathbf{u_n}$$
+
+Notice how this is in fact the exact same solutions as we initially used to solve a system of differential equations!
+
+What if we in fact repeated roots $\lambda_i=\lambda_j$
+
+If we set $\mathbf{u_i}$ in the Taylor expansion to be the eigenvector for $\mathbf{\lambda_i}$, we get:
+
+$$\mathbf{x^{(i})}= e^{\lambda_i t} \left[ \mathbf{u_i} + 0 + 0 + \dots \right] =  e^{\lambda_i t}\mathbf{u_i}$$
+
+like before.
+
+However, to find  another linearly independent solution, what if instead of using the corresponding eigenvector to the repeated eigenvalue, we instead used a vector that kept a little bit more of our Taylor expansion.
+
+Remember our expansion:
+
+$$\mathbf{x^{(j)}} = e^{\lambda_i t}e^{(\mathbf{A}-\lambda_i \mathbf{I} )t}\mathbf{u} = e^{\lambda_i t} \left[ \mathbf{u_j} + \frac{\mathbf{(A-\lambda_i \mathbf{I}})\mathbf{u_j}t}{1!} + \frac{(\mathbf{A-\lambda \mathbf{I}})^2\mathbf{u_j}t^2}{2!} + \dots \right]$$
+
+Instead of finding a $\mathbf{u}$ that makes:
+
+$$(A-\lambda_i \mathbf{I}})\mathbf{u_j} = 0$$
+
+let's find a $\mathbf{u_j}$ such that:
+
+$$(A-\lambda \mathbf{I}})\mathbf{u_j} \neq 0$$
+and 
+$$(A-\lambda \mathbf{I}})^2\mathbf{u_j} = 0$$
+
+The second condition ensures that all the initial terms in the Taylor expansion are in fact 0.
+
+
+If we can in fact find a vector like this, then we can get another linearly independent solution:
+
+
+$$\mathbf{x^{(j)}} = e^{\lambda t} \left[ \mathbf{u_j} + \frac{\mathbf{(A-\lambda \mathbf{I}})\mathbf{u_j}t}{1!} + 0 + 0 + \dots \right]$$
+
+It turns out that (not too difficult to prove) that
+$\mathbf{(A-\lambda \mathbf{I}})\mathbf{u_j}$ is just our original eigenvector for the eigenvalue $\lambda_i$:
+
+Thus, we have another solution:
+
+$$\mathbf{x^{(j)}} = e^{\lambda t} \left[ \mathbf{u_j} + \mathbf{u_i}t \right]$$
+
+This is the exact same solution as we had before in the case of repeated eigenvalues where $\mathbf{u_j}$ is our generalized eigenvector.
+
+We can extend this further with same logic for repeated eigenvalues of $k = 3,4,\dots$ by just expanding the Taylor expansion one term further each time.
+
+
 \section{Non-homogeneous Case}
-\section{Approximating Non-linear Differential Equations}
+There are three ways we will discuss solving a non-homogeneous differential equation of the form:
+
+$$\mathbf{x' = Px + g}$$
 
 
+\subsection{Diagonalization}
+
+Say that we try the solution:
+
+$$\mathbf{x = Ty}$$
+
+where $\mathbf{T}$ is an arbitrary constant matrix.
+
+Putting this into our non-homogeneous equation, we see:
+
+$$\mathbf{(Ty)' = PTy + g}$$
+$$\mathbf{Ty' = PTy + g}$$
+
+If $\mathbf{T}$ has an inverse:
+
+$$\mathbf{y' = (T^{-1}PT)y + T^{-1}g}$$
+
+If $\mathbf{P}$ has $n$ linearly independent eigenvectors, then we know that:
+
+$$\mathbf{P=S\LambdaS^{-1}}$$
+
+Thus:
+$$\mathbf{\Lambda = S^{-1}PS}$$
+
+where $\mathbf{\Lambda}$ is the diagonal matrix of eigenvalues and $\mathbf{S}$ is the matrix of corresponding eigenvectors.
+
+Thus, if we set $\mathbf{T=S}$, we see that we get:
+
+$$\mathbf{y' = \Lambda y + T^{-1}g}$$
+
+Since $\mathbf{\Lambda}$ is a diagonal matrix and $\mathbf{T^{-1}g}$ is just a vector, we see that this is equivalent to solving the first order differential equations:
+
+$$
+y_1' = \lambda_1 y_1 + h_1
+$$
+$$
+\vdots
+$$
+$$
+y_n' = \lambda_1 y_n + h_n
+$$
+
+where $h_1, \dots, h_n$ are just the components of the vector $\mathbf{T^{-1}g}$
+
+These first order differential equations can be solved using first-order techniques such as the intergrating factors.
+
+
+\subsection{Undetermined Coefficients}
+
+This method is useful if for the system:
+$$\mathbf{x' = Px + g}$$
+
+$\mathbf{P}$ is a constant matrix and $\mathbf{g}$ is the sum of constants, polynomials, exponentials or sinusoidals.
+
+In the case of an exponential non-homogeneous term $Ae^{rt}$, if the solution to the homogeneous solution also has something of the form $e^{rt}$ (this is when $r$ is an eigenvalue of the coefficient matrix), then we must guess the solution:
+
+$$\mathbf{x} = ae^{rt} + bte^{rt}$$
+
+This is slightly different from our discussion in the previous chapter where we only had to guess the solution $te^{rt}$ for a repeated root.
+
+Thus, what we want to do is:
+\begin{enumerate}
+    \item Break $\mathbf{g(t)}$ into its components (polynomial, exponential, sinusoidal, etc.).
+    \item Check if any of the terms that we broke down looks like the homogeneous solution
+    \item Guess a solution that is linear combination of the components we found initially. If we see a repeat a homogeneous solution, multiply that by t and add it our trial solution
+\end{enumerate}
+
+
+This is best illustrated by an example:
+
+Say we have the differential equation:
+
+$$\mathbf{x}' = 
+\begin{bmatrix}
+    -2 & 1 \\
+    1 & -2 \\
+\end{bmatrix}
+\mathbf{x}
++ \begin{bmatrix}
+    2e^{-t} \\
+    3t
+\end{bmatrix}
+$$
+
+Let's first break this down into it's the non-homogeneous part into it's components:
+
+$$\mathbf{g} = 
+\begin{bmatrix}
+    2 \\
+    0
+\end{bmatrix}
+e^{-t}
++ 
+\begin{bmatrix}
+    0 \\
+    3
+\end{bmatrix}t$$
+
+If we solve for the homogeneous solution of the matrix $\mathbf{A}$, we see that there is in fact a solution of the form $e^{-t}$. Thus, our trial solution is of the form:
+
+$$\mathbf{x} = \mathbf{a}te^{-t} + \mathbf{b}e^{-t} + \mathbf{c}t + \mathbf{d} $$
+
+which we can plug into our original equation and equate coefficients to solve for $\mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d}$.
+
+\subsection{Variation of Parameters}
+
+This method us very similar to the one described for solving the non-homogeneous differential equation in the n'th order case.
+
+For the system:
+
+$$\mathbf{x' = Ax + g}$$
+
+Let's use some combination of the homogeneous solution to try to find the solution to the non-homogeneous equation.
+
+[Note, that we are not looking for a linear combination of the homogeneous solutions. This would simply evaluate our differential equation to $\mathbf{0 = g}$ which is incorrect].
+
+Since our fundamental matrix consists of solutions to the homogeneous differential equations as columns, we can represent a potential trial solution as:
+
+$$\mathbf{x} = \mathbf{\Psi u}(t)$$
+
+Note that I put $\mathbf{u}(t)$ instead of $\mathbf{u}$ to emphasize that we're looking for non-constant coefficients.
+
+Putting this into our differential equation:
+
+$$(\mathbf{\Psi u}(t))' = \mathbf{A}\mathbf{\Psi u}(t) + \mathbf{g}}$$
+
+Using the product rule,
+$$\mathbf{\Psi' u}(t) + \mathbf{\Psi u'}(t)= \mathbf{A}\mathbf{\Psi u}(t) + \mathbf{g}}$$
+
+We also know that:
+
+$$\mathbf{\Psi'} = \mathbf{A\Psi}$$
+
+since the columns of $\mathbf{\Psi}$ are all solutions to the system:
+
+$$\mathbf{x' = Ax}$$
+
+Putting this into our initial equation, we get:
+
+$$\mathbf{A\Psi u}(t) + \mathbf{\Psi u'}(t)= \mathbf{A}\mathbf{\Psi u}(t) + \mathbf{g}}$$
+
+which results in the term $\mathbf{A\Psi u}(t)$ cancelling out on both sides. This gives us:
+
+$$\mathbf{\Psi u'}(t)= \mathbf{g}}$$
+
+Since we know that $\mathbf{\Psi}$ has linearly independent columns, we know that it must in fact be invertible. Therefore:
+
+$$\mathbf{u'}(t)= \mathbf{\Psi^{-1}g}}$$
+
+We can solve for $\mathbf{u'}(t)$ by integrating both sides. 
+
+$$\mathbf{u}(t) = \int{\mathbf{\Psi^{-1}(t)}\mathbf{g}}(t) \dd t + \mathbf{c}$$
+
+where I emphasized the dependence on $t$. The vector $\mathbf{c}$ is just a constant vector to represent the full span of the solution.
+
+Thus, the full set of solutions for $\mathbf{x}$ are:
+
+$$\mathbf{x} = \mathbf{\Psi u}(t) = \mathbf{\Psi}(t)\int{\mathbf{\Psi^{-1}}(t)\mathbf{g}}(t) \dd t + \mathbf{\Psi}(t)\mathbf{c}$$
+
+What if we have an IVP with some initial condition such that:
+
+$$\mathbf{x}(t_0) = \mathbf{x^0}$$
+
+Hmm, the first thing we can do is take advantage of the fact that the anti derivative term above can be represented as a definite integral plus another constant since:
+
+$$\int a(t) \dd t + c = \int_{t_0}^t a(t) \dd t + c_1$$
+
+Thus, we can represent our equation above as:
+
+
+$$\mathbf{x} = \mathbf{\Psi u}(t) = \mathbf{\Psi}(t)\int{\mathbf{\Psi^{-1}}(t)\mathbf{g}}(t) \dd t + \mathbf{\Psi}(t)\mathbf{c}$$
+
+
+Thus, we can rewrite the above equation as:
+
+
+$$\mathbf{x}(t) = \mathbf{\Psi u}(t) = \mathbf{\Psi}(t)\int_{t_0}^{t}{\mathbf{\Psi^{-1}}(t)\mathbf{g}}(t) \dd t + \mathbf{\Psi}(t)\mathbf{c_1}$$
+
+We do this so that the entire anti-derivative term cancels out at $t = t_0$.
+
+If we evaluate the expression at $t_0$:
+
+
+$$\mathbf{x}(t_0) = \mathbf{\Psi}(t)\int_{t_0}^{t_0}{\mathbf{\Psi^{-1}}(t)\mathbf{g}}(t) \dd t + \mathbf{\Psi}(t)\mathbf{c_1} = \mathbf{0} + \mathbf{\Psi}(t)\mathbf{c_1}$$
+
+Since we know from our IVP that $\mathbf{x}(t_0) = \mathbf{x^0}$,
+
+$$\mathbf{c_1} = \mathbf{\Psi^{-1}}(t)\mathbf{x^0}}$$
+
+Thus:
+
+\begin{mytheo}{Variation of Parameters for System of Differential Equations}
+    If we have a non-homogeneous differential equation of the form:
+    $$\mathbf{x' = Ax + g}$$
+    $$\mathbf{x}(t_0}) = \mathbf{x^0}$$
+    And we solve for the corresponding homogeneous solution to get the fundamental matrix $\mathbf{\Psi}$ formed from $n$ linearly independent solutions.
+    
+    If we try:
+    $$\mathbf{x} = \mathbf{\Psi u}(t)$$
+    
+    as a potential solution, we see that we can always find some $\mathbf{u}$(t) that solve the non-homogeneous problem and give us the closed form solution:
+    
+    $$
+    \mathbf{x}(t) = \mathbf{\Psi}(t)\int_{t_0}^{t}{\mathbf{\Psi^{-1}}(t)\mathbf{g}}(t) \dd t + \mathbf{\Psi}(t)\mathbf{\Psi^{-1}}(t)\mathbf{x^0}}$
+    $$
+    
+    
+    
+\end{mytheo}
+
+
+
+
+
+%% Goal: complete on Feb 6
 \chapter{Series Solutions}
+In this chapter we will discuss solutions to second order linear homogeneous differential equations using power series.
+
+
+\section{Review of Series}
+There are some properties of power series that we will rely on in solving differential equations using series:
+
+
+\begin{itemize}
+    \item A power series is in the form of:
+    
+    $$\sum_{n=0}^{\infty}a_n(x-x_0)^n$$
+    
+    A power series is said to \textbf{converge} at a point $x$ when:
+    
+    $$\lim_{m \to \infty}\sum_{n=0}^{m}a_n(x-x_0)^n$$
+    
+    exists for $x$. 
+    
+    Trivially, a power series always converges at $x = x_0$
+    
+    \item A power series \textbf{converges absolutely} at $x$ if the series:
+    
+    $$\lim_{m \to \infty}\sum_{n=0}^{m}|a_n(x-x_0)^n|$$
+    
+    exists for $x$.
+    
+    If something converges absolutely, then it must also converge. The converse is not always true
+    
+    \item We can test for the absolute convergence of a power series at some point $x$ using the \textbf{ratio test}. If $a_n \neq 0$:
+    
+    $$\lim_{n\to \infty} \frac{|a_{n+1}(x-x_0)^{n+1}|}{|a_n(x-x_0)^n|}
+    = |x-x_0|\lim_{n\to \infty} \frac{|a_{n+1}|}{|a_n|}$$
+    
+    If the value above is less than 1, the series \textbf{converges} absolutely:
+    
+    $$
+    \lim_{n\to \infty} \frac{|a_{n+1}(x-x_0)^{n+1}|}{|a_n(x-x_0)^n|} < 1
+    $$
+    
+    If the value is greater than one, than the series \textbf{diverges}:
+    
+    $$
+    \lim_{n\to \infty} \frac{|a_{n+1}(x-x_0)^{n+1}|}{|a_n(x-x_0)^n|} > 1
+    $$
+    
+    If the value is in fact just 1, than the test is inconclusive. 
+    
+    
+    \item If we find that a power series converges at some $x_1$, than the series converges for all $x$ such that $x$ is within $|x_1-x_0|$ from $x_0$
+    
+    Similarly if we find that a power series diverges at some $x_1$, then it diverges for all $x$ such that x is further than $|x_1-x_0|$ away from $x_0$
+    
+    
+    \item The \textbf{radius of convergence} $\rho$ of a power series is a non-negative number such that the power series converges absolutely for values of $x$ that are less than $\rho$ around $x_0$ in both directions and diverges for values of $x$ further than $\rho$ away from $x_0$.
+    
+    If the series only converges at $x_0$, then $\rho = 0$. If it converges everywhere, then $\rho = \infty$
+    
+    At the point $\rho$ away from $x_0$, it is inconclusive whether or not the series converges or not.
+    
+    \includegraphics[scale=0.5]{convergence.png}
+    
+    \item In the following properties we will use two series $a(x) = \sum_{n=0}^{\infty}a_n(x-x_0)^n$ and $b(x) = \sum_{n=0}^{\infty}b_n(x-x_0)^n$
+    
+    where both $a(x)$ and $b(x)$ converge for some $x$ such that $|x-x_0| < \rho$, $\rho > 0$. We will be considering only values of $x$ in the radius of convergence:
+    
+    We can add and subtract two series term wise:
+    
+    $$a(x) \pm b(x) = \sum_{n=0}^{\infty}(a_n \pm b_n)(x-x_0)^n  $$
+    
+    \item We can multiply two series:
+    
+    $$
+    a(x)b(x)
+    = \left[\sum_{n=0}^{\infty}a_n(x-x_0)^n \right] \left[\sum_{n=0}^{\infty}b_n(x-x_0)^n \right]
+    = \sum_{n=0}^{\infty}c_n(x-x_0)^n
+    $$
+    
+    where $c_n$ can be formed by collecting coefficients of common exponents $c_n = a_0b_n + \dots + a_nb_0$
+    
+    If $b(x_0) \neq 0$, i.e.$b_0 \neq 0$ then we can also divide two series:
+    
+    $$
+    \frac{a(x)}{b(x)}
+    = 
+    \frac{
+    \sum_{n=0}^{\infty}a_n(x-x_0)^n }{ \sum_{n=0}^{\infty}b_n(x-x_0)^n}
+    = 
+    \sum_{n=0}^{\infty}d_n(x-x_0)^n}
+    $$
+    
+    You can find $d_n$ by equating coefficients.
+    
+    Note: In the case of division, the radius of convergence of the two series may decrease from $\rho$.
+    
+    \item We can take an infinite amount of derivatives of a power series around our radius of convergence:
+    
+    $$
+    f(x)
+    = \sum_{n=0}^{\infty}a_n(x-x_0)^n 
+    = a_0 + a_1(x-x_0) + a_2(x-x_0)^2 + \dots
+    $$
+    $$
+    f'(x)
+    = a_1 + 2a_2(x-x_0) +
+    \dots
+    =  \sum_{n=1}^{\infty}na_n(x-x_0)^{n-1}
+    $$
+    $$
+    f''(x)
+    = 2a_2 + 6a_3(x-x_0) + 
+    \dots
+    =  \sum_{n=2}^{\infty}n(n-1)a_n(x-x_0)^{n-2}
+    $$
+    $$\vdots$$
+    
+    
+    
+    
+    
+    
+    
+    
+    \item The value of $a_n$ can be given by:
+    
+    $$a_n = \frac{a^{(n)}(x_0)}{n!}$$
+    
+    where $a^{(n)}(x_0)$ is the $n
+    th$ derivative of $x$ evaluated at $x_0$
+    
+    This is called the \textbf{Taylor Series} about the point $x_0$
+    
+    \item If we have a function $f(x)$ such that we can create a Taylor expansion about some point $x_0$:
+    
+    $$f(x) = 
+    \sum_{n=0}^{\infty}\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n$$
+    
+    we call this function $f(x)$ \textbf{analytic} around $x_0$. If $f$ and $g$ are analytic, then $f\pm g$, $fg$ and $\frac{f}{g}$ (where $g(x_0) \neq 0$ are all analytic around $x_0$
+    \end{itemize}
+
+
+Okay, that's enough review, let's start solving some differential equations!
+
+\section{Series solution Ordinary Points}
+Say we have the linear homogeneous second order differential equation:
+
+$$P(t)y'' + Q(t)y' + R(t)y = 0$$
+
+We assume here and in the future that the functions $P(t), Q(t), R(t)$ are all continuous.
+
+Let's say that we're trying to solve this differential equation around a neighborhood around a point $t_0$
+
+If $P(t_0) \neq 0$, then we know that there is some interval where $P(t) \neq 0$ since $P(t)$ is assumed to be continuous (no holes). We call the point $t_0$ an ordinary point if this is true.
+
+
+Thus, within this interval, we can divide by $P(t)$ to get:
+
+$$y'' + p(t)y' + q(t)y = 0$$
+
+where $p(t) = \frac{Q(t)}{P(t)}$ and $q(t) =\frac{R(t)}{P(t)} $
+
+
+In the case of $P(t_0) = 0$, we cannot just divide by $P(t)$ and use the same method we discuss in this section. We call such a point a \textbf{singular point}. There are ways to solve the differential equation, provided we satisfy some conditions. 
+
+
+By the Existence and Uniqueness theorem, we know that for initial conditions
+$y(t_0) = y^0$ and $y'(t_0) = y^0'$ we should always be able to find a unique solution.
+
+Let's try to find a solution in the form of a power series of the form:
+
+$$y(t) 
+= \sum_{n=0}^{\infty}a_n(t-t_0)^n 
+= a_0 + a_1(t-t_0) + a_2(t-t_0)^2 + \dots$$
+
+Within the radius of convergence, this is "easy" to divide and manipulate. Thus, we can use this formulation to help solve differential equations.
+
+This is best exemplified by an example:
+
+
+Let's consider the problem:
+
+$$y'' - ty = 0$$
+
+Since $P(t) = 1$ for all $t$, we know that this every point is ordinary. Thus, let's put in our our series into the differential equation:
+
+$$y(t) 
+= \sum_{n=0}^{\infty}a_n(t-t_0)^n $$
+
+$$y''(t) 
+= \sum_{n=2}^{\infty}n(n-1)a_n(t-t_0)^{n-2} $$
+
+Putting these into our original differential equation:
+
+$$
+\sum_{n=2}^{\infty}n(n-1)a_n(t-t_0)^{n-2}
+-t\sum_{n=0}^{\infty}a_n(t-t_0)^n = 0
+$$
+
+Let's first try to get both series to be combinations of the same powers.
+
+To do this, for the $y''$ series, let's substitute $k = n-2$. This is equivalent to $n = k+2$
+
+
+$$
+\sum_{k=0}^{\infty}(k+2)(k+1)a_{k+2}(t-t_0)^{k}
+-t\sum_{n=0}^{\infty}a_n(t-t_0)^n = 0
+$$
+
+Let's consider $t_0 = 0$:
+$$
+\sum_{k=0}^{\infty}(k+2)(k+1)a_{k+2}t^k
+-\sum_{n=0}^{\infty}a_nt^{n+1} = 0
+$$
+
+Let's replace the second series by $k = n +1$ or $n = k-1$:
+
+$$
+\sum_{k=0}^{\infty}(k+2)(k+1)a_{k+2}t^k
+-\sum_{k=1}^{\infty}a_{k-1}}t^{k} = 0
+$$
+
+Let's get them to the same starting point so we can add the two series together:
+
+$$
+(0+2)(0+1)a_2t^0 +
+\sum_{k=1}^{\infty}(k+2)(k+1)a_{k+2}t^k
+-\sum_{k=1}^{\infty}a_{k-1}t^{k} = 0
+$$
+$$
+2a_2 +
+\sum_{k=1}^{\infty} [(k+2)(k+1)a_{k+2} - a_{k-1}]t^{k} = 0
+$$
+
+Since all terms of this equation must be 0 in order to satisfy this equation we have:
+
+$$2a_2 = 0$$
+and
+$$(k+2)(k+1)a_{k+2} - a_{k-1} = 0$$
+
+The first condition can only be satisfied if $a_2 = 0$. The second condition is satisfied when we have the recurrence relationship:
+
+$$a_{k+2} = \frac{a_{k-1}}{(k+2)(k+1)}$$
+
+In terms of $a_0$, we can find the solutions for $n= 0, 3, 6, 9,\dots$
+
+$$a_3 = \frac{a_0}{3\vdot2}$$
+
+$$a_6 = \frac{a_3}{5\vdot6} = \frac{a_0}{2 \vdot 3 \vdot 5 \vdot 6}$$
+$$\vdots$$
+
+This is just:
+
+$$a_{3n} = \frac{a_0}{2 \vdot 3 \vdot 5 \vdot 6 \vdot \dots \vdot (3n-4) \vdot (3n-3) \vdot (3n-1) \vdot (3n)}$$
+
+for $n = 1,2,3, \dots$
+
+Similarly, we can find solutions in terms of $a_1$ for $a_4, a_7, a_10, \dots$:
+
+$$a_{3n + 1} = \frac{a_1}{3 \vdot 4 \vdot 6 \vdot 7 \vdot \dots \vdot (3n-3) \vdot (3n-2) \vdot (3n) \vdot (3n+1)}$$
+
+Since $a_2 = 0$ all values of $a_{3n+2}$ are also 0. Thus $a_5, a_8, a_11, \dots = 0$
+
+Thus, our entire solution can be summarized as:
+
+$$y(t) 
+= \sum_{n=0}^{\infty}a_nt^n $$
+
+$$
+= a_0\left[ 1 + \frac{t^3}{3\vdot 2} + \frac{t^6}{2\vdot3\vdot 5 \vdot 6}  + \dots + \frac{t^{3n}}{2 \vdot 3 \vdot 5 \vdot 6 \vdot \dots \vdot (3n-4) \vdot (3n-3) \vdot (3n-1) \vdot (3n)} + \dots \right]
+$$
+$$
++ a_1\left[ 1 + \frac{t^4}{3\vdot 4} + \frac{t^7}{3\vdot4\vdot 6 \vdot 7}  + \dots + \frac{t^{3n+1}}{3 \vdot 4 \vdot 6 \vdot 7 \vdot \dots \vdot (3n-3) \vdot (3n-2) \vdot (3n) \vdot (3n+1)} + \dots \right]
+$$
+$$
+= 
+a_0\left[ 1 + \sum_{n=1}^{\infty} \frac{t^{3n}}{2\vdot3\dots(3n-1)\vdot(3n)}\right]
++ a_1\left[ 1 + \sum_{n=1}^{\infty} \frac{t^{3n+1}}{3\vdot4\dots(3n)\vdot(3n+1)}\right]
+$$
+
+Thus we have a linear combination of two series. Do the two series converge? We can easily check that yes, for all $x$, both of the series converge. 
+
+We can easily verify that for a point $t_0 = 0$, that the Wronskian formed by the two series and their derivatives is non-zero. Thus, we have found two linearly independent solutions to our differential equation.
+
+
+
+
+
+\subsection{Justification of Analytic Solutions}
+In the past example, we guessed that the answer was going to be in the form of a series solution. However, for an ordinary point, how do we know for sure that the solution is indeed an analytic function?
+
+
+Say we have the differential equation:
+
+
+$$P(t)y'' + Q(t)y' + R(t)y = 0$$
+
+and let's consider some interval around $t_0$ such that $P(t_0) \neq 0$:
+
+$$y'' + p(t)y' + q(t)y = 0$$
+
+Say we have a solution of the form:
+$$y(t) = \phi = \sum_{n=0}^{\infty}a_n(t-t_0)^n$$
+
+if we can show that it is possible to always find coefficients that satisfy our differential equation in an interval around an ordinary point, we should be done with our proof.
+
+Let's take the m'th derivative of $\phi$:
+
+$$\phi^{(m)}(t) = \sum_{n=m}^{\infty}\frac{n!}{(n-m)!}a_n(t-t_0)^{n-m}$$
+
+When we evaluate this at $t = t_0$, we see that all the terms of the infinite sum become 0 except for when $n=m$:
+
+$$\phi^{(m)}(t_0) = \frac{m!}{(m-m)!}a_m(0)^{0} + 0 + 0 + \dots = m!a_m$$
+
+$$a_m = \frac{\phi^{(m)}}{m!}$$
+
+If we are given the initial conditions $y(t_0) = y^0$ and $y'(t_0) = y^0'$, we can see that this corresponds to:
+
+$$a_0 = \frac{y^0}{0!} = y^0$$
+$$a_1 = \frac{y^0'}{1!} = y^0'$$
+
+How do we find the other coefficients?
+
+We know that $\phi$ satisfies our original differential equation:
+
+$$\phi'' + p(t)\phi' + q(t)\phi = 0$$
+Rearranging, we see that:
+
+$$\phi'' = - p(t)\phi' - q(t)\phi$$
+
+and thus:
+
+$$a_2 = \frac{- p(t)\phi'(t_0) - q(t)\phi(t_0)}{2!}$$
+
+which we can solve for since we know $\phi(t_0)$ and $\phi'(t_0)$ from our initial conditions.
+
+We can continue our analysis by taking the derivative of our original expression:
+
+$$\phi''' = - p(t)\phi'' - (p'(t) + q(t))\phi' - q'(t)\phi$$
+
+If we evaluate this at $t_0$, we can form an expression for $a_3$ as well.
+
+We can continue this tedious process to compute the coefficients for an arbritrarily large $a_n$. This is not a recommended way of solving a series problem, but it is useful in showing the existence of solutions.
+
+The only thing that is necessary to find $a_n$ for an arbritrarily large $n$ around an ordinary point is just that we can calculate an arbritrarily large derivative for our power series and for $p$ and $q$. 
+
+
+We can always calculate arbritrarily large derivatives for power series so that should not be a problem. However, it turns out that we need to condition our $p$ and $q$ to also in fact be \textbf{analytic} (have a convergent Taylor Series around $t_0$ in order to guarantee a solution. Note that this is a stronger condition than simply being infinitely differentiable, as one might initially assume (WHY?)
+
+Thus:
+
+$$
+p(t) = \sum_{n=0}^{\infty}p_n(t-t_0)^n
+$$
+
+$$
+q(t) = \sum_{n=0}^{\infty}q_n(t-t_0)^n
+$$
+
+
+Therefore we can establish the following theorem:
+
+\begin{mytheo}{Existence of Power Series Solution}{powSolExist}
+    Given a differential equation of the form:
+    $$P(t)y'' + Q(t)y' + R(t)y = 0$$
+    where $P(t), Q(t), R(t)$ are all continuous functions
+    
+    If we can find a $t_0$ such that $P(t_0) \neq 0$ (an ordinary point) there is an interval around $t_0$ such that the differential equation simplifies to:
+    
+    $$y'' + p(t)y' + q(t)y = 0$$
+
+    where $p(t) = Q(t)/P(t)$ and $q(t) = R(t)/Q(t)$.
+    
+    Furthermore, if both $p(t)$ and $q(t)$ are analytic around $t_0$ (i.e. they have convergent Taylor Expansions) it is possible to find the complete solution of the differential equation in the form of a power series:
+    
+    $$\phi(t) = \sum_{n=0}^{\infty}a_n(t-t_0)^n = a_0y_1(t) + a_1y_2(t)$$
+    
+    where $a_0$ and $a_1$ are determined by the initial conditions and $y_1$ and $y_2$ are linearly independent analytic solutions around $t_0$
+    
+    Furthermore, the radius of convergence of this solution is at least as large as the maximum of the radius of convergence of $p$ and $q$
+    
+\end{mytheo}
+
+
+
+\section{Regular Points and Euler Equation Solutions}
+
+Say we have the differential equation we considered before:
+
+$$P(t)y'' + Q(t)y' + R(t)y = 0$$
+
+If we have points $t$ such that $P(t)$ is 0, it turns out that we cannot use the methods we discussed earlier for finding power series solutions.
+
+This is because the corresponding $p(t)$ and $q(t)$ become unbounded when we approach singular points and thus do not have convergent Taylor series. Thus, we may get bounded or unbounded solutions that may or may not be convergent power series.
+
+However, there is a class of singular points that we will discuss in detail where it is in fact possible to find solutions.
+
+We call these points regular singular points. They are defined as having the property:
+
+\begin{mytheo}{Regular Singular Points}{regSing}
+    For the differential equation:
+     $$P(t)y'' + Q(t)y' + R(t)y = 0$$
+     If the point $x_0$ is a singular point, but both the limits below
+     
+     $$\lim_{t \to t_0}\frac{Q(t)}{P(t)}(t-t_0)$$
+     $$\lim_{t \to t_0}\frac{R(t)}{P(t)}(t-t_0)^2$$
+     
+     are analytic functions (have convergent Taylor Series around $t_0$)
+\end{mytheo}
+
+
+These conditions will make a lot more sense in our discussion of solutions of Euler Equations:
+
+\subsection{Euler Equations}
+
+Euler Equations are a class of differential equations in the form:
+
+$$t^2y'' + aty' + by = 0$$
+
+We know that at $t_0 = 0$ is a singular point since $t_0^2 = 0$
+
+However, we can also verify that $t_0 = 0$ is a regular singular point since:
+
+
+$$\lim_{t \to 0}\frac{at}{t^2}t = a$$
+$$\lim_{t \to 0}\frac{b}{t^2}t^2 = b$$
+
+which are in fact (constant) analytic functions.
+
+
+Let's try a solution of the form:
+
+$$y = t^r$$
+
+(The reason we're trying this solutionis because at each derivative $y' = rt^{r-1}$ and $$y'' = r(r-1)t^{r-2}$$ when plugged in will give equal powers of $t$)
+
+When we plug this in, we get:
+
+$$t^2r(r-1)t^{r-2} + at rt^{r-1} + bt^r = 0$$
+$$r(r-1)t^r + art^r + bt^r = 0$$
+$$[r(r-1) + ar + b]t^r = 0$$
+
+Since we're looking for solutions around $t=0$ and not $t=0$, we can divide both sides by it:
+
+$$F(r) = r^2 + (a-1)r + b = 0$$
+
+This is just a quadratic we can solve for using the quadratic formula:
+
+$$r_1, r_2 = \frac{-(a-1) \pm \sqrt{(a-1)^2-4b}}{2}$$
+
+Thus a root that satisfies this quadratic will make $t^r$ a solution.
+
+We're going to get three cases similar to like we did in the case of our discussion of second order differential equations.
+
+We will only consider the interval $t > 0$ for right now, however, we will extend our results in the end.
+
+\subsubsection{Real Distinct Root}
+In this case, we have two solutions: $y_1(t) = t^{r_1}$ and $y_2(t) = t^{r_2}$. If we take the Wronskian of the two solutions, we get $t^{r_1}(r_2t^{r_2-1}) - t^{r_2}(r_1t^{r_1-1}) = (r_2-r_1)t^{r_1+r_2-1}$ which is never 0 for $t > 0$ and $r_2 \neq r_1$.
+
+Thus, our full solution is:
+
+$$y = c_1t^{r_1 t} + c_2t^{r_2 t}$$
+
+\subsection{Repeated Roots}
+
+Let's look at our differential equation again:
+
+$$t^2y'' + aty' + by = 0$$
+
+we know that this simplifies to
+
+$$F(r)t^r = 0$$
+
+for $y = t^r$
+
+If we have $F(r) = (r-r_1)^2$ (a repeated root), we have:
+
+$$(r-r_1)^2t^r = 0$$
+
+Let's derive both sides of this expression using the product rule and the fact that $\pdv{x^r}{r} = x^r\ln x$:
+
+$$2(r-r_1)t^r + (r-r_1)^2t^r\ln t = 0$$
+
+We can see that $r = r_1$ also satisfies this equation as well.
+
+Since we know that our original differential equation is equal to $(r-r_1)^2t^r$ if we plug in our solution, we can also take the derivative of it with respect to $r$:
+
+$$\pdv{}{r} t^2\pdv[2]{y}{t} + a\pdv{y}{t} + by = \pdv{(r-r_1)^2t^r}{r}$$
+
+Using the fact that we can rearrange the order of partial derivatives, we see that the LHS simplifies to:
+
+$$t^2\left(\pdv{y}{r}\right)'' + a\left(\pdv{y}{r}\right)' + b\left(\pdv{y}{r}\right) = 2(r-r_1)t^r + (r-r_1)^2t^r\ln t$$
+
+Putting in $y=t^r$ into the LHS:
+
+$$t^2\left(\pdv{t^r}{r}\right)'' + a\left(\pdv{t^r}{r}\right)' + b\left(\pdv{t^r}{r}\right) = 2(r-r_1)t^r + (r-r_1)^2t^r\ln t$$
+
+which simplifies further to:
+
+
+$$t^2(t^r\ln t)'' + a(t^r\ln t)' + b(t^r\ln t) = 2(r-r_1)t^r + (r-r_1)^2t^r\ln t$$
+
+At $r=r_1$, we know that the RHS of the equation is 0. Thus:
+
+
+$$t^2(t^{r_1}\ln t)'' + a(t^{r_1}\ln t)' + b(t^{r_1}\ln t) = 0$$
+
+Looking at the above equality we see that $y_2 = t^{r_1}\ln t$ solves our original differential equation!
+
+Thus, we can form two solutions:
+
+$$y(t) = c_1y_1(t) + c_2y_2(t) = c_1t^{r_1} + c_2t^{r_1}\ln t$$
+
+
+
+\subsubsection{Complex Roots}
+We know that complex roots always come in conjugate pairs. Thus, let's consider the roots $r_1 = \lambda + i\mu$ and $r_2 = \lambda - i\mu$
+
+We can get complex valued solutions by $y_1 = t^{\lambda + i\mu}$ and $y_2 = t^{\lambda-i\mu}$
+
+We know that $x^a = e^{a\ln{x}}$
+
+Thus,
+
+$$y_1, y_2 = t^{\lambda \pm i\mu} = e^{(\lambda \pm i\mu)\ln t}$$
+$$e^{\lambda\ln t}e^{\pm i\mu \ln t} = e^{\lambda\ln t}[\cos(\pm \mu \ln t) + i\sin(\pm \mu \ln t)]$$
+
+Simplifying further, we see that our two solutions are given by:
+
+$$y_1, y_2 = e^{\lambda\ln t}[\cos(\mu \ln t) \pm i\sin( \mu \ln t)]$$
+
+The real and imaginary part of this expression are linear combinations of these two solutions so we can find two real valued solutions by:
+
+$$
+y_1 = e^{\lambda\ln t}\cos(\mu \ln t)
+$$
+and
+$$
+y_2 = e^{\lambda\ln t}\sin(\mu \ln t)
+$$
+
+Using the fact that $e^{\lambda\ln t = t^{\lambda}$, we can get our final solutions as:
+$$
+y_1 = t^{\lambda}\cos(\mu \ln t)
+$$
+and
+$$
+y_2 = t^{\lambda}\sin(\mu \ln t)
+$$
+
+\subsection{When t is less than 0}
+For the past solutions we have both $t^\lambda$ and $\ln t$. However, when $t < 0$ and $\lambda$ is not an integer, these values are hard to interpret (or in the second case, not even defined).
+
+However, it turns out when we make a substitution in our original Euler equation, we can solve for the case when $t < 0$.
+
+Our original Euler Equation was of the form:
+
+$$t^2y'' + aty' + by = 0$$
+
+where we guessed $y = t^r$
+
+Let's define a new variable $x = -t$ where $t < 0$ and $x > 0$.
+
+We know from the chain rule that:
+
+$$\dv{y}{t} = \dv{y}{x} \dv{x}{t}$$
+Since $x = -t$
+$$\dv{x}{t} = -1$$
+This gives us:
+$$\dv{y}{t} = -\dv{y}{x}$$
+
+What is the second derivative with respect to t?
+
+$$\dv[2]{y}{t} = \dv{}{t} \left[\dv{y}{t}\right]= \dv{}{t} \left[-\dv{y}{x}\right] =\dv{}{x} \left[-\dv{y}{x}\right]\dv{x}{t} $$
+$$=-\dv[2]{y}{x}\dv{x}{t} = \dv[2]{y}{x}$$
+
+
+We can put these equalities in our original differential equation to get:
+
+
+$$t^2\dv[2]{y}{x} + at\left[-\dv[1]{y}{x}\right] + by = 0$$
+
+Putting in $t = -x$ and $t^2 = x^2$ we get:
+
+$$x^2\dv[2]{y}{x} + ax\dv{y}{x} + by = 0$$
+
+where $x > 0$
+
+We see this is exactly the problem we had before except we interchanged $t$ with $x$. Thus, the solutions will be the same as before:
+
+\[
+y(x) =
+\begin{cases}
+    c_1x^{r_1} + c_2x^{r_2} & \text{if real and unique } \\
+    c_1x^{r_1} + c_2x^{r_1}\ln{x}  & \text{if real and repeated } \\
+    c_1x^\lambda \cos{\mu \ln x} + c_2x^\lambda \sin{\mu \ln x} & \text{if complex } \\
+\end{cases}
+\]
+
+To get the solutions in terms of $t$, we can simplify replace $x$ with $-t$
+
+Since $|t| = -t$ when $t < 0$ and $|t| = t$ when $t>0$, we can represent our solutions in the most general form if we just use the absolute value of $t$.
+
+\begin{mytheo}{Solutions to Euler Equations}{solEuler}
+    Say we have an Euler Equation of the form:
+    $$t^2y'' + aty' + by = 0$$
+    
+    For the regular point $t_0 = 0$, we can find solutions in an interval around $t_0$ if we solve the roots of the polynomial:
+    
+    $$F(r) = r^2 + (a-1)r + b = 0$$
+    
+    If we get \textbf{two real and unique} roots, then the full solution is given by:
+    
+    $$\phi(t) = c_1|t|^{r_1} + c_2|t|^{r_2}$$
+    
+    If we get \textbf{real repeated} roots, then the full solution is given by:
+
+    $$\phi(t) = c_1|t|^{r_1} + c_2|t|^{r_1}\ln{|t|}$$
+    
+    If we get \textbf{two complex} roots, then the full solution is given by:
+    
+    $$\phi(t) = c_1|t|^\lambda \cos{\mu \ln |t|} + c_2|t|^\lambda \sin{\mu \ln |t|}$$
+    where $r_1, r_2 = \lambda \pm i\mu$
+\end{mytheo}
+
+
+% Goal Complete by Feb 7
+\section{The Method of Frobenius}
+Let's consider now the case of a homogeneous linear second order differential equation around a regular point.
+
+Say we have the differential equation:
+
+$$P(t)y'' + Q(t)y' + R(t)y = 0$$
+
+Say we have a singular point $t_0$ such that the following conditions are satisfied (it is a regular point):
+
+$$\lim_{t \to t_0}\frac{Q(t)}{P(t)}(t-t_0)$$
+
+$$\lim_{t \to t_0}\frac{R(t)}{P(t)}(t-t_0)^2$$
+
+
+Let's multiply both sides of original sides by $t^2$:
+
+$$t^2P(t)y'' + t^2Q(t)y' + t^2R(t)y = 0$$
+
+Since the limits above exist, we can divide both sides by P(t):
+
+$$t^2y'' + t\left[t\frac{Q(t)}{P(t)}\right]y' + \left[t^2\frac{R(t)}{P(t)}\right]y = 0$$
+
+We know that the things in the brackets have convergent analytic functions, so let's replace them with $p(t)$ and $q(t)$:
+
+$$t^2y'' + tp(t)y' + q(t)y = 0$$
+
+Notice that this looks a lot like Euler Equations, except instead of constants we have analytic functions.
+
+Since the coefficients are Euler coefficient times an analytic function, then we should guess a similar solution:
+
+$$y = t^r\sum_{n=0}^\infty a_{n}t^{n} = \sum_{n=0}^\infty a_{n}t^{n+r}$$
+
+When we solve for a solution, there are three things we are looking for:
+
+\begin{enumerate}
+	\item The value of $r$
+	\item The coefficients $a_n$ via some sort of recurrence relationship
+	\item The radius of convergence of the series solution
+\end{enumerate}
+
+We will only consider the cases of $t > 0$ for the next examples, but we can get the answers for $t < 0$ by making a substitution of variables like we did before.
+
+Let's try putting in this solution into our original differential equation:
+
+$$y = \sum_{n=0}^\infty a_{n}t^{n+r}$$
+$$y' = \sum_{n=0}^\infty (n+r)a_{n}t^{n+r-1}$$
+$$y'' = \sum_{n=0}^\infty (n+r)(n+r-1)a_{n}t^{n+r-2}$$
+
+Let's also represent our convergent analytic functions as series:
+
+$$p(t) = \sum_{n=0}^\infty p_{n}t^{n}$$
+$$q(t) = \sum_{n=0}^\infty q_{n}t^{n}$$
+
+In addition, let's constrain ourselves to the condition that $a_0 \neq 0$ (since if it was 0, when $t=0$, we would just get the trivial solution)
+
+Substituting all of these into our original equation, we get:
+
+$$t^2\sum_{n=0}^\infty (n+r)(n+r-1)a_{n}t^{n+r-2} 
++
+t\left[\sum_{n=0}^\infty p_{n}t^{n}\right]\sum_{n=0}^\infty (n+r)a_{n}t^{n+r-1}
++
+\left[ \sum_{n=0}^\infty q_{n}t^{n} \right]\sum_{n=0}^\infty a_{n}t^{n+r}
+= 0
+$$
+
+This is equivalent to:
+
+$$\sum_{n=0}^\infty (n+r)(n+r-1)a_{n}t^{n+r} 
++
+\left[\sum_{n=0}^\infty p_{n}t^{n}\right]\sum_{n=0}^\infty (n+r)a_{n}t^{n+r}
++
+\left[ \sum_{n=0}^\infty q_{n}t^{n} \right]\sum_{n=0}^\infty a_{n}t^{n+r}
+= 0
+$$
+
+Expanding out each series:
+
+$$r(r-1)a_0t^r + (r+1)ra_1t^{r+1} + (r+2)(r+1)a_2t^{r+2} + \dots$$
+$$+(p_0+p_1t+p_2t^2 + \dots)[ra_0t^r + (r+1)a_1t^{r+1} + (r+2)a_2t^{r+2} + \dots]$$
+$$+ (q_0+q_1t+q_2t^2 + \dots)[a_0t^r+a_1t^{r+1} + a_2t^{r+2} + \dots]$$
+
+
+Let's order by powers of $t$:
+
+$$[a_0(r)(r-1)+a_0p_0r+a_0q_0]t^r$$
+$$+ [a_1(r+1)(r) + a_1p_0(r+1) + a_1q_0 + a_0p_1r+a_0q_1]t^{r+1}$$
+$$[a_2(r+2)(r+1) + a_2p_0(r+2) + a_2q_0 + a_1p_1(r+1) + a_1q_1 + a_0p_2r + a_0q_2]t^{r+2}$$
+$$\dots = 0$$
+
+Taking out some $a_i$:
+$$[a_0[(r)(r-1)+p_0r+q_0]]t^r$$
+$$+ [a_1[(r+1)(r) + p_0(r+1) + q_0] + a_0[p_1r+q_1]]t^{r+1}$$
+$$[a_2[(r+2)(r+1) + p_0(r+2) + q_0] + a_1[p_1(r+1) + q_1] + a_0[p_2r + q_2]]t^{r+2}$$
+$$\dots = 0$$
+
+You might begin to notice a pattern! We can further simplify our analysis by considering a function:
+
+$$F(r) = (r)(r-1) + p_0r + q_0$$
+
+Using this function our equation simplifies considerably:
+
+$$[a_0F(r)]t^r$$
+$$+ [a_1F(r+1) + a_0[p_1r+q_1]]t^{r+1}$$
+$$[a_2F(r+2) + a_1[p_1(r+1) + q_1] + a_0[p_2r + q_2]]t^{r+2}$$
+$$\dots = 0$$
+
+We can simplify this one last time to get:
+
+$$a_0F(r)t^r
++ \sum_{n=0}^\infty \left[ a_nF(r+n) + \sum_{k=0}^\infty p_{n-k}(r+k) + q_{n-k} \right]t^{n+r} = 0
+$$
+
+Since all the entire expression is equal to 0, all the coefficients must also be 0. Thus, we have two conditions:
+
+$$F(r) = 0$$
+$$\sum_{n=0}^\infty \left[ a_nF(r+n) + \sum_{k=0}^\infty p_{n-k}(r+k) + q_{n-k} \right] = 0$$
+
+
+The first condition is just solving for the roots of the polynomial 
+
+
+
+$$F(r) = (r)(r-1) + p_0r + q_0$ = 0$$
+
+
+We have seen this many times. We can use a method such as the quadratic equation to find the roots of this equation. The trouble comes when we get a repeated root $r_1$. We will discuss this case in another section.
+
+For the second condition, each term in the sum must be 0. 
+
+Let's first consider the case where $F(r+n)$ is non-zero for every $n$:
+
+If this is indeed the case, then it is possible to solve for every $a_n$ for $n=0,1,2,3 \dots$ by just knowing the value of $r$ and the previous values of $a_0, a_1, \dots, a_{n-1}$.
+
+
+Let's now consider the case where $F(r+n)$ is zero. Say that when we initially solved $F(r) = 0$ we got two unique roots $r_1$ and $r_2$ where $r_1 < r_2$. Let's also say that $r_1$ and $r_2$ only differ by some integer.
+
+In the case of $r_1$, since we know that $r_1 > r_2$ we also know that for any $n=0,1,2,\dots$ $F(r+n) \neq 0$ (since there are only two roots to the polynomial and we're considering the bigger one). Thus, we can always find the coefficients $a_0, a_1, a_2, \dots, a_n$ for any $n$ we choose. Therefore we are guaranteed a solution of the form:
+
+$$y_1(t) = t^{r_1} \sum_{n=0}^\infty a_n(r_1)t^n$$
+
+(where we emphasized that $a_n$ was calculated using values of the root $r_1$)
+
+However for the smaller root $r_2$, we know that since $r_2$ is an integer away from $r_1$, there exists some $k$ such that $r_2 + l = r_1$. This means that when we try to solve for the coefficients $a_n$, we may have trouble finding $a_l$ since $F(r_2+l) = F(r_1) = 0$. In certain cases, we may still find our solution if  
+
+$$\sum_{k=0}^{l-1}a_k[ p_{n-k}(r+k) + q_{n-k} = 0$$
+
+since in this particular case $a_l$ may be arbitrarily set. 
+
+In the case of $r_1$ and $r_2$ differing by some non-integer (like a fraction), we can always find two solutions by:
+
+
+$$y_1(t) = t^{r_1} \sum_{n=0}^\infty a_n(r_1)t^n$$
+$$y_2(t) = t^{r_2} \sum_{n=0}^\infty a_n(r_2)t^n$$
+
+In the case of complex conjugate roots, we know that there is no $l$ such that $r_1 = r_2 + l$, so we can find complex-valued solutions this way. We can find real valued solutions by just taking the real and imaginary part of our expression like we did before.
+
+
+Another very important point to note is that the radius of convergence will be at least as large as the distance from the next singular point (if the function is complex, this means the distance in the complex plane). 
+
+
+
+\section{Special Cases}
+In this section we will discuss finding the series solutions near regular points in the case where there are repeated roots to the indicial equation, or there are roots that differ by some integer $l$. 
+
+\subsubsection{Repeated Roots}
+In the case where we have repeated roots, we know that it is possible to factor our our indicial equation in the form:
+
+$$F(r) = r(r-1) + p_0r + q_0 = (r-r_1)^2$$
+
+Say that we plug in our guess for the differential equation and get the result:
+
+$$a_0F(r)t^r
++ \sum_{n=0}^\infty \left[ a_nF(r+n) + \sum_{k=0}^{n-1} a_k[ p_{n-k}(r+k) + q_{n-k}] \right]t^{n+r} = 0
+$$
+
+Say we somehow found all the coefficients $a_1, \dots, a_{n-1}$ such that the second part of this expression is 0. We're then left with:
+
+$$a_0F(r)t^r = 0$$
+
+Thus:
+$$a_0(r-r_1)^2t^r = 0$$
+
+Since $a_0 \neq 0 $:
+
+$$(r-r_1)^2t^r = 0$$
+
+Let's take the derivative of both sides with respect to $r$:
+
+$$2(r-r_1)t^r + (r-r_1)^2rt^r\ln t = 0$$
+
+
+Notice that $r=r_1$ satisfies this equation as well.
+
+Since this was our original differential equation with our guess plugged in (and some clever choosing of coefficients $a_1, \dots, a_{n-1}$).
+
+By the fact that for continuous functions we can interchange the way we take the derivatives, this is equivalent to first taking the partial derivative of $y$ with respect to $r$ and then putting that into our differential equation. Thus:
+
+
+$$L\left[\pdv{y}{r}\right] = 2(r-r_1)t^r + (r-r_1)^2rt^{r-1}$$
+
+which we know that when this expression is evaluated at $r_1$ solves our differential equation!
+
+Thus:
+
+$$L\left[\pdv{y}{r} \Bigg|_{r=r_1}\right] = 0$$
+
+We know that $y$ is:
+
+$$y = t^r\sum_{n=0}^\infty a_n(r)t^n $$
+
+Taking the partial derivative of this expression with respect to $r$ give us (using the chain rule):
+
+$$\pdv{y}{r}(r) = t^r \ln t\sum_{n=0}^\infty a_n(r)t^{n} + t^r\sum_{n=0}^\infty a_n'(r)t^n$$
+
+where $a_n'(r)$ is the (complicated) derivative we can find by our second condition.
+
+We can simplify this by rearranging coefficients:
+
+$$\pdv{y}{r}(r) = \ln t \left( t^r\sum_{n=0}^\infty a_n(r)t^{n}\right)  + t^r\sum_{n=0}^\infty a_n'(r)t^n$$
+
+$$= y_1\ln t  + t^r\sum_{n=0}^\infty a_n'(r)t^n$$
+
+Let's evaluate this at $r=r_1$ 
+
+$$y_2 = \pdv{y}{r} \Bigg|_{r=r_1} = y_1\ln t + t^{r_1}\sum_{n=0}^\infty a_n'(r_1)t^n$$
+
+
+Since in practice, it is actually difficult to determine a closed form of $a_n'$, we often use the form described above and find the actual coefficients by equating them.
+
+Thus,
+
+\begin{mytheo}{Repeated Roots in Indicial Equation}{repRootIndicial}
+	Say we have a second order homogeneous differential equation:
+	
+	$$t^2y'' + t[tp(t)]y' + t^2q(t)y = 0$$
+	
+	where $t = 0$ is a singular point.
+	
+	Furthermore say that $tp(t)$ and $t^2q(t)$ are both analytic functions for some radius of convergence $\rho$.
+	
+	Say that we solve for the roots and find two identical roots
+	
+	$$F(r) = r(r-1) + p_0r + q_0 = (r-r_1)^2 = 0$$
+	
+	The form of the first solution can be given by:
+	
+	$$y_1(t) = |t|^{r_1}\sum_{n=0}^\infty a_nt^n$$
+	
+	and the form of the second solution is given by:
+	
+	$$y_2(t) = y_1(t)\ln|t| + |t|^{r_2}\sum_{n=0}^\infty b_nt^n$$
+	
+	
+	
+\end{mytheo}
+
+\subsection{Roots Differing by an Integer}
+
+\begin{mytheo}{Roots Differing By an Integer}{rootInt}
+	Say we have a second order homogeneous differential equation:
+	
+	$$t^2y'' + t[tp(t)]y' + t^2q(t)y = 0$$
+	
+	where $t = 0$ is a singular point.
+	
+	Furthermore say that $tp(t)$ and $t^2q(t)$ are both analytic functions for some radius of convergence $\rho$.
+	
+	Say that we solve for the roots $r_1$ and $r_2$ of the indicial equation:
+	
+	$$F(r) = r(r-1) + p_0r + q_0 = 0$$
+	
+	If $r_1 > r_2$ and $r_1$ differ with $r_2$ by an integer $L$, $r_1 = r_2 + L$, the form of the two solutions are given by:
+	
+	$$y_1(t) = |t|^{r_1}\sum_{n=0}^\infty a_nt^n$$
+	
+	and 
+	
+	$$y_2(t) = cy_1(t)\ln|t| + |t|^{r_2}\sum_{n=0}^\infty b_nt^n$$
+	
+	where $c$ is a constant that may be 0
+	
+	
+\end{mytheo}
+
+
+\hyperref[sec:prRootInt]{The (lengthy) proof of this is given in the appendix.}
+
+\section{Summary of Series Solution near Regular Point}
+
+Putting all we know together about regular points, we get something called the \textbf{Method of Frobenius}
+
+
+	Say we have a second order homogeneous differential equation:
+	
+	$$P(t)y'' + Q(t)y' + R(t)y = 0$$
+	
+	where:
+	
+	$$\lim_{t \to t_0} \frac{Q(t)}{P(t)}(t-t_0)
+	$$
+	$$\lim_{t \to t_0} \frac{R(t)}{P(t)}(t-t_0)^2
+	$$
+	
+	both exist and are analytic functions. In addition $t_0$ is a singular point such that that $P(t_0)$ is 0.
+	
+	For convenience, let's consider only $t_0 = 0$ (the origin). If we want to consider another $t_0 \neq 0$, we can just substitute another variable $x_0 = t-t_0$, such that the function will be centered at 0.
+	
+	
+	Since the limits of the functions above exists, we can multiply both sides of our differential equation and divide by $P(t)$ to obtain:
+	
+	$$t^2y'' + t[p(t)]y' + [q(t)]y = 0$$
+	
+	where $p(t) = tQ(t)/P(t)$ and $q(t) = t^2R(t)/P(t)$
+	
+	
+	By definition, both $p(t)$ and $q(t)$ are analytic functions with some convergent Taylor Series around $0$. Let's consider the minimum of the radius of convergence of both of them $\rho$.
+	$$p(t) = \sum_{n=0}^\infty p_nt^n$$
+	$$q(t) = \sum_{n=0}^\infty q_nt^n$$
+	
+	If we solve for the roots of the polynomial, we may get four cases for how the solution will look like
+	
+	$$F(r) = r(r-1) + p_0r + q_0 = 0$$
+	
+	\begin{enumerate}
+		\item \textbf{Real and Unique Roots}
+		
+		If we have two real and unique roots $r_1$ and $r_2$, we will get two solutions:
+		$$y_1(t) = |t|^{r_2}\sum_{n=0}^\infty a_nt^n$$
+		$$y_2(t) = |t|^{r_2}\sum_{n=0}^\infty a_nt^n$$
+		
+		\item \textbf{Complex and Unique Roots}
+		
+		If we solve the equation and get some complex conjugate roots $r_1, r_2 = \lambda \pm i\mu$, we can just solve for one complex valued solution, and just take the real and complex parts of it:
+		
+		$$y_1(t) = \Re{|t|^{r_1}\sum_{n=0}^\infty a_nt^n}$$
+		$$y_2(t) = \Im{|t|^{r_1}\sum_{n=0}^\infty a_nt^n}$$
+		
+		\item \textbf{Identical Roots}
+		
+		If we solve for the indicial equation and get identical roots $r=r_1=r_2$, the solutions are in the form:
+		
+		$$y_1(t) = |t|^{r_2}\sum_{n=0}^\infty a_nt^n$$
+		$$y_2(t) = y_1(t)\ln|t| + |t|^{r_2}\sum_{n=0}^\infty b_nt^n$$
+		
+		\item \textbf{Roots Differing by an Integer}
+		
+		
+		If we solve for the indicial equation and get two roots such that $r_1 > r_2$ and that $r_1$ differ with $r_2$ by an integer $L$, $r_1 = r_2 + L$, the form of the two solutions are given by:
+		$$y_1(t) = |t|^{r_2}\sum_{n=0}^\infty a_nt^n$$
+		$$y_2(t) = cy_1(t)\ln|t| + |t|^{r_2}\sum_{n=0}^\infty b_nt^n$$
+		
+		where $c$ is a constant that may be 0
+		
+	\end{enumerate}
+	
+Each of these solutions are convergent on some radius of convergence at least the size of $\rho$ around $t = 0$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Bessel's Equation}
+In this section we will look at a particular example of a linear homogeneous differential equation that can be solved using the method of Frobenius. This differential equation, the \textbf{Bessel equation} is found throughout physics and mathematics.
+
+The equation is:
+
+$$x^2y'' + xy' + (x^2-v^2)y = 0$$
+
+We will only consider $x>0$ for simplicity. Also, $v$ is an arbitrary constant that we can set.
+
+Notice that this is in the form of a regular singular point at $x=0$, with:
+$$
+p = 1
+$$
+and 
+$$
+q = x^2-v^2
+$$
+
+which are both analytic functions. Let's try a Frobenius type solution:
+
+$$y = x^r\sum_{n=0}^\infty a_nx^n = \sum_{n=0}^\infty a_nx^{n+r}$$
+
+$$y' = \sum_{n=0}^\infty a_n(n+r)x^{n+r-1}$$
+$$y'' =  \sum_{n=0}^\infty (n+r)(n+r-1)a_nx^{n+r-2}$$
+
+where $a_0 \neq 0$
+
+Putting these into our original equation, we get:
+
+$$
+x^2\sum_{n=0}^\infty (n+r)(n+r-1)a_nx^{n+r-2}
++ x\sum_{n=0}^\infty a_n(n+r)x^{n+r-1}
++ (x^2-v^2)\sum_{n=0}^\infty a_nx^{n+r} = 0
+$$
+Simplifying,
+$$
+= \sum_{n=0}^\infty a_n[(n+r)(n+r-1) + (n+r)]x^{n+r}
++ \sum_{n=0}^\infty a_nx^{n+r+2} -v^2\sum_{n=0}^\infty a_nx^{n+r} = 0
+$$ 
+
+We can simplify the middle sum:
+
+$$\sum_{n=0}^\infty a_nx^{n+r+2} = \sum_{n=2}^\infty a_{n-2}x^{n+r}$$
+
+and 
+$$(n+r)(n+r-1) + (n+r) = (n+r)^2$$
+
+to get:
+
+$$
+= \sum_{n=0}^\infty a_n[(n+r)^2-v^2]x^{n+r}
++ \sum_{n=2}^\infty a_{n-2}x^{n+r}  = 0
+$$
+
+Let's put the two summations together by expanding out the first two terms:
+
+$$a_0[(0+r)^2-v^2]x^r + a_1[(1+r)^2-v^2]x^{r+1}
++ \sum_{n=2}^\infty [a_n((n+r)^2-v^2)+a_{n-2}]x^{n+r}$$
+
+$$\boxed{
+a_0(r^2-v^2)x^r + a_1[(1+r)^2-v^2]x^{r+1} +  \sum_{n=2}^\infty [a_n((n+r)^2-v^2)+a_{n-2}]x^{n+r}
+=0} $$
+
+Since each coefficient of $x$ must be 0, we have three conditions:
+
+\begin{enumerate}
+	\item $$a_0(r^2-v^2) = 0$$
+	\item $$a_1[(1+r)^2-v^2] = 0$$
+	\item $$a_n((n+r)^2-v^2)+a_{n-2} = 0$$
+\end{enumerate}
+
+Since $a_0 \neq 0$:
+
+$$r^2 - v^2 = 0$$
+$$\boxed{r = \pm v}$$
+
+For the second equation, we see that $r = v$ does not make the part in brackets 0. However, since we can arbitrarily set the coefficients, we can choose to set $a_1 = 0$.
+
+Finally, the third expression gives us a recurrence relationship of finding coefficients based on previous values.
+
+
+Let's first consider the larger value of the roots $r= +v$.
+
+In this case, we get the recurrence relationship:
+
+$$a_n((n+v)^2-v^2)+a_{n-2} = 0$$
+
+We can simplify the expression in the middle using the identity $a^2-b^2 = (a+b)(a-b)$:
+
+$$a_n(n(n+2v))+a_{n-2} = 0$$
+
+Since for any value of $n$, $n(n+2v)$ never equals 0, we can always find an expression for $a_n$ in terms of $a_{n-2}$:
+
+
+$$a_n=\frac{-a_{n-2}}{n(n+2v)}$$
+
+Since we set $a_1 = 0$, this means that all odd $a_n$ are also 0 due to this recurrence relationship:
+
+$$a_1=a_3=a_5=\dots=0$$
+
+Thus, we can rewrite our recurrence relationship with $n=2m$ for $m=1,2,3,\dots$:
+
+$$a_{2m}=\frac{-a_{2m-2}}{2m(2m+2v)}
+= \frac{-a_{2m-2}}{2^2m(m+v)}$$
+
+Thus,
+$$a_2 = \frac{-a_{0}}{2^2\vdot1\vdot(v+1)}$$
+$$a_4 = \frac{-a_{2}}{2^2\vdot2\vdot(v+2)} = \frac{a_0}{(2^2)^2\vdot2\vdot(v+2)\vdot(v+1)}$$
+$$a_6 = \frac{-a_{6}}{2^2\vdot1\vdot3\vdot(v+3)} = \frac{-a_0}{(2^2)^3\vdot3\vdot2\vdot1\vdot(v+3)\vdot(v+2)\vdot(v+1)}$$
+
+We can continue this pattern to see that:
+
+$$a_{2m}=\frac{(-1)^ma_0}{2^{2m}\vdot m! \vdot(v+m)\vdot\dots\vdot(v+2)\vdot(v+1)} $$
+
+
+Thus, one solution is always given by:
+
+
+$$\boxed{
+	y_1(x) = \sum_{m=0}^\infty \frac{(-1)^ma_0}{2^{2m}\vdot m! \vdot(v+m)\vdot\dots\vdot(v+2)\vdot(v+1)} x^{n+v}
+}$$
+
+What about the other root $r = -v$?
+
+Let's have a look at the recurrence relationship again:
+
+$$a_n((n+r)^2-v^2)+a_{n-2} = 0$$
+
+when $r=-v$, making the same simplification we made earlier:
+
+
+$$a_n[n(n-2v)]+a_{n-2} = 0$$
+
+Hmm, if the term $n-2v$ equals 0 the recurrence relationship would not be satisfied for $a_{n-2} \neq 0$ and we would have to find another form for the solution.
+
+Thus, we need to be wary of the case:
+
+$$n = 2v$$
+
+or 
+
+$$v = \frac{n}{2}$$
+
+when $v$ is a discrete multiple of $1/2$.
+
+Let's consider the case where $n$ is odd, i.e. $v = 1/2, 3/2, 5/2, \dots$. 
+
+We know that $a_1$ is 0. However, we can also set all of $a_1=a_3=a_5=\dots=0$, so that we wouldn't have to deal with the case of finding $a_n$ when $n$ is odd and $v = n/2$.
+
+In other words, when we're trying to find $a_n$ where $n=2v$, our recurrence relationship will look like:
+
+$$a_n[2v(2v-2v)]+0 = 0$$
+
+which will always be satisfied!
+
+Thus, we only have to worry about cases where
+
+$$v=\frac{n}{2}$$
+
+where $n$ is even, or where:
+
+$$v=m$$
+where m is a whole number.
+
+In the case of non-whole number, we can do the exact same thing we did before to find our first solution, except replace $v$ with $-v$
+
+In the case of a whole number, we will have to look at the form of the solution specified by the \hyperref[sec:methodOfFrobenius]{Method of Frobenius}, plug it in and find the coefficients in order to find the second solution.
+
+Thus,
+
+\begin{mytheo}{Bessel's Equations}{bessel}
+	For a differential equation of the form:
+	$$x^2y'' + xy' + (x^2-v^2)y = 0$$
+	
+	where $v$ is an arbitrarily constant.
+	
+	For $x>0$, we can always find one solution by:
+	$$
+	y_1(x) = \sum_{m=0}^\infty \frac{(-1)^ma_0}{2^{2m}\vdot m! \vdot(v+m)\vdot\dots\vdot(v+2)\vdot(v+1)} x^{n+v}
+	$$
+	
+	For non-whole numbers, we can also find the second linearly independent solution by:
+	
+	$$
+	y_2(x) = \sum_{m=0}^\infty \frac{(-1)^ma_0}{2^{2m}\vdot m! \vdot(-v+m)\vdot\dots\vdot(-v+2)\vdot(-v+1)} x^{n-v}
+	$$
+	
+	The solution in the cases where $v$ is a whole number are more complicated and can be found by trying the form of solution specified in the \hyperref[sec:methodOfFrobenius]{section} above.
+	
+\end{mytheo}
+
+Bessel equations have far more interesting properties and applications then presented here.
+
+[TODO: gamma functions, solve $v=0$, etc.]
+
 
 \chapter{Laplace Transform}
+
+\chapter{Partial Differential Equations and Fourier Transform}
+
+\chapter{Boundary Value Problems}
 
 \chapter{First-order case}
 
@@ -2049,6 +3783,7 @@ Thus, it is possible to view all the node types on the determinant-trace plane a
     \item Is there a form of Abel's equation in higher than 2 dimensions?
     \item Why does putting $t, t^2, \dots $ before solution to a constant coefficient differential homogeneous give us another linearly independent solution for any degree?
     \item Why is a generalized eigenvector guaranteed to exist if we have a eigenvalue with multiplicity greater than one.
+    \item In systems of equations, to solve for the non-homogeneous case using undetermined coefficient, why do we have both $te^{\lambda t} + e^{\lambda t}$ as solutions instead of just $te^{\lambda t}$
 \end{itemize}
 
 \chapter{Proofs}
@@ -2913,4 +4648,423 @@ $$
 (A sine function is just a shifted cosine ).
 
 This is the end of our proof.
+
+\section{\hyperref[sec:matExpProp]{Proof of Matrix Exponential Properties}}
+\label{sec:prMatExpProp}
+Let's prove all the properties sequentially:
+\begin{itemize}
+    \item Derivative of a matrix exponential:
+    $$\dv{e^{\mathbf{A}t}}{t}
+    = \mathbf{A}e^{\mathbf{A}t}
+    $$
+    
+    
+    Proof: Consider the Taylor expansion of a matrix exponential:
+    
+    
+    $$e^{\mathbf{A}t} = \mathbf{I} + \sum_{n=1}^\infty \frac{{\mathbf{A}}^nt^n}{n!} = \mathbf{I} + \frac{\mathbf{A}t}{1!} + \frac{\mathbf{A}^2t^2}{2!} + \dots$$
+    
+    Taking the derivative of this expression with respect to tgives us:
+    
+    $$\dv{e^{\mathbf{A}t}}{t}
+    = \sum_{n=1}^\infty \frac{{\mathbf{A}}^nt^{n-1}}{(n-1)!} = \frac{\mathbf{A}}{0!} + \frac{\mathbf{A}^2t}{1!} + \dots$$
+    
+    This is just:
+    $$\dv{e^{\mathbf{A}t}}{t}
+    = \mathbf{A}\sum_{n=1}^\infty \frac{{\mathbf{A}}^{n-1}t^{n-1}}{(n-1)!} = \mathbf{A}\left[\mathbf{I} + \frac{\mathbf{A}t}{1!} + \dots\right]$$
+    
+    Applying a shift of indices $m = n-1$, gives us:
+    $$\dv{e^{\mathbf{A}t}}{t}
+    = \mathbf{A}\sum_{m=0}^\infty \frac{{\mathbf{A}}^mt^m}{m!} = \mathbf{A}\left[\mathbf{I} + \sum_{m=1}^\infty \frac{{\mathbf{A}}^mt^m}{m!}\right]$$
+    
+    The term on the right is just our original matrix exponential:
+    
+    $$\dv{e^{\mathbf{A}t}}{t}
+    =\mathbf{A}e^{\mathbf{A}t}$$
+    
+    which is what we were trying to prove.
+    
+    
+    \item Matrix exponential of a diagonal matrix:
+    $$
+    \mathbf{D} = 
+    \begin{bmatrix}
+        d_{1} & & \\
+        & \ddots & \\
+        & & d_{r} \\
+    \end{bmatrix}
+    $$
+    $$
+    e^{\mathbf{D}} = 
+    \begin{bmatrix}
+        e^{d_{1}} & & \\
+        & \ddots & \\
+        & & e^{d_{r}} \\
+    \end{bmatrix}
+    $$
+    
+    Proof:
+    
+    Applying a Taylor expansion of the matrix exponential, we get:
+    
+    $$e^{\mathbf{D}} = \mathbf{I} + \sum_{n=1}^\infty \frac{{\mathbf{D}}^n}{n!} = \mathbf{I} + \frac{\mathbf{D}}{1!} + \frac{\mathbf{D}^2}{2!} + \dots$$
+    
+    It turns out taking powers of a diagonal matrix is equivalent to taking powers of the diagonal elements of the matrix:
+    
+    $$\mathbf{D}^k = 
+    \begin{bmatrix}
+        d_{1}^k & & \\
+        & \ddots & \\
+        & & d_{r}^k \\
+    \end{bmatrix}
+    $$
+    
+    Thus, when we put this into the Taylor expansion, we get:
+    $$e^{\mathbf{D}} = \mathbf{I} + \sum_{n=1}^\infty \frac{{\mathbf{D}}^n}{n!} = \mathbf{I} + \frac{1}{1!}
+    \begin{bmatrix}
+        d_{1} & & \\
+        & \ddots & \\
+        & & d_{r}\\
+    \end{bmatrix}
+    + \frac{1}{2!}
+    \begin{bmatrix}
+        d_{1}^2 & & \\
+        & \ddots & \\
+        & & d_{r}^2 \\
+    \end{bmatrix}
+    + \dots
+    $$
+    
+    $$
+    e^{\mathbf{D}} =
+    \begin{bmatrix}
+        1 + \frac{1}{1!}d_{1}  +  \frac{1}{2!}d_{1}^2 + \dots & & \\
+        & \ddots & \\
+        & & 1 + \frac{1}{1!}d_{k} + \frac{1}{2!}d_{k}^2 + \dots \\
+    \end{bmatrix}
+    $$
+    
+    We see that each element on the diagonal is just the Taylor expansion of taking the exponent of the diagonal element. Thus we have:
+    
+    $$
+    e^{\mathbf{D}} =
+    \begin{bmatrix}
+        e^{d_1} & & \\
+        & \ddots & \\
+        & & e^{d_k} \\
+    \end{bmatrix}
+    $$
+    
+    which is what we were trying to prove.
+    
+    
+    
+    
+    \item If we have a matrix $\mathbf{A} = \mathbf{S}\mathbf{D}\mathbf{S^{-1}}$
+    where $\mathbf{D}$ is a diagonal matrix:
+    
+    $$e^{\mathbf{\mathbf{S}\mathbf{D}\mathbf{S^{-1}}}} = \mathbf{S} e^{\mathbf{D}}\mathbf{S}^{-1}$$
+    
+    Proof:
+    
+    Again, we can take the Taylor expansion:
+    
+    $$e^{\mathbf{A}} = e^{\mathbf{SDS^{-1}}} = \mathbf{I} + \sum_{n=1}^\infty \frac{{(\mathbf{SDS^{-1}})}^n}{n!} = \mathbf{I} + \frac{(\mathbf{SDS^{-1}})}{1!} + \frac{(\mathbf{SDS^{-1}})^2}{2!} + \dots$$
+    
+    
+    What is $(\mathbf{SDS^{-1}})^k$?
+    
+    Let's expand it out:
+    
+    $$(\mathbf{SDS^{-1}})^k = (\mathbf{SDS^{-1}})(\mathbf{SDS^{-1}})\dots(\mathbf{SDS^{-1}})$$
+    
+    Using the fact that matrices are associative,we can change the parenthesis:
+    
+    $$(\mathbf{SDS^{-1}})^k = \mathbf{SD(S^{-1}}\mathbf{S)D(S^{-1}}\dots\mathbf{S)DS^{-1}})$$
+    
+    which turns into:
+        $$(\mathbf{SDS^{-1}})^k = \mathbf{SDIDI \dots IDS^{-1}}$$
+        
+    This is just:
+        
+    $$(\mathbf{SDS^{-1}})^k = \mathbf{SDIDI \dots IDS^{-1}}$$ 
+        
+    $$(\mathbf{SDS^{-1}})^k = \mathbf{SDDD \dots DDS^{-1}}$$ 
+    $$(\mathbf{SDS^{-1}})^k = \mathbf{SD^kS^{-1}}$$ 
+    
+    Putting this into the Taylor Expansion gives us:
+    
+    
+    $$e^{\mathbf{SDS^{-1}}} = \mathbf{I} + \sum_{n=1}^\infty \frac{{(\mathbf{SDS^{-1}})}^n}{n!} = \mathbf{SS^{-1}} + \sum_{n=1}^\infty \frac{{\mathbf{SD^nS^{-1}}}}{n!} = \mathbf{S}\left[\sum_{n=1}^\infty \frac{{\mathbf{D^n}}}{n!} \right]\mathbf{S^{-1}}$$
+    $$= \mathbf{S} e^{\mathbf{D}}\mathbf{S}^{-1}$$
+    
+    QED
+
+    \item If $\mathbf{AB = BA}$, then $\mathbf{A}e^{\mathbf{B}t} = e^{\mathbf{B}t}\mathbf{A}$
+    
+    Proof:
+    
+    Let's expand out the Taylor Series:
+    $$\mathbf{A}e^{\mathbf{B}t} = 
+    \mathbf{A}e^{\mathbf{B}} = \mathbf{A}\left[\mathbf{I} + \sum_{n=1}^\infty \frac{{\mathbf{B}}^n}{n!} \right] = \mathbf{A}\left[\mathbf{I} + \frac{\mathbf{B}}{1!} + \frac{\mathbf{B}^2}{2!} + \dots \right]
+    $$
+    We can see that since $\mathbf{AB = BA}$: and $\mathbf{AI = IA}$
+    $$
+    = \left[\mathbf{I} + \sum_{n=1}^\infty \frac{{\mathbf{B}}^n}{n!} \right]\mathbf{A} = \left[\mathbf{I} + \frac{\mathbf{B}}{1!} + \frac{\mathbf{B}^2}{2!} + \dots \right]\mathbf{A}
+    = e^{\mathbf{B}t}\mathbf{A}$$
+    
+    \item  $(e^{\mathbf{A}})^{-1} = e^{-\mathbf{A}}$
+    
+    Proof:
+    
+    If we can show that the product of the two exponential matrices  $e^{\mathbf{A}}e^{-\mathbf{A}}$ is just $\mathbf{I}$, then we would be finished since this is the definition of an inverse.
+    
+    Let's consider the derivative of $e^{\mathbf{A}t}e^{-\mathbf{A}t}$. 
+    
+    We know by the product rule:
+    $$
+    \dv{e^{\mathbf{A}t}e^{-\mathbf{A}t}}{t} = \mathbf{A}e^{\mathbf{A}t}e^{-\mathbf{A}t} + e^{\mathbf{A}t}(-\mathbf{A})e^{-\mathbf{A}t}
+    $$
+    
+    We know that scalars can be moved out, and because (somewhat) trivially $\mathbf{AA} = \mathbf{AA}$, then $\mathbf{A}e^{\mathbf{A}} = e^{\mathbf{A}}\mathbf{A}$:
+    
+    Thus:
+    $$
+    = \mathbf{A}e^{\mathbf{A}t}e^{-\mathbf{A}t} -\mathbf{A}e^{\mathbf{A}t}e^{-\mathbf{A}t} = \mathbf{0}
+    $$
+    
+    That means that $e^{\mathbf{A}t}e^{-\mathbf{A}t}$ is a constant. At $t=0$, we get:
+    
+    $$e^{\mathbf{A}0}e^{-\mathbf{A}0} = \mathbf{II} = \mathbf{I}$$
+    
+    Since the derivative of the product of the exponential matrices is constant, this applies at any value of $t$. Setting $t=1$ gives us:
+    
+    $$e^{\mathbf{A}}e^{-\mathbf{A}} = \mathbf{I}$$
+
+    
+    
+    
+    \item If $\mathbf{AB = BA}$, then $e^{\mathbf{A+B}} = e^{\mathbf{A}}e^{\mathbf{B}}$
+    
+    Let's consider the product of three exponential matrices, $e^{(\mathbf{A+B})t}e^{-\mathbf{A}t}e^{-\mathbf{B}t}$. Similar to what we did before, let's evaluate the derivative of this product:
+    
+    $$
+    \dv{e^{(\mathbf{A+B})t}e^{-\mathbf{A}t}e^{-\mathbf{B}t}}{t} = (\mathbf{A+B})e^{(\mathbf{A+B)}t}e^{-\mathbf{A}t} e^{-\mathbf{B}t}
+    + e^{(\mathbf{A+B})t}(-\mathbf{A})e^{-\mathbf{A}t}e^{-\mathbf{B}t}
+    + e^{(\mathbf{A+B})t}e^{-\mathbf{A}t}(-\mathbf{B})e^{-\mathbf{B}t}
+    $$
+    
+    We know that $\mathbf{AB = BA}$ and $\mathbf{A(A+B) = (A+B)A}$ and $\mathbf{B(A+B) = (A+B)B}$, thus:
+    
+    $$
+    = (\mathbf{A+B-A-B})e^{(\mathbf{A+B})t}e^{-\mathbf{A}t}e^{-\mathbf{B}t} = \mathbf{0}$$
+    
+    Thus, the product of the three exponential matrices is constant with respect to $t$. At $t=0$, we see that:
+    
+    $$e^{(\mathbf{A+B})0}e^{-\mathbf{A}0}e^{-\mathbf{B}0} = \mathbf{I} $$
+    
+    Thus, at $t=1$, it should also be $\mathbf{I}$:
+    
+    $$e^{(\mathbf{A+B})}e^{-\mathbf{A}}e^{-\mathbf{B}} = \mathbf{I} $$
+    
+    Using the previous property, we can rearrange an see that:
+    
+    $$e^{(\mathbf{A+B})} = e^{\mathbf{A}}e^{\mathbf{B}} $$
+    
+    
+\end{itemize}
+
+
+\section{\hyperref[th:rootInt]{Proof of Form of Solution when Roots Differ by an Integer}}
+
+\label{sec:prRootInt}
+
+
+We know that when we solve for our indicial equation and get two roots differing by some integer that one solution is given using the larger root $r_1$:
+
+$$y_1 = t^{r_1}\sum_{n=0}^\infty a_nt^n$$
+
+How can we find another solution?
+
+Let's use the method of \textbf{reduction of order} where we assume the form $y_2(t) = u(t)y_1(t)$ and try to find $u(t)$ that satisfies our original equation.
+
+We have:
+
+$$y_2 = uy_1$$
+$$y_2' = uy_1' + u'y_1$$
+$$y_2''(t) = uy_1'' + 2u'y_1' + u''y_1$$
+
+Let's put this into our original differential equation:
+
+$$t^2y'' + tp(t)y' + q(t)y = 0$$
+
+$$t^2[uy_1'' + 2u'y_1' + u''y_1] + tp[uy_1' + u'y_1] + q[uy_1] = 0$$
+
+Rearranging into brackets of $u$:
+
+$$u[t^2y_1''+tpy_1'+qy_1] + u'[2t^2y_1'+tpy_1] + t^2u''y_1 = 0$$
+
+We know that $[y_1''+py_1'+qy_1 = 0$ since it is a solution of our original differential equation. Thus, we're left with:
+
+$$u'[2t^2y_1'+pty_1] + t^2u''y_1 = 0$$
+
+Dividing both sides by $t^2$:
+$$u'[2y_1'+p\frac{1}{t}y_1] + u''y_1 = 0$$
+
+We can solve this if we make a substitution $v = u'$:
+
+
+$$v[2y_1'+\frac{1}{t}py_1] + v'y_1 = 0$$
+
+Dividing both sides by $y_1$, we see that we have a homogeneous linear first order differential equation that we can solve with an integrating factor:
+
+$$v' + v\left[ 2\frac{y_1'}{y_1} + \frac{p}{t}\right]  = 0$$
+
+Our integrating factor will be:
+
+$$\exp{ \int \left( 2\frac{y_1'}{y_1} + \frac{p}{t} \right) \dd t}$$
+
+The integral inside can be expanded to:
+
+$$\int \left( 2\frac{y_1'}{y_1} + \frac{p}{t} \right) dt 
+= \int \left( \frac{2}{y_1}\dv{y_1}{t} + \frac{p}{t} \right) \dd t
+= 2\int \frac{1}{y_1} \dd y_1 + \int \frac{p}{t} \dd t$$
+$$= 2\ln|y_1| + \int \frac{p}{t} \dd t$$
+
+When we take the exponential of this, we get:
+$$\exp{ \int \left( 2\frac{y_1'}{y_1} + \frac{p}{t} \right) \dd t}
+= \exp{2\int \frac{1}{y_1} \dd y_1 + \int p\frac{p}{t} \dd t} = y_1^2\exp{\int \frac{p}{t} \dd t}$$
+
+
+When we multiply both sides by this integrating factor, we get:
+
+$$\dv{}{t} \left( vy_1^2\exp{\int  \frac{p}{t} \dd t}\right) = 0$$
+
+
+This just means that the expression in the parenthesis is some constant and thus:
+
+$$v = u' = c_1\frac{1}{y_1^2}\exp{-\int \frac{p}{t} \dd t}$$
+
+To find u, we can integrate this expression one more time with respect to $t$:
+
+$$u = -c_1\int\left(\frac{1}{y_1^2}\exp{-\int \frac{p}{t}} \dd t\right) \dd t + c_2 $$
+
+
+Since we only care about finding a specific $u$, we can arbitrarily choose $c_1=1$ and $c_2 = 0$:
+
+$$u = \int\left(\frac{1}{y_1^2}\exp{-\int \frac{p}{t} \dd t}\right) \dd t $$
+
+Thus:
+
+$$y_2 = uy_1 = y_1\int\left(\frac{1}{y_1^2}\exp{-\int \frac{p}{t} \dd t}\right) \dd t$$
+
+Let's do another simplification. We know that $p$ is a convergent Taylor Series:
+
+$$p = \sum_{n=0}^\infty p_nt^n = p_0 + p_1t + p_2t^2 + \dots$$
+
+Thus,
+$$\frac{p}{t} = t^{-1}\sum_{n=0}^\infty p_nt^n = \frac{p_0}{t} + p_1 + p_2t + \dots$$
+
+Integrating the expression gives us:
+
+$$\int \frac{p}{t} \dd t
+= \int \left( \frac{p_0}{t} + p_1 + p_2t + \dots\right) \dd t = p_0\ln(t) + p_1t + p_2\frac{t^2}{2} + \dots$$
+
+Taking the exponential of $-\int \frac{p}{t} \dd t$, gives us:
+
+$$\exp{-\int \frac{p}{t} \dd t}
+= \exp{-p_0\ln(t) - p_1t -  p_2\frac{t^2}{2} + \dots}
+= t^{-p_0}\exp{- p_1t -  p_2\frac{t^2}{2} + \dots}
+$$
+
+Using the fact that both $p$ and the exponential are analytic functions and that the composition of two analytic functions is also analytic:
+
+$$\exp{- p_1t -  p_2\frac{t^2}{2} + \dots} = A_0 + A_1t + A_2t^2 + \dots$$
+
+where the coefficients $A_0, A_1, dots$ can be tediously calculating by by expanding out each of the Taylor expansions of the exponentials, multiplying and combining like terms.
+
+
+Thus:
+$$\exp{-\int \frac{p}{t} \dd t} = t^{-p_0}(A_0 + A_1t + A_2t^2 + \dots)$$
+
+
+Since:
+
+$$y_2 = y_1\int\left(\frac{1}{y_1^2}\exp{-\int \frac{p}{t} \dd t}\right) \dd t = y_1\int\left( \frac{1}{y_1^2}  t^{-p_0}(A_0 + A_1t + A_2t^2 + \dots) \right) \dd t$$
+
+We can also make another substitution:
+
+$$y_1 = t^{r_1}\sum_{n=0}^\infty a_nt^n = t^r_1(a_0 + a_1t + a_2t^2 + \dots)
+$$
+
+$$y_1^2 = t^{2r_1}(a_0 + a_1t + a_2t^2 + \dots)^2$$
+
+Thus, we have:
+
+$$y_2 = y_1\int\left( \frac{  t^{-p_0}(A_0 + A_1t + A_2t^2 + \dots)}{t^{2r_1}(a_0 + a_1t + a_2t^2 + \dots)^2} \right) \dd t$$
+
+
+Since the square of analytic function is also an analytic function and the division of two analytic functions is also analytic, we can simplify this:
+
+$$y_2 = y_1\int\left( \frac{  t^{-p_0-2r_1}(A_0 + A_1t + A_2t^2 + \dots)}{(B_0 + B_1t + B_2t^2 + \dots)} \right) \dd t $$
+$$
+=  y_1\int\left( t^{-p_0-2r_1}(C_0 + C_1t + C_2t^2 + \dots) \right) \dd t$$
+
+Now what do we do?
+
+Let's look at the case where $r_1 = r_2 + L$. We know that the indicial equation will be:
+
+$$F(r) = r(r-1) + p_0r + q_0 = (r-r_1)(r-r_2) = (r-r_1)(r-r_1+L)$$
+
+If we expand this out, we see that:
+
+$$r^2 + (p_0-1)r + q_0 = r^2 + (-2r_1+L)r + r_1(r_1-L)$$
+
+Thus:
+
+$$-2r_1+L = p_0-1$$
+
+Rearranging this,
+
+$$-p_0-2r_1 = -L-1$$
+
+
+We can put this into our original expression to get:
+
+$$y_2 = y_1\int\left(   t^{-p_0-2r_1}(C_0 + C_1t + C_2t^2 + \dots) \right) \dd t $$
+$$= y_1\int\left(   t^{-(L+1)}(C_0 + C_1t + C_2t^2 + \dots) \right) \dd t $$
+
+Let's rearrange our series a little bit:
+
+$$= y_1\int\left(  t^{-(L+1)}(C_Lt^L + C_0 + C_1t + C_2t^2 + \dots) \right) \dd t $$
+
+$$= y_1\int\left(  \frac{C_L}{t} + \frac{C_0}{t^{L+1}} + \frac{C_1}{t^{L}} + \frac{C_2t^2}{t^{L-1}} + \dots \right) \dd t $$
+
+Evaluating this integral gives us:
+
+$$= C_Ly_1\ln|t| +  y_1\left( \frac{C_0}{-Lt^L} + \frac{C_1}{-(L-1)t^{L-1}} + \frac{C_2}{-(L-2)t^{L-2}} + \dots\right) $$
+
+$$= C_Ly_1\ln|t| + y_1t^{-L}\left(\frac{C_0}{-L} + \frac{C_1}{-(L-1)}t + \frac{C_2}{-(L-2)}t^2 + \dots \right) $$
+
+Notice that the coefficients are just constants. Let's represent these constants with $D_0, D_1, \dots$
+
+$$= C_Ly_1\ln|t| + y_1t^{-L}\left(D_0 + D_1t + D_2t^2 + \dots \right) $$
+
+Let's plug in the value of $y_1$ onto this expression
+
+$$y_1 = t^{r_1}\sum_{n=0}^\infty a_nt^n = t^{r_2+L}\sum_{n=0}^\infty a_nt^n$$
+
+$$= C_Ly_1\ln|t| + t^{r_2+L}\sum_{n=0}^\infty a_nt^nt^{-L}\left(D_0 + D_1t + D_2t^2 + \dots \right) $$
+$$= C_Ly_1\ln|t| + t^{r_2}\sum_{n=0}^\infty a_nt^n \sum_{n=0}^\infty D_nt^n $$
+
+The product of a two convergent analytic functions is itself analytic, so:
+
+$$= C_Ly_1\ln|t| + t^{r_2}\sum_{n=0}^\infty b_nt^n $$
+
+Thus, if $C_L$ is 0 then we may be able to get another solution by replacing $r_1$ with $r_2$.
+
+
+
+
+
 \end{document}
